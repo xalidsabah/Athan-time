@@ -2,7 +2,9 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-size: 300% 300%;
+    animation: backgroundShift 8s ease-in-out infinite;
     min-height: 100vh;
     transition: all 0.3s ease;
 }
@@ -42,13 +44,14 @@ body {
 
 /* Enhanced Next Prayer Section */
 #next-prayer {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     border-radius: 20px;
     padding: 30px;
     color: white;
-    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
     position: relative;
     overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 #next-prayer::before {
@@ -63,10 +66,12 @@ body {
 }
 
 #next-prayer h3 {
-    color: white;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.3);
     position: relative;
     z-index: 1;
+    font-weight: 800;
+    letter-spacing: 1px;
 }
 
 #next-prayer-time {
@@ -84,16 +89,65 @@ body {
 }
 
 #countdown {
-    color: white;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     position: relative;
     z-index: 1;
     animation: pulse 2s infinite;
+    font-weight: 700;
 }
 
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
+}
+
+@keyframes shimmerText {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes subtleShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes timeShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes badgePulse {
+    0%, 100% { 
+        transform: scale(1); 
+        box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.2);
+    }
+    50% { 
+        transform: scale(1.05); 
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.4);
+    }
+}
+
+@keyframes locationShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes backgroundShift {
+    0%, 100% { background-position: 0% 50%; }
+    33% { background-position: 100% 50%; }
+    66% { background-position: 200% 50%; }
+}
+
+@keyframes checkPulse {
+    0%, 100% { 
+        transform: scale(1); 
+        filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.3));
+    }
+    50% { 
+        transform: scale(1.1); 
+        filter: drop-shadow(0 0 15px rgba(34, 197, 94, 0.5));
+    }
 }
 
 /* Enhanced Prayer Cards - Fixed Colors */
@@ -327,10 +381,18 @@ body {
 }
 
 .tab-header h2 {
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
+    font-size: 28px;
+    font-weight: 900;
+    color: #ffffff;
     margin: 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.2);
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #ffffff, #667eea, #f093fb, #ffffff);
+    background-size: 300% 300%;
+    animation: headerShimmer 4s ease-in-out infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .header-actions {
@@ -492,9 +554,9 @@ body {
 }
 
 .prayer-card {
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.1) 0%, 
-        rgba(255, 255, 255, 0.05) 100%);
+    background: linear-gradient(135deg,
+        rgba(0, 0, 0, 0.3) 0%,
+        rgba(0, 0, 0, 0.4) 100%);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
@@ -513,16 +575,16 @@ body {
 .prayer-card.next-prayer-highlight {
     border-color: rgba(255, 215, 0, 0.6);
     box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
-    background: linear-gradient(135deg, 
-        rgba(255, 215, 0, 0.15) 0%, 
-        rgba(255, 255, 255, 0.05) 100%);
+    background: linear-gradient(135deg,
+        rgba(255, 215, 0, 0.15) 0%,
+        rgba(0, 0, 0, 0.3) 100%);
 }
 
 .prayer-card.passed {
     opacity: 0.7;
-    background: linear-gradient(135deg, 
-        rgba(0, 0, 0, 0.1) 0%, 
-        rgba(255, 255, 255, 0.02) 100%);
+    background: linear-gradient(135deg,
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0.3) 100%);
 }
 
 .prayer-info {
@@ -532,10 +594,20 @@ body {
 }
 
 .prayer-icon {
-    font-size: 24px;
+    font-size: 28px;
     margin-right: 16px;
-    width: 40px;
-    text-align: center;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
 }
 
 .prayer-details {
@@ -544,15 +616,20 @@ body {
 
 .prayer-name {
     font-size: 20px;
-    font-weight: bold;
-    color: white;
+    font-weight: 700;
+    color: #ffffff !important;
     margin: 0 0 4px 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    letter-spacing: 0.3px;
 }
 
 .prayer-description {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.9) !important;
     margin: 0;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4), 0 0 10px rgba(116, 75, 162, 0.2);
+    font-weight: 500;
+    letter-spacing: 0.3px;
 }
 
 .prayer-time-container {
@@ -561,25 +638,35 @@ body {
 
 .prayer-time {
     font-size: 24px;
-    font-weight: bold;
-    color: white;
+    font-weight: 700;
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    letter-spacing: 0.5px;
 }
 
 .next-badge {
-    background: linear-gradient(135deg, #ffd700, #ffed4e);
-    color: #000;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 10px;
-    font-weight: bold;
-    margin-top: 4px;
+    background: linear-gradient(135deg, #ffd700, #ffed4e, #ffc107);
+    color: #000000 !important;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: 800;
+    margin-top: 6px;
     display: inline-block;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.5px;
+    animation: badgePulse 2s ease-in-out infinite;
 }
 
 .passed-badge {
-    color: #51cf66;
-    font-size: 18px;
-    margin-top: 4px;
+    color: #22c55e;
+    font-size: 20px;
+    margin-top: 6px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 15px rgba(34, 197, 94, 0.4);
+    filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.3));
+    animation: checkPulse 2s ease-in-out infinite;
 }
 
 .prayer-actions {
@@ -941,6 +1028,192 @@ body {
     box-shadow: 0 8px 32px rgba(0, 176, 148, 0.3);
 }
 
+/* Daily Verse Section */
+.daily-verse-section {
+    margin-bottom: 24px;
+}
+
+.verse-card {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.95) 0%, 
+        rgba(248, 250, 252, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 20px;
+    padding: 32px;
+    color: #1f2937;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+}
+
+.verse-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.verse-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.verse-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.verse-refresh-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #3b82f6;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.verse-refresh-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.5);
+    transform: rotate(180deg);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.verse-content {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 20px;
+}
+
+.arabic-verse {
+    font-family: 'Amiri', 'Times New Roman', serif;
+    font-size: 28px;
+    line-height: 2;
+    text-align: center;
+    direction: rtl;
+    color: #1f2937;
+    margin-bottom: 20px;
+    padding: 24px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.08);
+    font-weight: 500;
+}
+
+.verse-translation {
+    font-size: 18px;
+    line-height: 1.7;
+    color: #374151;
+    margin-bottom: 16px;
+    font-style: italic;
+    text-align: center;
+    padding: 16px;
+    background: rgba(239, 246, 255, 0.5);
+    border-radius: 12px;
+    border-left: 4px solid #3b82f6;
+    font-weight: 500;
+}
+
+.verse-reference {
+    font-size: 16px;
+    color: #6b7280;
+    text-align: center;
+    font-weight: 600;
+    background: rgba(59, 130, 246, 0.05);
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.verse-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    margin-top: 20px;
+}
+
+/* Responsive improvements for verse card */
+@media (max-width: 768px) {
+    .verse-card {
+        padding: 24px;
+        margin: 0 -20px 20px -20px;
+        border-radius: 0;
+    }
+    
+    .arabic-verse {
+        font-size: 24px;
+        padding: 20px;
+        line-height: 1.8;
+    }
+    
+    .verse-translation {
+        font-size: 16px;
+        padding: 14px;
+    }
+    
+    .verse-actions {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .verse-action-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+        flex: 1;
+        justify-content: center;
+        min-width: 120px;
+    }
+    
+    .verse-title {
+        font-size: 20px;
+    }
+}
+
+.verse-action-btn {
+    background: #ffffff;
+    border: 2px solid #3b82f6;
+    color: #3b82f6;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+.verse-action-btn:hover {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
 .quran-card button {
     transition: all 0.3s ease;
 }
@@ -1065,14 +1338,15 @@ body {
 
 /* Enhanced Location Display */
 .location-display {
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #f093fb 100%);
     color: white;
-    border-radius: 15px;
-    padding: 20px;
+    border-radius: 20px;
+    padding: 25px;
     margin: 20px 0;
-    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4), 0 0 30px rgba(139, 92, 246, 0.2);
     position: relative;
     overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .location-display::before {
@@ -1106,9 +1380,16 @@ body {
 }
 
 .location-name {
-    font-size: 18px;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 20px;
+    font-weight: 800;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.2);
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, #ffffff, #e2e8f0, #ffffff);
+    background-size: 200% 200%;
+    animation: locationShimmer 3s ease-in-out infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .location-coordinates {
@@ -1211,8 +1492,10 @@ header::before {
 }
 
 @keyframes headerShimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
+    0%, 100% { background-position: 0% 50%; }
+    25% { background-position: 100% 50%; }
+    50% { background-position: 200% 50%; }
+    75% { background-position: 300% 50%; }
 }
 
 /* Responsive improvements */
@@ -1729,6 +2012,11 @@ header::before {
     font-weight: bold;
 }
 
+.mosque-marker i {
+    color: white;
+    font-size: 14px;
+}
+
 .user-marker {
     background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     width: 35px;
@@ -1742,6 +2030,11 @@ header::before {
     color: white;
     font-size: 16px;
     animation: userMarkerPulse 2s infinite;
+}
+
+.user-marker i {
+    color: white;
+    font-size: 16px;
 }
 
 @keyframes userMarkerPulse {

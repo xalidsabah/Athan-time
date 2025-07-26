@@ -756,4 +756,467 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification('You are offline. Using cached data.', 'warning');
         });
     }
+    
+    // Enhanced Quran Verse Functionality
+    const quranVerses = [
+        {
+            arabic: "وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ ۚ إِنَّ اللَّهَ بَالِغُ أَمْرِهِ ۚ قَدْ جَعَلَ اللَّهُ لِكُلِّ شَيْءٍ قَدْرًا",
+            translation: "And whoever relies upon Allah - then He is sufficient for him. Indeed, Allah will accomplish His purpose. Allah has already set for everything a [decreed] extent.",
+            reference: "Quran 65:3"
+        },
+        {
+            arabic: "وَبَشِّرِ الصَّابِرِينَ الَّذِينَ إِذَا أَصَابَتْهُم مُّصِيبَةٌ قَالُوا إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ",
+            translation: "And give good tidings to the patient, Who, when disaster strikes them, say, 'Indeed we belong to Allah, and indeed to Him we will return.'",
+            reference: "Quran 2:155-156"
+        },
+        {
+            arabic: "وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ ۚ عَلَيْهِ تَوَكَّلْتُ وَإِلَيْهِ أُنِيبُ",
+            translation: "And my success is not but through Allah. Upon Him I have relied, and to Him I return.",
+            reference: "Quran 11:88"
+        },
+        {
+            arabic: "وَمَن يُؤْمِن بِاللَّهِ يَهْدِ قَلْبَهُ ۚ وَاللَّهُ بِكُلِّ شَيْءٍ عَلِيمٌ",
+            translation: "And whoever believes in Allah - He will guide his heart. And Allah is Knowing of all things.",
+            reference: "Quran 64:11"
+        },
+        {
+            arabic: "فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ",
+            translation: "So remember Me; I will remember you. And be grateful to Me and do not deny Me.",
+            reference: "Quran 2:152"
+        }
+    ];
+    
+    let currentVerseIndex = 0;
+    
+    window.showDailyVerse = function() {
+        const today = new Date();
+        const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+        currentVerseIndex = dayOfYear % quranVerses.length;
+        displayCurrentVerse();
+        showNotification('Daily verse updated!', 'success');
+    };
+    
+    window.getRandomVerse = function() {
+        currentVerseIndex = Math.floor(Math.random() * quranVerses.length);
+        displayCurrentVerse();
+        showNotification('Random verse loaded!', 'success');
+    };
+    
+    window.refreshVerse = function() {
+        currentVerseIndex = (currentVerseIndex + 1) % quranVerses.length;
+        displayCurrentVerse();
+    };
+    
+    window.shareVerse = function() {
+        const verse = quranVerses[currentVerseIndex];
+        const shareText = `${verse.translation}\n\n${verse.reference}`;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Verse from the Quran',
+                text: shareText
+            }).catch(console.error);
+        } else {
+            navigator.clipboard.writeText(shareText).then(() => {
+                showNotification('Verse copied to clipboard!', 'success');
+            }).catch(() => {
+                showNotification('Could not copy verse', 'error');
+            });
+        }
+    };
+    
+    window.bookmarkVerse = function() {
+        const verse = quranVerses[currentVerseIndex];
+        let bookmarks = JSON.parse(localStorage.getItem('quranBookmarks') || '[]');
+        
+        if (!bookmarks.find(b => b.reference === verse.reference)) {
+            bookmarks.push(verse);
+            localStorage.setItem('quranBookmarks', JSON.stringify(bookmarks));
+            showNotification('Verse bookmarked!', 'success');
+        } else {
+            showNotification('Verse already bookmarked', 'info');
+        }
+    };
+    
+    window.playVerseAudio = function() {
+        showNotification('Audio feature coming soon!', 'info');
+    };
+    
+    function displayCurrentVerse() {
+        const verse = quranVerses[currentVerseIndex];
+        
+        const arabicElement = document.getElementById('arabic-verse');
+        const translationElement = document.getElementById('verse-translation');
+        const referenceElement = document.getElementById('verse-reference');
+        
+        if (arabicElement) arabicElement.textContent = verse.arabic;
+        if (translationElement) translationElement.textContent = verse.translation;
+        if (referenceElement) {
+            referenceElement.innerHTML = `<i class="fas fa-book mr-2"></i>${verse.reference}`;
+        }
+    }
+    
+    // Initialize with daily verse on load
+    setTimeout(() => {
+        showDailyVerse();
+    }, 1000);
+    
+    // Mosque Finder Functionality
+    let mosquesMap = null;
+    let userMarker = null;
+    let mosqueMarkers = [];
+    let currentMosques = [];
+    
+    window.initMosqueFinder = function(lat, lng) {
+        console.log('🕌 Initializing mosque finder...', lat, lng);
+        
+        const mapContainer = document.getElementById('mosques-map');
+        const mapLoading = document.getElementById('map-loading');
+        
+        if (!mapContainer) {
+            console.error('❌ Map container not found');
+            return;
+        }
+        
+        try {
+            // Initialize map
+            if (mosquesMap) {
+                mosquesMap.remove();
+            }
+            
+            mosquesMap = L.map('mosques-map').setView([lat, lng], 14);
+            
+            // Add tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(mosquesMap);
+            
+            // Add user location marker
+            userMarker = L.marker([lat, lng], {
+                icon: L.divIcon({
+                    className: 'user-marker',
+                    html: '<i class="fas fa-user"></i>',
+                    iconSize: [35, 35],
+                    iconAnchor: [17, 17]
+                })
+            }).addTo(mosquesMap);
+            
+            userMarker.bindPopup('<div class="popup-content"><strong>📍 Your Location</strong></div>').openPopup();
+            
+            // Hide loading
+            if (mapLoading) {
+                mapLoading.style.display = 'none';
+            }
+            
+            // Fetch nearby mosques
+            fetchNearbyMosques(lat, lng);
+            
+            console.log('✅ Mosque finder initialized successfully');
+            
+        } catch (error) {
+            console.error('❌ Error initializing mosque finder:', error);
+            showNotification('Error loading map. Please try again.', 'error');
+            
+            // Show fallback message
+            if (mapContainer) {
+                mapContainer.innerHTML = `
+                    <div class="map-error" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 400px; background: #f3f4f6; border-radius: 20px;">
+                        <i class="fas fa-exclamation-triangle text-6xl text-gray-400 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-600 mb-2">Map Loading Error</h3>
+                        <p class="text-gray-500 text-center mb-4">Unable to load the map. Please check your internet connection.</p>
+                        <button onclick="initMosqueFinder(${lat}, ${lng})" class="map-btn primary">
+                            <i class="fas fa-sync-alt mr-2"></i>Try Again
+                        </button>
+                    </div>
+                `;
+            }
+        }
+    };
+    
+    async function fetchNearbyMosques(lat, lng) {
+        console.log('🔍 Fetching nearby mosques...');
+        
+        try {
+            // Update status
+            updateMosqueStats('Searching...', '-', 'Loading');
+            
+            // Overpass API query for nearby mosques
+            const query = `
+                [out:json][timeout:25];
+                (
+                    node["amenity"="place_of_worship"]["religion"="muslim"](around:3000,${lat},${lng});
+                    way["amenity"="place_of_worship"]["religion"="muslim"](around:3000,${lat},${lng});
+                    relation["amenity"="place_of_worship"]["religion"="muslim"](around:3000,${lat},${lng});
+                );
+                out center meta;
+            `;
+            
+            const url = 'https://overpass-api.de/api/interpreter';
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'data=' + encodeURIComponent(query)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('📊 Mosque data received:', data);
+            
+            processMosqueData(data.elements, lat, lng);
+            
+        } catch (error) {
+            console.error('❌ Error fetching mosques:', error);
+            showNotification('Could not load nearby mosques. Showing sample data.', 'warning');
+            
+            // Show fallback mosques
+            showFallbackMosques(lat, lng);
+        }
+    }
+    
+    function processMosqueData(elements, userLat, userLng) {
+        console.log('📝 Processing mosque data...', elements.length, 'elements');
+        
+        // Clear existing markers
+        mosqueMarkers.forEach(marker => mosquesMap.removeLayer(marker));
+        mosqueMarkers = [];
+        currentMosques = [];
+        
+        if (elements.length === 0) {
+            console.log('ℹ️ No mosques found, showing fallback data');
+            showFallbackMosques(userLat, userLng);
+            return;
+        }
+        
+        // Process each mosque
+        elements.forEach((element, index) => {
+            let lat, lng;
+            
+            // Get coordinates based on element type
+            if (element.type === 'node') {
+                lat = element.lat;
+                lng = element.lon;
+            } else if (element.center) {
+                lat = element.center.lat;
+                lng = element.center.lon;
+            } else {
+                return; // Skip if no coordinates
+            }
+            
+            const name = element.tags?.name || `Mosque ${index + 1}`;
+            const address = formatAddress(element.tags);
+            const distance = calculateDistance(userLat, userLng, lat, lng);
+            
+            const mosque = {
+                id: element.id,
+                name: name,
+                address: address,
+                lat: lat,
+                lng: lng,
+                distance: distance,
+                tags: element.tags || {}
+            };
+            
+            currentMosques.push(mosque);
+            
+            // Add marker to map
+            addMosqueMarker(mosque);
+        });
+        
+        // Sort by distance
+        currentMosques.sort((a, b) => a.distance - b.distance);
+        
+        // Update display
+        displayMosquesList();
+        updateMosqueStats(currentMosques.length, currentMosques[0]?.distance, 'High');
+        
+        console.log('✅ Processed', currentMosques.length, 'mosques');
+    }
+    
+    function showFallbackMosques(userLat, userLng) {
+        console.log('🔄 Showing fallback mosque data');
+        
+        const fallbackMosques = [
+            { name: "Central Mosque", address: "123 Main Street", lat: userLat + 0.01, lng: userLng + 0.01 },
+            { name: "Community Islamic Center", address: "456 Oak Avenue", lat: userLat - 0.008, lng: userLng + 0.015 },
+            { name: "Masjid Al-Noor", address: "789 Pine Road", lat: userLat + 0.015, lng: userLng - 0.01 },
+            { name: "Islamic Society", address: "321 Elm Street", lat: userLat - 0.012, lng: userLng - 0.008 }
+        ];
+        
+        currentMosques = fallbackMosques.map(mosque => ({
+            ...mosque,
+            distance: calculateDistance(userLat, userLng, mosque.lat, mosque.lng),
+            id: Math.random().toString(36).substr(2, 9)
+        }));
+        
+        currentMosques.sort((a, b) => a.distance - b.distance);
+        
+        // Add markers
+        currentMosques.forEach(mosque => addMosqueMarker(mosque));
+        
+        // Update display
+        displayMosquesList();
+        updateMosqueStats(currentMosques.length, currentMosques[0]?.distance, 'Sample Data');
+    }
+    
+    function addMosqueMarker(mosque) {
+        const marker = L.marker([mosque.lat, mosque.lng], {
+            icon: L.divIcon({
+                className: 'mosque-marker',
+                html: '<i class="fas fa-mosque"></i>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            })
+        }).addTo(mosquesMap);
+        
+        const popupContent = `
+            <div class="popup-content">
+                <div class="popup-mosque-name">${mosque.name}</div>
+                <div class="popup-mosque-address">${mosque.address}</div>
+                <div class="popup-mosque-distance">${mosque.distance.toFixed(1)} km away</div>
+            </div>
+        `;
+        
+        marker.bindPopup(popupContent);
+        mosqueMarkers.push(marker);
+    }
+    
+    function displayMosquesList() {
+        const mosquesList = document.getElementById('mosques-list');
+        const noMosquesDiv = document.getElementById('no-mosques');
+        
+        if (!mosquesList) return;
+        
+        if (currentMosques.length === 0) {
+            mosquesList.innerHTML = '';
+            if (noMosquesDiv) noMosquesDiv.classList.remove('hidden');
+            return;
+        }
+        
+        if (noMosquesDiv) noMosquesDiv.classList.add('hidden');
+        
+        mosquesList.innerHTML = currentMosques.map(mosque => `
+            <div class="mosque-card-new" onclick="focusOnMosque(${mosque.lat}, ${mosque.lng})">
+                <div class="mosque-header">
+                    <div class="mosque-icon">
+                        <i class="fas fa-mosque"></i>
+                    </div>
+                    <div class="mosque-info">
+                        <h4 class="mosque-name">${mosque.name}</h4>
+                        <p class="mosque-address">${mosque.address}</p>
+                    </div>
+                </div>
+                <div class="mosque-actions">
+                    <div class="mosque-distance">
+                        <i class="fas fa-map-marker-alt"></i>
+                        ${mosque.distance.toFixed(1)} km
+                    </div>
+                    <button class="mosque-directions" onclick="event.stopPropagation(); openDirections(${mosque.lat}, ${mosque.lng}, '${mosque.name}')">
+                        <i class="fas fa-directions"></i>
+                        Directions
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function updateMosqueStats(total, closest, accuracy) {
+        const totalElement = document.getElementById('total-mosques');
+        const closestElement = document.getElementById('closest-distance');
+        const accuracyElement = document.getElementById('map-accuracy');
+        
+        if (totalElement) totalElement.textContent = total;
+        if (closestElement) closestElement.textContent = typeof closest === 'number' ? `${closest.toFixed(1)}km` : closest;
+        if (accuracyElement) accuracyElement.textContent = accuracy;
+    }
+    
+    function formatAddress(tags) {
+        if (!tags) return 'Address not available';
+        
+        const parts = [];
+        if (tags['addr:housenumber'] && tags['addr:street']) {
+            parts.push(`${tags['addr:housenumber']} ${tags['addr:street']}`);
+        } else if (tags['addr:street']) {
+            parts.push(tags['addr:street']);
+        }
+        
+        if (tags['addr:city']) parts.push(tags['addr:city']);
+        if (tags['addr:state']) parts.push(tags['addr:state']);
+        
+        return parts.length > 0 ? parts.join(', ') : 'Address not available';
+    }
+    
+    function calculateDistance(lat1, lng1, lat2, lng2) {
+        const R = 6371; // Earth's radius in kilometers
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLng = (lng2 - lng1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLng/2) * Math.sin(dLng/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+    
+    window.focusOnMosque = function(lat, lng) {
+        if (mosquesMap) {
+            mosquesMap.setView([lat, lng], 16);
+            
+            // Find and open popup for this mosque
+            mosqueMarkers.forEach(marker => {
+                const markerPos = marker.getLatLng();
+                if (Math.abs(markerPos.lat - lat) < 0.0001 && Math.abs(markerPos.lng - lng) < 0.0001) {
+                    marker.openPopup();
+                }
+            });
+        }
+    };
+    
+    window.openDirections = function(lat, lng, name) {
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&destination_place_id=${encodeURIComponent(name)}`;
+        window.open(url, '_blank');
+    };
+    
+    // Add event listeners for mosque tab controls
+    document.addEventListener('DOMContentLoaded', function() {
+        const refreshBtn = document.getElementById('refresh-mosques');
+        const expandBtn = document.getElementById('expand-search');
+        const fullscreenBtn = document.getElementById('fullscreen-map');
+        
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', function() {
+                if (window.currentLocation) {
+                    initMosqueFinder(window.currentLocation.lat, window.currentLocation.lng);
+                } else {
+                    showNotification('Location not available. Please enable location access.', 'error');
+                }
+            });
+        }
+        
+        if (expandBtn) {
+            expandBtn.addEventListener('click', function() {
+                showNotification('Expanding search radius...', 'info');
+                // Could implement expanded radius search here
+            });
+        }
+        
+        if (fullscreenBtn) {
+            fullscreenBtn.addEventListener('click', function() {
+                const mapContainer = document.getElementById('mosques-map');
+                if (mapContainer) {
+                    if (mapContainer.requestFullscreen) {
+                        mapContainer.requestFullscreen();
+                    } else if (mapContainer.webkitRequestFullscreen) {
+                        mapContainer.webkitRequestFullscreen();
+                    } else if (mapContainer.msRequestFullscreen) {
+                        mapContainer.msRequestFullscreen();
+                    }
+                }
+            });
+        }
+    });
 }); 

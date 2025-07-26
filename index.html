@@ -16,11 +16,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Athan Times">
-    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMzYjgyZjYiLz48cmVjdCB4PSIxMiIgeT0iMTgiIHdpZHRoPSI4IiBoZWlnaHQ9IjYiIGZpbGw9IndoaXRlIiByeD0iMSIvPjxlbGxpcHNlIGN4PSIxNiIgY3k9IjE4IiByeD0iNiIgcnk9IjQiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMTUiIHk9IjEwIiB3aWR0aD0iMiIgaGVpZ2h0PSIxMCIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjgiIHI9IjIiIGZpbGw9IiNmZmQ3MDAiLz48cGF0aCBkPSJNIDE0IDIwIFEgMTYgMTggMTggMjAgTCAxOCAyNCBMIDE0IDI0IFoiIGZpbGw9IiM2MzY2ZjEiLz48L3N2Zz4=">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMzYjgyZjYiLz48cmVjdCB4PSIxMiIgeT0iMTgiIHdpZHRoPSI4IiBoZWlnaHQ9IjYiIGZpbGw9IndoaXRlIiByeD0iMSIvPjxlbGxpcHNlIGN4PSIxNiIgY3k9IjE4IiByeD0iNiIgcnk9IjQiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMTUiIHk9IjEwIiB3aWR0aD0iMiIgaGVpZ2h0PSIxMCIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjgiIHI9IjIiIGZpbGw9IiNmZmQ3MDAiLz48cGF0aCBkPSJNIDE0IDIwIFEgMTYgMTggMTggMjAgTCAxOCAyNCBMIDE0IDI0IFoiIGZpbGw9IiM2MzY2ZjEiLz48L3N2Zz4=">
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMzYjgyZjYiLz48cmVjdCB4PSIxMiIgeT0iMTgiIHdpZHRoPSI4IiBoZWlnaHQ9IjYiIGZpbGw9IndoaXRlIiByeD0iMSIvPjxlbGxpcHNlIGN4PSIxNiIgY3k9IjE4IiByeD0iNiIgcnk9IjQiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMTUiIHk9IjEwIiB3aWR0aD0iMiIgaGVpZ2h0PSIxMCIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjgiIHI9IjIiIGZpbGw9IiNmZmQ3MDAiLz48cGF0aCBkPSJNIDE0IDIwIFEgMTYgMTggMTggMjAgTCAxOCAyNCBMIDE0IDI0IFoiIGZpbGw9IiM2MzY2ZjEiLz48L3N2Zz4=">
     
     <!-- Open Graph -->
     <meta property="og:title" content="Athan Times - Premium Prayer Times App">
@@ -240,12 +242,57 @@
                 <div class="tab-header">
                     <h2><i class="fas fa-book-open text-purple-600"></i> Quran Audio</h2>
                     <div class="header-actions">
-                        <button id="mode-toggle" onclick="togglePlaybackMode()" class="mode-btn surah-mode">
-                            Surah Mode
+                        <button id="daily-verse-btn" onclick="showDailyVerse()" class="action-btn" title="Daily Verse">
+                            <i class="fas fa-calendar-day"></i>
+                        </button>
+                        <button id="random-verse-btn" onclick="getRandomVerse()" class="action-btn" title="Random Verse">
+                            <i class="fas fa-random"></i>
                         </button>
                         <button id="search-toggle" class="action-btn" onclick="toggleQuranSearch()" title="Search">
                             <i class="fas fa-search"></i>
                         </button>
+                    </div>
+                </div>
+                
+                <!-- Enhanced Daily Verse Section -->
+                <div class="daily-verse-section">
+                    <div class="verse-card">
+                        <div class="verse-header">
+                            <h3 class="verse-title">
+                                <i class="fas fa-star-and-crescent text-purple-600 mr-2"></i>
+                                Verse of the Day
+                            </h3>
+                            <button onclick="refreshVerse()" class="verse-refresh-btn" title="Get new verse">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="verse-content">
+                            <div class="arabic-verse" id="arabic-verse">
+                                وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ ۚ إِنَّ اللَّهَ بَالِغُ أَمْرِهِ ۚ قَدْ جَعَلَ اللَّهُ لِكُلِّ شَيْءٍ قَدْرًا
+                            </div>
+                            
+                            <div class="verse-translation" id="verse-translation">
+                                "And whoever relies upon Allah - then He is sufficient for him. Indeed, Allah will accomplish His purpose. Allah has already set for everything a [decreed] extent."
+                            </div>
+                            
+                            <div class="verse-reference" id="verse-reference">
+                                <i class="fas fa-book mr-2"></i>
+                                Quran 65:3
+                            </div>
+                        </div>
+                        
+                        <div class="verse-actions">
+                            <button onclick="shareVerse()" class="verse-action-btn">
+                                <i class="fas fa-share mr-2"></i>Share
+                            </button>
+                            <button onclick="bookmarkVerse()" class="verse-action-btn">
+                                <i class="fas fa-bookmark mr-2"></i>Bookmark
+                            </button>
+                            <button onclick="playVerseAudio()" class="verse-action-btn">
+                                <i class="fas fa-volume-up mr-2"></i>Listen
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
@@ -257,13 +304,6 @@
                         <i class="fas fa-search search-icon"></i>
                     </div>
                     <div id="search-results" class="search-results"></div>
-                </div>
-                
-                <!-- Quran Reference -->
-                <div class="quran-reference">
-                    <cite id="quran-reference">
-                        "And We have certainly made the Quran easy for remembrance, so is there any who will remember?" - Quran 54:17
-                    </cite>
                 </div>
 
                 <!-- Enhanced Audio Player -->
@@ -292,7 +332,11 @@
                             <div class="selector-group">
                                 <label class="selector-label">Select Reciter</label>
                                 <select id="reciter-selector" class="custom-select">
-                                    <!-- Options will be populated by JavaScript -->
+                                    <option value="mishary">Mishary Rashid Alafasy</option>
+                                    <option value="sudais">Abdul Rahman Al-Sudais</option>
+                                    <option value="husary">Mahmoud Khalil Al-Husary</option>
+                                    <option value="minshawi">Mohamed Siddiq Al-Minshawi</option>
+                                    <option value="ajmi">Ahmad bin Ali Al-Ajmi</option>
                                 </select>
                             </div>
                         </div>
