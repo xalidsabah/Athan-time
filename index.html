@@ -18,9 +18,12 @@
     <meta name="apple-mobile-web-app-title" content="Athan Times">
     <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMzYjgyZjYiLz48cmVjdCB4PSIxMiIgeT0iMTgiIHdpZHRoPSI4IiBoZWlnaHQ9IjYiIGZpbGw9IndoaXRlIiByeD0iMSIvPjxlbGxpcHNlIGN4PSIxNiIgY3k9IjE4IiByeD0iNiIgcnk9IjQiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMTUiIHk9IjEwIiB3aWR0aD0iMiIgaGVpZ2h0PSIxMCIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjgiIHI9IjIiIGZpbGw9IiNmZmQ3MDAiLz48cGF0aCBkPSJNIDE0IDIwIFEgMTYgMTggMTggMjAgTCAxOCAyNCBMIDE0IDI0IFoiIGZpbGw9IiM2MzY2ZjEiLz48L3N2Zz4=">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMzYjgyZjYiLz48cmVjdCB4PSIxMiIgeT0iMTgiIHdpZHRoPSI4IiBoZWlnaHQ9IjYiIGZpbGw9IndoaXRlIiByeD0iMSIvPjxlbGxpcHNlIGN4PSIxNiIgY3k9IjE4IiByeD0iNiIgcnk9IjQiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMTUiIHk9IjEwIiB3aWR0aD0iMiIgaGVpZ2h0PSIxMCIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjgiIHI9IjIiIGZpbGw9IiNmZmQ3MDAiLz48cGF0aCBkPSJNIDE0IDIwIFEgMTYgMTggMTggMjAgTCAxOCAyNCBMIDE0IDI0IFoiIGZpbGw9IiM2MzY2ZjEiLz48L3N2Zz4=">
+    <!-- Favicon - GitHub Pages Compatible -->
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+    <link rel="alternate icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="shortcut icon" href="./favicon.svg">
+    <!-- Emoji fallback for browsers that don't support SVG favicons -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕌</text></svg>">
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMzYjgyZjYiLz48cmVjdCB4PSIxMiIgeT0iMTgiIHdpZHRoPSI4IiBoZWlnaHQ9IjYiIGZpbGw9IndoaXRlIiByeD0iMSIvPjxlbGxpcHNlIGN4PSIxNiIgY3k9IjE4IiByeD0iNiIgcnk9IjQiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMTUiIHk9IjEwIiB3aWR0aD0iMiIgaGVpZ2h0PSIxMCIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjgiIHI9IjIiIGZpbGw9IiNmZmQ3MDAiLz48cGF0aCBkPSJNIDE0IDIwIFEgMTYgMTggMTggMjAgTCAxOCAyNCBMIDE0IDI0IFoiIGZpbGw9IiM2MzY2ZjEiLz48L3N2Zz4=">
     
@@ -146,6 +149,9 @@
                 <div class="tab-header">
                     <h2><i class="fas fa-mosque text-green-600"></i> Prayer Times</h2>
                     <div class="header-actions">
+                        <button id="stop-audio-btn" class="action-btn" onclick="stopAudio()" title="Stop Audio">
+                            <i class="fas fa-stop"></i>
+                        </button>
                         <button id="prayer-settings-btn" class="action-btn" onclick="showPrayerSettings()" title="Prayer Settings">
                             <i class="fas fa-cog"></i>
                         </button>
@@ -213,13 +219,21 @@
                                 <div class="compass-direction south">S</div>
                                 <div class="compass-direction west">W</div>
                             </div>
-                            <div class="qibla-needle"></div>
+                            <div id="compass-needle" class="qibla-needle"></div>
+                            <div id="qibla-indicator" class="qibla-indicator"></div>
                             <div class="compass-center"></div>
                         </div>
                         <div class="compass-info">
                             <div class="direction-display">
-                                <div class="direction-text">Calculating...</div>
-                                <div class="distance-text">Distance: Calculating...</div>
+                                <div class="direction-text">
+                                    <span>Qibla: </span><span id="qibla-angle">Calculating...</span>
+                                </div>
+                                <div class="distance-text">
+                                    <span>Distance: </span><span id="qibla-distance">Calculating...</span>
+                                </div>
+                                <div class="heading-text">
+                                    <span>Heading: </span><span id="compass-heading">0°</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -228,9 +242,12 @@
                     <div class="qibla-stats">
                         <div class="accuracy-section">
                             <h4>Compass Accuracy</h4>
-                            <div class="accuracy-text">Calibrating...</div>
+                            <div id="compass-accuracy" class="accuracy-text">Calibrating...</div>
                         </div>
                         <div class="calibration-section">
+                            <button onclick="calibrateCompass()" class="calibrate-btn">
+                                <i class="fas fa-sync-alt mr-2"></i>Calibrate Compass
+                            </button>
                             <div class="calibration-text">Move device to calibrate</div>
                         </div>
                     </div>
@@ -240,8 +257,11 @@
             <!-- Enhanced Quran Tab -->
             <div id="quran" class="tab-content">
                 <div class="tab-header">
-                    <h2><i class="fas fa-book-open text-purple-600"></i> Quran Audio</h2>
+                    <h2><i class="fas fa-book-open text-purple-600"></i> Quran Recitation</h2>
                     <div class="header-actions">
+                        <button id="bookmarks-btn" onclick="toggleBookmarks()" class="action-btn" title="View Bookmarks">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
                         <button id="daily-verse-btn" onclick="showDailyVerse()" class="action-btn" title="Daily Verse">
                             <i class="fas fa-calendar-day"></i>
                         </button>
@@ -254,43 +274,146 @@
                     </div>
                 </div>
                 
-                <!-- Enhanced Daily Verse Section -->
-                <div class="daily-verse-section">
-                    <div class="verse-card">
-                        <div class="verse-header">
-                            <h3 class="verse-title">
-                                <i class="fas fa-star-and-crescent text-purple-600 mr-2"></i>
-                                Verse of the Day
-                            </h3>
-                            <button onclick="refreshVerse()" class="verse-refresh-btn" title="Get new verse">
-                                <i class="fas fa-sync-alt"></i>
+                <!-- Bookmarks Section -->
+                <div id="bookmarks-section" class="bookmarks-section" style="display: none;">
+                    <div class="bookmarks-header">
+                        <h3 class="bookmarks-title">
+                            <i class="fas fa-bookmark text-yellow-500 mr-2"></i>
+                            Saved Verses
+                        </h3>
+                        <div class="bookmarks-actions">
+                            <button onclick="exportBookmarks()" class="bookmark-action-btn export-btn" title="Export Bookmarks">
+                                <i class="fas fa-download mr-2"></i>Export
+                            </button>
+                            <button onclick="clearAllBookmarks()" class="bookmark-action-btn clear-btn" title="Clear All">
+                                <i class="fas fa-trash mr-2"></i>Clear All
+                            </button>
+                            <button onclick="toggleBookmarks()" class="bookmark-action-btn close-btn" title="Close">
+                                <i class="fas fa-times mr-2"></i>Close
                             </button>
                         </div>
+                    </div>
+                    
+                    <div id="bookmarks-list" class="bookmarks-list">
+                        <!-- Bookmarks will be populated here -->
+                    </div>
+                    
+                    <div id="no-bookmarks" class="no-bookmarks" style="display: none;">
+                        <div class="no-bookmarks-content">
+                            <i class="fas fa-bookmark-plus text-gray-400 mb-4" style="font-size: 48px;"></i>
+                            <h4>No Saved Verses</h4>
+                            <p>Start bookmarking your favorite verses by clicking the bookmark button on any verse.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Beautiful Audio Player Section -->
+                <div class="quran-audio-player">
+                    <div class="player-header">
+                        <div class="player-info">
+                            <h4 class="player-title">
+                                <i class="fas fa-headphones text-purple-500 mr-2"></i>
+                                Audio Player
+                            </h4>
+                            <div class="player-details">
+                                <span id="current-verse-info" class="verse-info">Select a verse</span>
+                                <span class="separator">•</span>
+                                <span id="current-reciter" class="reciter-info">Mishary Alafasy</span>
+                            </div>
+                        </div>
+                        <div id="audio-player-status" class="player-status">
+                            <i class="fas fa-pause text-gray-500"></i> Ready
+                        </div>
+                    </div>
+                    
+                    <div class="audio-progress-container">
+                        <div class="audio-progress-track">
+                            <div id="audio-progress-bar" class="audio-progress-bar"></div>
+                        </div>
+                        <div class="audio-time-display">
+                            <span id="audio-current-time" class="time-current">0:00</span>
+                            <span id="audio-duration" class="time-duration">0:00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="player-controls">
+                        <button onclick="playVerseAudio()" class="player-btn play-btn" title="Play Current Verse">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button onclick="stopAudio()" class="player-btn stop-btn" title="Stop Audio">
+                            <i class="fas fa-stop"></i>
+                        </button>
+                        <div class="reciter-selector">
+                            <select id="reciter-select" onchange="changeReciter(this.value)" class="reciter-dropdown">
+                                <option value="ar.alafasy">Mishary Alafasy</option>
+                                <option value="ar.abdurrahmaansudais">Abdur-Rahman As-Sudais</option>
+                                <option value="ar.maheralmeaqly">Maher Al Mueaqly</option>
+                                <option value="ar.saadalghamdi">Saad Al Ghamdi</option>
+                                <option value="ar.abdulbasitmurattal">Abdul Basit</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Enhanced Daily Verse Section -->
+                <div class="daily-verse-section">
+                    <div class="verse-card-enhanced">
+                        <div class="verse-header">
+                            <div class="verse-title-section">
+                                <h3 class="verse-title">
+                                    <i class="fas fa-star-and-crescent text-purple-600 mr-2"></i>
+                                    <span>Verse of the Day</span>
+                                </h3>
+                                <div class="verse-navigation">
+                                    <button onclick="refreshVerse()" class="nav-btn prev-btn" title="Previous verse">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <button onclick="getRandomVerse()" class="nav-btn random-btn" title="Random verse">
+                                        <i class="fas fa-shuffle"></i>
+                                    </button>
+                                    <button onclick="refreshVerse()" class="nav-btn next-btn" title="Next verse">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         
-                        <div class="verse-content">
-                            <div class="arabic-verse" id="arabic-verse">
-                                وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ ۚ إِنَّ اللَّهَ بَالِغُ أَمْرِهِ ۚ قَدْ جَعَلَ اللَّهُ لِكُلِّ شَيْءٍ قَدْرًا
+                        <div class="verse-content-enhanced">
+                            <div class="arabic-verse-container">
+                                <div class="arabic-verse-enhanced" id="arabic-verse">
+                                    وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ ۚ إِنَّ اللَّهَ بَالِغُ أَمْرِهِ ۚ قَدْ جَعَلَ اللَّهُ لِكُلِّ شَيْءٍ قَدْرًا
+                                </div>
+                                <div class="verse-ornament">
+                                    <div class="ornament-line"></div>
+                                    <div class="ornament-center">✦</div>
+                                    <div class="ornament-line"></div>
+                                </div>
                             </div>
                             
-                            <div class="verse-translation" id="verse-translation">
+                            <div class="verse-translation-enhanced" id="verse-translation">
                                 "And whoever relies upon Allah - then He is sufficient for him. Indeed, Allah will accomplish His purpose. Allah has already set for everything a [decreed] extent."
                             </div>
                             
-                            <div class="verse-reference" id="verse-reference">
-                                <i class="fas fa-book mr-2"></i>
-                                Quran 65:3
+                            <div class="verse-reference-enhanced" id="verse-reference">
+                                <div class="reference-badge">
+                                    <i class="fas fa-book-open mr-2"></i>
+                                    <span>Quran 65:3 - At-Talaq</span>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="verse-actions">
-                            <button onclick="shareVerse()" class="verse-action-btn">
-                                <i class="fas fa-share mr-2"></i>Share
+                        <div class="verse-actions-enhanced">
+                            <button onclick="playVerseAudio()" class="verse-action-btn-enhanced listen-btn">
+                                <i class="fas fa-headphones mr-2"></i>
+                                <span>Listen</span>
                             </button>
-                            <button onclick="bookmarkVerse()" class="verse-action-btn">
-                                <i class="fas fa-bookmark mr-2"></i>Bookmark
+                            <button onclick="shareVerse()" class="verse-action-btn-enhanced share-btn">
+                                <i class="fas fa-share-alt mr-2"></i>
+                                <span>Share</span>
                             </button>
-                            <button onclick="playVerseAudio()" class="verse-action-btn">
-                                <i class="fas fa-volume-up mr-2"></i>Listen
+                            <button onclick="bookmarkVerse()" class="verse-action-btn-enhanced bookmark-btn">
+                                <i class="fas fa-bookmark mr-2"></i>
+                                <span>Save</span>
                             </button>
                         </div>
                     </div>

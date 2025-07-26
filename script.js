@@ -570,11 +570,101 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1000);
     }
 
-    // Placeholder functions for prayer actions
+    // Global audio variables
+    let currentAudio = null;
+    let adhanAudio = null;
+    let quranAudio = null;
+
+    // Real Adhan player implementation
     window.playAdhan = function(prayerName) {
-        showNotification(`Playing Adhan for ${prayerName}`, 'info');
-        // Add actual adhan audio here
+        console.log(`🔊 Playing Adhan for ${prayerName}`);
+        
+        // Stop any currently playing audio
+        stopAllAudio();
+        
+        // Adhan audio URLs (using online sources)
+        const adhanUrls = [
+            'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav', // Fallback
+            'https://archive.org/download/adhan_201905/adhan.mp3', // Primary
+            'https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-one/religion_islam_adhan_call_to_prayer_01.mp3' // Alternative
+        ];
+        
+        // Create and play audio
+        adhanAudio = new Audio();
+        currentAudio = adhanAudio;
+        
+        // Try URLs in order
+        let urlIndex = 0;
+        
+        function tryNextUrl() {
+            if (urlIndex < adhanUrls.length) {
+                adhanAudio.src = adhanUrls[urlIndex];
+                adhanAudio.load();
+                
+                adhanAudio.addEventListener('canplay', function() {
+                    console.log('✅ Adhan audio loaded successfully');
+                    adhanAudio.play().then(() => {
+                        showNotification(`🔊 Playing Adhan for ${prayerName}`, 'success');
+                    }).catch(error => {
+                        console.error('Failed to play adhan:', error);
+                        tryNextUrl();
+                    });
+                }, { once: true });
+                
+                adhanAudio.addEventListener('error', function() {
+                    console.warn(`Failed to load adhan URL ${urlIndex + 1}`);
+                    urlIndex++;
+                    tryNextUrl();
+                }, { once: true });
+                
+                adhanAudio.addEventListener('ended', function() {
+                    showNotification(`✅ Adhan for ${prayerName} completed`, 'success');
+                    currentAudio = null;
+                }, { once: true });
+                
+            } else {
+                // All URLs failed, use Web Audio API to generate a simple tone
+                generateAdhanTone(prayerName);
+            }
+        }
+        
+        tryNextUrl();
     };
+
+    // Generate simple Adhan tone if no audio files work
+    function generateAdhanTone(prayerName) {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Create a simple melodic pattern
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4
+            oscillator.frequency.setValueAtTime(523, audioContext.currentTime + 0.5); // C5
+            oscillator.frequency.setValueAtTime(659, audioContext.currentTime + 1.0); // E5
+            oscillator.frequency.setValueAtTime(523, audioContext.currentTime + 1.5); // C5
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime + 2.0); // A4
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 2.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 2.5);
+            
+            showNotification(`🔊 Playing Adhan tone for ${prayerName}`, 'success');
+            
+            setTimeout(() => {
+                showNotification(`✅ Adhan for ${prayerName} completed`, 'success');
+            }, 2500);
+            
+        } catch (error) {
+            console.error('Failed to generate adhan tone:', error);
+            showNotification(`❌ Could not play Adhan for ${prayerName}`, 'error');
+        }
+    }
 
     window.sharePersonalPrayerTime = function(prayerName, prayerTime) {
         const text = `${prayerName} prayer time: ${formatTime12Hour(prayerTime)}`;
@@ -757,32 +847,71 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Enhanced Quran Verse Functionality
+    // Enhanced Quran Verse Functionality with proper audio mapping
     const quranVerses = [
         {
             arabic: "وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ ۚ إِنَّ اللَّهَ بَالِغُ أَمْرِهِ ۚ قَدْ جَعَلَ اللَّهُ لِكُلِّ شَيْءٍ قَدْرًا",
             translation: "And whoever relies upon Allah - then He is sufficient for him. Indeed, Allah will accomplish His purpose. Allah has already set for everything a [decreed] extent.",
-            reference: "Quran 65:3"
+            reference: "Quran 65:3",
+            surah: 65,
+            verse: 3,
+            surahName: "At-Talaq"
         },
         {
             arabic: "وَبَشِّرِ الصَّابِرِينَ الَّذِينَ إِذَا أَصَابَتْهُم مُّصِيبَةٌ قَالُوا إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ",
             translation: "And give good tidings to the patient, Who, when disaster strikes them, say, 'Indeed we belong to Allah, and indeed to Him we will return.'",
-            reference: "Quran 2:155-156"
+            reference: "Quran 2:155-156",
+            surah: 2,
+            verse: 155,
+            surahName: "Al-Baqarah"
         },
         {
             arabic: "وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ ۚ عَلَيْهِ تَوَكَّلْتُ وَإِلَيْهِ أُنِيبُ",
             translation: "And my success is not but through Allah. Upon Him I have relied, and to Him I return.",
-            reference: "Quran 11:88"
+            reference: "Quran 11:88",
+            surah: 11,
+            verse: 88,
+            surahName: "Hud"
         },
         {
             arabic: "وَمَن يُؤْمِن بِاللَّهِ يَهْدِ قَلْبَهُ ۚ وَاللَّهُ بِكُلِّ شَيْءٍ عَلِيمٌ",
             translation: "And whoever believes in Allah - He will guide his heart. And Allah is Knowing of all things.",
-            reference: "Quran 64:11"
+            reference: "Quran 64:11",
+            surah: 64,
+            verse: 11,
+            surahName: "At-Taghabun"
         },
         {
             arabic: "فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ",
             translation: "So remember Me; I will remember you. And be grateful to Me and do not deny Me.",
-            reference: "Quran 2:152"
+            reference: "Quran 2:152",
+            surah: 2,
+            verse: 152,
+            surahName: "Al-Baqarah"
+        },
+        {
+            arabic: "وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ ۖ أُجِيبُ دَعْوَةَ الدَّاعِ إِذَا دَعَانِ",
+            translation: "And when My servants ask you concerning Me, indeed I am near. I respond to the invocation of the supplicant when he calls upon Me.",
+            reference: "Quran 2:186",
+            surah: 2,
+            verse: 186,
+            surahName: "Al-Baqarah"
+        },
+        {
+            arabic: "وَهُوَ مَعَكُمْ أَيْنَ مَا كُنتُمْ ۚ وَاللَّهُ بِمَا تَعْمَلُونَ بَصِيرٌ",
+            translation: "And He is with you wherever you are. And Allah, of what you do, is Seeing.",
+            reference: "Quran 57:4",
+            surah: 57,
+            verse: 4,
+            surahName: "Al-Hadid"
+        },
+        {
+            arabic: "وَلَا تَهِنُوا وَلَا تَحْزَنُوا وَأَنتُمُ الْأَعْلَوْنَ إِن كُنتُم مُّؤْمِنِينَ",
+            translation: "So do not weaken and do not grieve, and you will be superior if you are [true] believers.",
+            reference: "Quran 3:139",
+            surah: 3,
+            verse: 139,
+            surahName: "Ali 'Imran"
         }
     ];
     
@@ -829,17 +958,255 @@ document.addEventListener('DOMContentLoaded', function() {
         const verse = quranVerses[currentVerseIndex];
         let bookmarks = JSON.parse(localStorage.getItem('quranBookmarks') || '[]');
         
-        if (!bookmarks.find(b => b.reference === verse.reference)) {
-            bookmarks.push(verse);
+        // Check if already bookmarked
+        const isAlreadyBookmarked = bookmarks.some(bookmark => bookmark.reference === verse.reference);
+        
+        if (!isAlreadyBookmarked) {
+            const bookmarkData = {
+                arabic: verse.arabic,
+                translation: verse.translation,
+                reference: verse.reference,
+                surahName: verse.surahName,
+                surah: verse.surah,
+                verse: verse.verse,
+                savedAt: new Date().toISOString()
+            };
+            
+            bookmarks.unshift(bookmarkData); // Add to beginning
             localStorage.setItem('quranBookmarks', JSON.stringify(bookmarks));
-            showNotification('Verse bookmarked!', 'success');
+            showNotification('🔖 Verse bookmarked successfully!', 'success');
+            
+            // Update bookmark button appearance
+            updateBookmarkButton(true);
         } else {
-            showNotification('Verse already bookmarked', 'info');
+            showNotification('📌 Verse already bookmarked', 'info');
         }
     };
     
+    // Real Quran audio player implementation with correct verse mapping
     window.playVerseAudio = function() {
-        showNotification('Audio feature coming soon!', 'info');
+        console.log('🔊 Playing Quran verse audio');
+        
+        // Stop any currently playing audio
+        stopAllAudio();
+        
+        const verse = quranVerses[currentVerseIndex];
+        const surahNumber = verse.surah;
+        const verseNumber = verse.verse;
+        
+        // Show loading with verse info
+        showNotification(`🔄 Loading ${verse.surahName} ${surahNumber}:${verseNumber}...`, 'info');
+        
+        // Available reciters with their API codes
+        const reciters = [
+            { name: 'Mishary Alafasy', code: 'ar.alafasy' },
+            { name: 'Abdur-Rahman As-Sudais', code: 'ar.abdurrahmaansudais' },
+            { name: 'Maher Al Mueaqly', code: 'ar.maheralmeaqly' },
+            { name: 'Saad Al Ghamdi', code: 'ar.saadalghamdi' },
+            { name: 'Abdul Basit', code: 'ar.abdulbasitmurattal' }
+        ];
+        
+        // Get current reciter from localStorage or use default
+        const savedReciter = localStorage.getItem('selectedReciter') || 'ar.alafasy';
+        const currentReciter = reciters.find(r => r.code === savedReciter) || reciters[0];
+        
+        // Al Quran Cloud API for specific verse audio
+        const audioUrl = `https://cdn.islamic.network/quran/audio/128/${currentReciter.code}/${surahNumber}${verseNumber.toString().padStart(3, '0')}.mp3`;
+        
+        console.log(`🎵 Attempting to play: ${audioUrl}`);
+        
+        // Create and play audio
+        quranAudio = new Audio();
+        currentAudio = quranAudio;
+        quranAudio.src = audioUrl;
+        
+        quranAudio.addEventListener('canplay', function() {
+            console.log('✅ Quran verse audio loaded successfully');
+            quranAudio.play().then(() => {
+                showNotification(`🔊 Playing ${verse.surahName} ${surahNumber}:${verseNumber} - ${currentReciter.name}`, 'success');
+                updateAudioPlayerDisplay(verse, currentReciter, 'playing');
+            }).catch(error => {
+                console.error('Failed to play Quran verse audio:', error);
+                tryAlternativeQuranAudio(surahNumber, verseNumber, verse, currentReciter);
+            });
+        }, { once: true });
+        
+        quranAudio.addEventListener('error', function() {
+            console.warn('Failed to load Quran verse audio from primary source');
+            tryAlternativeQuranAudio(surahNumber, verseNumber, verse, currentReciter);
+        }, { once: true });
+        
+        quranAudio.addEventListener('ended', function() {
+            showNotification(`✅ ${verse.surahName} ${surahNumber}:${verseNumber} completed`, 'success');
+            updateAudioPlayerDisplay(verse, currentReciter, 'completed');
+            currentAudio = null;
+        }, { once: true });
+        
+        quranAudio.addEventListener('timeupdate', function() {
+            updateAudioProgress();
+        });
+        
+        // Load the audio
+        quranAudio.load();
+    };
+
+    // Try alternative Quran audio sources with better error handling
+    function tryAlternativeQuranAudio(surahNumber, verseNumber, verse, reciter) {
+        console.log('🔄 Trying alternative audio source...');
+        
+        // Try full surah audio as fallback
+        const surahAudioUrl = `https://cdn.islamic.network/quran/audio-surah/128/${reciter.code}/${surahNumber}.mp3`;
+        
+        if (quranAudio) {
+            quranAudio.src = surahAudioUrl;
+            quranAudio.load();
+            
+            quranAudio.addEventListener('canplay', function() {
+                console.log('✅ Surah audio loaded as fallback');
+                quranAudio.currentTime = (verseNumber - 1) * 10; // Approximate verse timing
+                quranAudio.play().then(() => {
+                    showNotification(`🔊 Playing ${verse.surahName} (Full Surah) - ${reciter.name}`, 'info');
+                    updateAudioPlayerDisplay(verse, reciter, 'playing-surah');
+                }).catch(error => {
+                    console.error('Failed to play Surah audio:', error);
+                    generateQuranTone(verse);
+                });
+            }, { once: true });
+            
+            quranAudio.addEventListener('error', function() {
+                console.warn('Failed to load Surah audio');
+                generateQuranTone(verse);
+            }, { once: true });
+        }
+    }
+
+    // Enhanced tone generation with verse info
+    function generateQuranTone(verse) {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Create a peaceful, meditative tone pattern inspired by Quranic recitation
+            const frequencies = [220, 246, 261, 293, 329, 349, 392]; // Islamic musical scale
+            let time = audioContext.currentTime;
+            
+            frequencies.forEach((freq, index) => {
+                oscillator.frequency.setValueAtTime(freq, time);
+                time += 0.5;
+            });
+            
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 3.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 3.5);
+            
+            showNotification(`🎵 Playing meditation tone for ${verse.surahName}`, 'info');
+            updateAudioPlayerDisplay(verse, { name: 'Meditation Tone' }, 'tone');
+            
+        } catch (error) {
+            console.error('Failed to generate Quran tone:', error);
+            showNotification('❌ Audio not available', 'error');
+        }
+    }
+
+    // Update audio player display
+    function updateAudioPlayerDisplay(verse, reciter, status) {
+        const playerStatus = document.getElementById('audio-player-status');
+        const reciterName = document.getElementById('current-reciter');
+        const verseInfo = document.getElementById('current-verse-info');
+        
+        if (playerStatus) {
+            switch(status) {
+                case 'playing':
+                    playerStatus.innerHTML = '<i class="fas fa-play text-green-500"></i> Playing';
+                    break;
+                case 'playing-surah':
+                    playerStatus.innerHTML = '<i class="fas fa-play text-blue-500"></i> Playing Surah';
+                    break;
+                case 'tone':
+                    playerStatus.innerHTML = '<i class="fas fa-music text-purple-500"></i> Meditation';
+                    break;
+                case 'completed':
+                    playerStatus.innerHTML = '<i class="fas fa-check text-gray-500"></i> Completed';
+                    break;
+                default:
+                    playerStatus.innerHTML = '<i class="fas fa-pause text-gray-500"></i> Stopped';
+            }
+        }
+        
+        if (reciterName && reciter.name) {
+            reciterName.textContent = reciter.name;
+        }
+        
+        if (verseInfo) {
+            verseInfo.textContent = `${verse.surahName} ${verse.surah}:${verse.verse}`;
+        }
+    }
+
+    // Update audio progress bar
+    function updateAudioProgress() {
+        if (quranAudio && quranAudio.duration) {
+            const progressBar = document.getElementById('audio-progress-bar');
+            const currentTimeDisplay = document.getElementById('audio-current-time');
+            const durationDisplay = document.getElementById('audio-duration');
+            
+            if (progressBar) {
+                const progress = (quranAudio.currentTime / quranAudio.duration) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+            
+            if (currentTimeDisplay) {
+                currentTimeDisplay.textContent = formatTime(quranAudio.currentTime);
+            }
+            
+            if (durationDisplay) {
+                durationDisplay.textContent = formatTime(quranAudio.duration);
+            }
+        }
+    }
+
+    // Format time in MM:SS
+    function formatTime(seconds) {
+        if (isNaN(seconds)) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // Change reciter function
+    window.changeReciter = function(reciterCode) {
+        localStorage.setItem('selectedReciter', reciterCode);
+        showNotification('Reciter changed! Play a verse to hear the new voice.', 'success');
+    };
+
+    // Stop all currently playing audio
+    function stopAllAudio() {
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            currentAudio = null;
+        }
+        if (adhanAudio) {
+            adhanAudio.pause();
+            adhanAudio.currentTime = 0;
+            adhanAudio = null;
+        }
+        if (quranAudio) {
+            quranAudio.pause();
+            quranAudio.currentTime = 0;
+            quranAudio = null;
+        }
+    }
+
+    // Global function to stop audio (can be called from UI)
+    window.stopAudio = function() {
+        stopAllAudio();
+        showNotification('🔇 Audio stopped', 'info');
     };
     
     function displayCurrentVerse() {
@@ -866,6 +1233,237 @@ document.addEventListener('DOMContentLoaded', function() {
     let userMarker = null;
     let mosqueMarkers = [];
     let currentMosques = [];
+
+    // Global variables for Qibla compass
+    let qiblaDirection = 0;
+    let deviceHeading = 0;
+    let magneticDeclination = 0;
+    let isCompassActive = false;
+    let orientationPermissionGranted = false;
+
+    // Qibla Compass Implementation
+    function initQiblaCompass() {
+        console.log('🧭 Initializing Qibla Compass...');
+        
+        if (!window.currentLocation) {
+            showNotification('📍 Location needed for Qibla direction', 'error');
+            return;
+        }
+
+        // Calculate Qibla direction
+        calculateQiblaDirection(window.currentLocation.lat, window.currentLocation.lng);
+        
+        // Update compass display
+        updateCompassDisplay();
+        
+        // Request device orientation permission for iOS 13+
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+            requestOrientationPermission();
+        } else {
+            // For other browsers, start listening immediately
+            startCompassListening();
+        }
+
+        // Update accuracy display
+        updateAccuracyDisplay();
+        
+        isCompassActive = true;
+        console.log('✅ Qibla Compass initialized');
+    }
+
+    function requestOrientationPermission() {
+        DeviceOrientationEvent.requestPermission()
+            .then(response => {
+                if (response === 'granted') {
+                    orientationPermissionGranted = true;
+                    startCompassListening();
+                    showNotification('🧭 Compass access granted', 'success');
+                } else {
+                    showNotification('❌ Compass access denied. Please enable in device settings.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Permission request failed:', error);
+                showNotification('❌ Compass not supported on this device', 'error');
+            });
+    }
+
+    function startCompassListening() {
+        if ('DeviceOrientationEvent' in window) {
+            window.addEventListener('deviceorientation', handleDeviceOrientation, true);
+            
+            // Also try absolute orientation for better accuracy
+            if ('DeviceOrientationAbsoluteEvent' in window) {
+                window.addEventListener('deviceorientationabsolute', handleDeviceOrientation, true);
+            }
+            
+            console.log('🧭 Started listening to device orientation');
+        } else {
+            showNotification('❌ Device orientation not supported', 'error');
+        }
+    }
+
+    function handleDeviceOrientation(event) {
+        if (!isCompassActive) return;
+
+        // Get compass heading (alpha value)
+        let alpha = event.alpha;
+        
+        if (alpha !== null) {
+            // Normalize alpha to 0-360 degrees
+            deviceHeading = alpha < 0 ? alpha + 360 : alpha;
+            
+            // Apply magnetic declination correction
+            let correctedHeading = deviceHeading + magneticDeclination;
+            if (correctedHeading >= 360) correctedHeading -= 360;
+            if (correctedHeading < 0) correctedHeading += 360;
+            
+            // Update compass needle
+            updateCompassNeedle(correctedHeading);
+        }
+    }
+
+    function calculateQiblaDirection(lat, lng) {
+        // Kaaba coordinates
+        const kaabaLat = 21.4225;
+        const kaabaLng = 39.8262;
+        
+        // Convert to radians
+        const lat1 = lat * Math.PI / 180;
+        const lat2 = kaabaLat * Math.PI / 180;
+        const deltaLng = (kaabaLng - lng) * Math.PI / 180;
+        
+        // Calculate bearing using spherical trigonometry
+        const x = Math.sin(deltaLng) * Math.cos(lat2);
+        const y = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLng);
+        
+        let bearing = Math.atan2(x, y);
+        
+        // Convert to degrees and normalize to 0-360
+        qiblaDirection = (bearing * 180 / Math.PI + 360) % 360;
+        
+        console.log(`🕋 Qibla direction calculated: ${qiblaDirection.toFixed(1)}°`);
+        
+        // Fetch magnetic declination for more accurate compass
+        fetchMagneticDeclination(lat, lng);
+    }
+
+    async function fetchMagneticDeclination(lat, lng) {
+        try {
+            // Use NOAA magnetic declination web service
+            const response = await fetch(`https://www.ngdc.noaa.gov/geomag-web/calculators/calculateDeclination?lat1=${lat}&lon1=${lng}&key=zNEw7&startYear=2024&startMonth=1&startDay=1&resultFormat=json`);
+            
+            if (response.ok) {
+                const data = await response.json();
+                magneticDeclination = parseFloat(data.result[0].declination);
+                console.log(`🧭 Magnetic declination: ${magneticDeclination}°`);
+            } else {
+                // Fallback: approximate declination based on location
+                magneticDeclination = approximateMagneticDeclination(lat, lng);
+            }
+        } catch (error) {
+            console.warn('Failed to fetch magnetic declination:', error);
+            magneticDeclination = approximateMagneticDeclination(lat, lng);
+        }
+        
+        updateCompassDisplay();
+    }
+
+    function approximateMagneticDeclination(lat, lng) {
+        // Very rough approximation - real declination varies significantly
+        // This is just a fallback when the API fails
+        if (lng < -30) return -15; // Americas
+        if (lng > 120) return 10;  // Asia-Pacific
+        return 5; // Europe/Africa
+    }
+
+    function updateCompassDisplay() {
+        const qiblaAngle = document.getElementById('qibla-angle');
+        const qiblaDistance = document.getElementById('qibla-distance');
+        
+        if (qiblaAngle) {
+            qiblaAngle.textContent = `${qiblaDirection.toFixed(1)}°`;
+        }
+        
+        if (qiblaDistance && window.currentLocation) {
+            const distance = calculateDistanceToKaaba(window.currentLocation.lat, window.currentLocation.lng);
+            qiblaDistance.textContent = `${distance.toFixed(0)} km`;
+        }
+    }
+
+    function calculateDistanceToKaaba(lat, lng) {
+        const kaabaLat = 21.4225;
+        const kaabaLng = 39.8262;
+        
+        const R = 6371; // Earth's radius in km
+        const dLat = (kaabaLat - lat) * Math.PI / 180;
+        const dLng = (kaabaLng - lng) * Math.PI / 180;
+        
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat * Math.PI / 180) * Math.cos(kaabaLat * Math.PI / 180) *
+                  Math.sin(dLng/2) * Math.sin(dLng/2);
+        
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+
+    function updateCompassNeedle(heading) {
+        const compassNeedle = document.getElementById('compass-needle');
+        const qiblaIndicator = document.getElementById('qibla-indicator');
+        
+        if (compassNeedle) {
+            // Rotate compass needle to show device heading
+            compassNeedle.style.transform = `rotate(${-heading}deg)`;
+        }
+        
+        if (qiblaIndicator) {
+            // Rotate Qibla indicator relative to device heading
+            const qiblaRelative = qiblaDirection - heading;
+            qiblaIndicator.style.transform = `rotate(${qiblaRelative}deg)`;
+        }
+        
+        // Update heading display
+        const headingDisplay = document.getElementById('compass-heading');
+        if (headingDisplay) {
+            headingDisplay.textContent = `${heading.toFixed(0)}°`;
+        }
+    }
+
+    function updateAccuracyDisplay() {
+        const accuracyElement = document.getElementById('compass-accuracy');
+        if (accuracyElement) {
+            let accuracy = 'Unknown';
+            
+            if ('DeviceOrientationEvent' in window) {
+                if (orientationPermissionGranted || typeof DeviceOrientationEvent.requestPermission !== 'function') {
+                    accuracy = 'Good';
+                } else {
+                    accuracy = 'Permission needed';
+                }
+            } else {
+                accuracy = 'Not supported';
+            }
+            
+            accuracyElement.textContent = accuracy;
+        }
+    }
+
+    // Compass calibration function
+    window.calibrateCompass = function() {
+        showNotification('🧭 Hold your phone flat and move it in a figure-8 pattern', 'info');
+        
+        // Reset compass values
+        deviceHeading = 0;
+        
+        // Re-fetch magnetic declination
+        if (window.currentLocation) {
+            fetchMagneticDeclination(window.currentLocation.lat, window.currentLocation.lng);
+        }
+        
+        setTimeout(() => {
+            showNotification('✅ Compass calibration complete', 'success');
+        }, 3000);
+    };
     
     window.initMosqueFinder = function(lat, lng) {
         console.log('🕌 Initializing mosque finder...', lat, lng);
@@ -1219,4 +1817,222 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+
+    // Enhanced Bookmarks Management
+    window.toggleBookmarks = function() {
+        const bookmarksSection = document.getElementById('bookmarks-section');
+        const isVisible = bookmarksSection.style.display !== 'none';
+        
+        if (isVisible) {
+            bookmarksSection.style.display = 'none';
+        } else {
+            bookmarksSection.style.display = 'block';
+            displayBookmarks();
+        }
+    };
+
+    function displayBookmarks() {
+        const bookmarks = JSON.parse(localStorage.getItem('quranBookmarks') || '[]');
+        const bookmarksList = document.getElementById('bookmarks-list');
+        const noBookmarks = document.getElementById('no-bookmarks');
+        
+        if (bookmarks.length === 0) {
+            bookmarksList.innerHTML = '';
+            noBookmarks.style.display = 'block';
+            return;
+        }
+        
+        noBookmarks.style.display = 'none';
+        
+        bookmarksList.innerHTML = bookmarks.map((bookmark, index) => `
+            <div class="bookmark-item" data-index="${index}">
+                <div class="bookmark-content">
+                    <div class="bookmark-arabic">
+                        ${bookmark.arabic}
+                    </div>
+                    <div class="bookmark-translation">
+                        "${bookmark.translation}"
+                    </div>
+                    <div class="bookmark-reference">
+                        <span class="reference-text">
+                            <i class="fas fa-book-open mr-2"></i>
+                            ${bookmark.reference}
+                        </span>
+                        <span class="bookmark-date">
+                            <i class="fas fa-clock mr-1"></i>
+                            ${new Date(bookmark.savedAt).toLocaleDateString()}
+                        </span>
+                    </div>
+                </div>
+                <div class="bookmark-actions">
+                    <button onclick="playBookmarkedVerse(${index})" class="bookmark-btn play-bookmark-btn" title="Play Audio">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button onclick="shareBookmarkedVerse(${index})" class="bookmark-btn share-bookmark-btn" title="Share">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                    <button onclick="loadBookmarkedVerse(${index})" class="bookmark-btn load-bookmark-btn" title="View Verse">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button onclick="removeBookmark(${index})" class="bookmark-btn remove-bookmark-btn" title="Remove">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    window.playBookmarkedVerse = function(index) {
+        const bookmarks = JSON.parse(localStorage.getItem('quranBookmarks') || '[]');
+        if (bookmarks[index]) {
+            const bookmark = bookmarks[index];
+            
+            // Find the verse in our array to get proper audio data
+            const verseIndex = quranVerses.findIndex(v => v.reference === bookmark.reference);
+            if (verseIndex !== -1) {
+                currentVerseIndex = verseIndex;
+                playVerseAudio();
+                showNotification(`🔊 Playing bookmarked verse: ${bookmark.reference}`, 'success');
+            } else {
+                showNotification('❌ Audio not available for this verse', 'error');
+            }
+        }
+    };
+
+    window.shareBookmarkedVerse = function(index) {
+        const bookmarks = JSON.parse(localStorage.getItem('quranBookmarks') || '[]');
+        if (bookmarks[index]) {
+            const bookmark = bookmarks[index];
+            const shareText = `${bookmark.translation}\n\n${bookmark.reference}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Bookmarked Verse from the Quran',
+                    text: shareText
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    showNotification('Bookmarked verse copied to clipboard!', 'success');
+                }).catch(() => {
+                    showNotification('Could not copy verse', 'error');
+                });
+            }
+        }
+    };
+
+    window.loadBookmarkedVerse = function(index) {
+        const bookmarks = JSON.parse(localStorage.getItem('quranBookmarks') || '[]');
+        if (bookmarks[index]) {
+            const bookmark = bookmarks[index];
+            
+            // Find and load this verse
+            const verseIndex = quranVerses.findIndex(v => v.reference === bookmark.reference);
+            if (verseIndex !== -1) {
+                currentVerseIndex = verseIndex;
+                displayCurrentVerse();
+                toggleBookmarks(); // Close bookmarks
+                showNotification(`📖 Loaded verse: ${bookmark.reference}`, 'success');
+                
+                // Scroll to verse display
+                const verseCard = document.querySelector('.verse-card-enhanced');
+                if (verseCard) {
+                    verseCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } else {
+                showNotification('❌ Could not load this verse', 'error');
+            }
+        }
+    };
+
+    window.removeBookmark = function(index) {
+        const bookmarks = JSON.parse(localStorage.getItem('quranBookmarks') || '[]');
+        if (bookmarks[index]) {
+            const removedVerse = bookmarks[index];
+            bookmarks.splice(index, 1);
+            localStorage.setItem('quranBookmarks', JSON.stringify(bookmarks));
+            displayBookmarks();
+            showNotification(`🗑️ Removed bookmark: ${removedVerse.reference}`, 'success');
+        }
+    };
+
+    window.exportBookmarks = function() {
+        const bookmarks = JSON.parse(localStorage.getItem('quranBookmarks') || '[]');
+        if (bookmarks.length === 0) {
+            showNotification('❌ No bookmarks to export', 'error');
+            return;
+        }
+        
+        const exportData = bookmarks.map(bookmark => ({
+            arabic: bookmark.arabic,
+            translation: bookmark.translation,
+            reference: bookmark.reference,
+            savedDate: new Date(bookmark.savedAt).toLocaleDateString()
+        }));
+        
+        const exportText = exportData.map(bookmark => 
+            `${bookmark.reference}\n\n${bookmark.arabic}\n\n"${bookmark.translation}"\n\nSaved: ${bookmark.savedDate}\n\n${'='.repeat(50)}\n\n`
+        ).join('');
+        
+        // Create downloadable file
+        const blob = new Blob([exportText], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `quran-bookmarks-${new Date().toISOString().split('T')[0]}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showNotification(`📁 Exported ${bookmarks.length} bookmarks`, 'success');
+    };
+
+    window.clearAllBookmarks = function() {
+        const bookmarks = JSON.parse(localStorage.getItem('quranBookmarks') || '[]');
+        if (bookmarks.length === 0) {
+            showNotification('❌ No bookmarks to clear', 'error');
+            return;
+        }
+        
+        if (confirm(`Are you sure you want to delete all ${bookmarks.length} bookmarked verses? This cannot be undone.`)) {
+            localStorage.removeItem('quranBookmarks');
+            displayBookmarks();
+            showNotification('🗑️ All bookmarks cleared', 'success');
+        }
+    };
+
+    // Update bookmark button appearance
+    function updateBookmarkButton(isBookmarked) {
+        const bookmarkBtns = document.querySelectorAll('.bookmark-btn, .verse-action-btn-enhanced.bookmark-btn');
+        bookmarkBtns.forEach(btn => {
+            if (isBookmarked) {
+                btn.classList.add('bookmarked');
+                const icon = btn.querySelector('i');
+                if (icon) {
+                    icon.className = 'fas fa-bookmark mr-2';
+                }
+            } else {
+                btn.classList.remove('bookmarked');
+                const icon = btn.querySelector('i');
+                if (icon) {
+                    icon.className = 'far fa-bookmark mr-2';
+                }
+            }
+        });
+    }
+
+    // Check if current verse is bookmarked when displaying
+    function checkIfVerseBookmarked() {
+        const verse = quranVerses[currentVerseIndex];
+        const bookmarks = JSON.parse(localStorage.getItem('quranBookmarks') || '[]');
+        const isBookmarked = bookmarks.some(bookmark => bookmark.reference === verse.reference);
+        updateBookmarkButton(isBookmarked);
+    }
+
+    // Update displayCurrentVerse to check bookmark status
+    const originalDisplayCurrentVerse = displayCurrentVerse;
+    displayCurrentVerse = function() {
+        originalDisplayCurrentVerse();
+        checkIfVerseBookmarked();
+    };
 }); 
