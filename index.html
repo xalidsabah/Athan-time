@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athan Times - Premium Prayer Times App</title>
+    
+    <!-- Enhanced Meta Tags -->
+    <meta name="description" content="Premium Islamic prayer times app with Qibla direction, Quran recitation, and nearby mosque finder. Accurate prayer times based on your location.">
+    <meta name="keywords" content="prayer times, athan, qibla, mosque, islamic, muslim, salah, adhan">
+    <meta name="author" content="Athan Times">
+    <meta name="theme-color" content="#3b82f6">
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Athan Times">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Athan Times - Premium Prayer Times App">
+    <meta property="og:description" content="Accurate prayer times, Qibla direction, and nearby mosque finder">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://athan-times.app">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Athan Times - Premium Prayer Times App">
+    <meta name="twitter:description" content="Accurate prayer times, Qibla direction, and nearby mosque finder">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    
+    <!-- External Resources -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Leaflet CSS and JS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="min-h-screen">
+    <!-- Enhanced Splash Screen -->
+    <div id="splash" class="splash-screen fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 z-50">
+        <div class="text-center text-white">
+            <div class="w-40 h-40 mx-auto mb-8 rounded-full bg-white bg-opacity-20 flex items-center justify-center backdrop-blur-sm">
+                <i class="fas fa-mosque text-6xl text-white"></i>
+            </div>
+            <h1 class="text-5xl font-bold mb-4">Athan Times</h1>
+            <p class="text-xl opacity-90 mb-8">Premium Prayer Times & Islamic Tools</p>
+            <div class="flex justify-center space-x-2">
+                <div class="w-3 h-3 bg-white rounded-full animate-bounce"></div>
+                <div class="w-3 h-3 bg-white rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                <div class="w-3 h-3 bg-white rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="w-full min-h-screen bg-white hidden">
+        <!-- Enhanced Header -->
+        <header class="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-800 text-white p-6 shadow-lg">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Athan Times</h1>
+                    <div id="current-date" class="text-lg opacity-90">Loading date...</div>
+                    <div id="hijri-date" class="text-sm opacity-80 mt-1"></div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="location-btn" class="p-3 rounded-full hover:bg-white hover:bg-opacity-20 transition" aria-label="Update location">
+                        <i class="fas fa-map-marker-alt text-xl"></i>
+                    </button>
+                    <button id="settings-btn" class="p-3 rounded-full hover:bg-white hover:bg-opacity-20 transition" aria-label="Open settings">
+                        <i class="fas fa-cog text-xl"></i>
+                </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Enhanced Location Display -->
+        <div class="location-display mx-6 mt-4">
+            <div class="location-info">
+                <div class="location-details">
+                    <div class="location-name">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        <span id="location-name">Detecting location...</span>
+                    </div>
+                    <div class="location-coordinates">
+                        <i class="fas fa-crosshairs mr-2"></i>
+                        <span id="location-coordinates">Loading coordinates...</span>
+                    </div>
+                    <div class="location-info-text">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        <span id="location-info">Getting your location...</span>
+                    </div>
+                </div>
+                <div class="location-actions">
+                    <div class="time-display">
+                        <div id="current-time" class="text-2xl font-bold">--:--</div>
+                        <div class="time-label">Local Time</div>
+                    </div>
+                    <button class="location-btn" id="refresh-location" aria-label="Refresh location">
+                        <i class="fas fa-sync-alt mr-1"></i>Refresh
+                    </button>
+                    <button class="location-btn" id="share-location" aria-label="Share location">
+                        <i class="fas fa-share-alt mr-1"></i>Share
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="bg-white shadow-md sticky top-0 z-40" role="navigation" aria-label="Main navigation">
+            <div class="w-full px-6">
+                <div class="flex space-x-8 overflow-x-auto">
+                    <button class="tab-btn active py-4 px-2 border-b-2 border-blue-600 text-blue-600 font-medium whitespace-nowrap" data-tab="prayers" aria-selected="true" role="tab">
+                        <i class="fas fa-mosque mr-2"></i>Prayer Times
+                    </button>
+                    <button class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 font-medium whitespace-nowrap" data-tab="qibla" aria-selected="false" role="tab">
+                        <i class="fas fa-compass mr-2"></i>Qibla
+                    </button>
+                    <button class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 font-medium whitespace-nowrap" data-tab="quran" aria-selected="false" role="tab">
+                        <i class="fas fa-book-open mr-2"></i>Quran
+                    </button>
+                    <button class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 font-medium whitespace-nowrap" data-tab="mosques" aria-selected="false" role="tab">
+                        <i class="fas fa-mosque mr-2"></i>Nearby Mosques
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="p-6" role="main">
+            <!-- Prayer Times Tab -->
+            <div id="prayers" class="tab-content active">
+                <div class="tab-header">
+                    <h2><i class="fas fa-mosque text-green-600"></i> Prayer Times</h2>
+                    <div class="header-actions">
+                        <button id="prayer-settings-btn" class="action-btn" onclick="showPrayerSettings()" title="Prayer Settings">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <button id="location-refresh" class="action-btn" onclick="refreshLocation()" title="Refresh Location">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Enhanced Next Prayer Section -->
+                <div id="next-prayer" class="next-prayer-enhanced">
+                    <div class="next-prayer-content">
+                        <div class="prayer-details">
+                            <h3 class="next-prayer-name">Fajr</h3>
+                            <p id="next-prayer-time" class="next-prayer-time">03:39</p>
+                            <p class="next-prayer-desc">Dawn Prayer</p>
+                        </div>
+                        <div class="countdown-section">
+                            <div id="countdown" class="countdown-display">04:26:09</div>
+                            <p class="countdown-label">until Athan</p>
+                            <div class="countdown-actions">
+                                <button onclick="setCustomReminder()" class="mini-btn">
+                                    <i class="fas fa-bell"></i>
+                                </button>
+                                <button onclick="playAdhan()" class="mini-btn">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prayer Times Container -->
+                <div id="prayer-times" class="prayer-times-grid">
+                    <!-- Prayer cards will be dynamically generated -->
+                </div>
+                
+                <!-- Hijri Date Display -->
+                <div class="hijri-date-container">
+                    <div class="hijri-info">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="hijri-date">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Qibla Tab -->
+            <div id="qibla" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-compass text-yellow-600"></i> Qibla Direction</h2>
+                    <div class="header-actions">
+                        <button onclick="initQiblaCompass()" class="action-btn" title="Recalibrate">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="qibla-container">
+                    <!-- Enhanced Compass -->
+                    <div class="qibla-compass-wrapper">
+                        <div class="qibla-compass-new">
+                            <div class="compass-rose">
+                                <div class="compass-direction north">N</div>
+                                <div class="compass-direction east">E</div>
+                                <div class="compass-direction south">S</div>
+                                <div class="compass-direction west">W</div>
+                            </div>
+                            <div class="qibla-needle"></div>
+                            <div class="compass-center"></div>
+                        </div>
+                        <div class="compass-info">
+                            <div class="direction-display">
+                                <div class="direction-text">Calculating...</div>
+                                <div class="distance-text">Distance: Calculating...</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Accuracy and Status -->
+                    <div class="qibla-stats">
+                        <div class="accuracy-section">
+                            <h4>Compass Accuracy</h4>
+                            <div class="accuracy-text">Calibrating...</div>
+                        </div>
+                        <div class="calibration-section">
+                            <div class="calibration-text">Move device to calibrate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Quran Tab -->
+            <div id="quran" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-book-open text-purple-600"></i> Quran Audio</h2>
+                    <div class="header-actions">
+                        <button id="mode-toggle" onclick="togglePlaybackMode()" class="mode-btn surah-mode">
+                            Surah Mode
+                        </button>
+                        <button id="search-toggle" class="action-btn" onclick="toggleQuranSearch()" title="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Search Section -->
+                <div id="quran-search" class="search-section" style="display: none;">
+                    <div class="search-input-container">
+                        <input type="text" id="quran-search-input" placeholder="Search Surahs..." 
+                               oninput="searchQuran(this.value)">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <div id="search-results" class="search-results"></div>
+                </div>
+                
+                <!-- Quran Reference -->
+                <div class="quran-reference">
+                    <cite id="quran-reference">
+                        "And We have certainly made the Quran easy for remembrance, so is there any who will remember?" - Quran 54:17
+                    </cite>
+                </div>
+
+                <!-- Enhanced Audio Player -->
+                <div class="quran-player-container">
+                    <h3>Quran Audio Player</h3>
+                    
+                    <!-- Player Controls Row -->
+                    <div class="player-controls-row">
+                        <div class="player-selectors">
+                            <div class="selector-group">
+                                <label class="selector-label">Select Surah</label>
+                                <select id="surah-selector" class="custom-select">
+                                    <option value="1">Al-Fatiha (The Opening)</option>
+                                    <option value="2">Al-Baqarah (The Cow)</option>
+                                    <option value="3">Ali Imran (Family of Imran)</option>
+                                    <option value="18">Al-Kahf (The Cave)</option>
+                                    <option value="36">Ya-Sin</option>
+                                    <option value="55">Ar-Rahman (The Beneficent)</option>
+                                    <option value="67">Al-Mulk (The Sovereignty)</option>
+                                    <option value="112">Al-Ikhlas (The Sincerity)</option>
+                                    <option value="113">Al-Falaq (The Dawn)</option>
+                                    <option value="114">An-Nas (Mankind)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="selector-group">
+                                <label class="selector-label">Select Reciter</label>
+                                <select id="reciter-selector" class="custom-select">
+                                    <!-- Options will be populated by JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Controls -->
+                        <div class="player-extra-controls">
+                            <button id="bookmark-btn" onclick="toggleBookmark()" class="control-btn" title="Bookmark">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                            <button id="repeat-btn" onclick="toggleAutoRepeat()" class="control-btn" title="Auto Repeat">
+                                <i class="fas fa-repeat"></i>
+                            </button>
+                            <div class="speed-control">
+                                <select onchange="setPlaybackSpeed(this.value)" class="speed-select">
+                                    <option value="0.5">0.5x</option>
+                                    <option value="0.75">0.75x</option>
+                                    <option value="1.0" selected>1.0x</option>
+                                    <option value="1.25">1.25x</option>
+                                    <option value="1.5">1.5x</option>
+                                </select>
+                                <span id="speed-display" class="speed-label">1.0x</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Audio Player -->
+                    <div class="audio-player">
+                        <!-- Now Playing Info -->
+                        <div class="now-playing">
+                            <div class="surah-info">
+                                <div id="current-surah-name" class="surah-name">Al-Fatiha (The Opening)</div>
+                                <div id="current-reciter-name" class="reciter-name">Mishary Rashid Alafasy</div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="progress-container">
+                            <div id="progress-bar" class="progress-bar">
+                                <div id="progress-fill" class="progress-fill"></div>
+                            </div>
+                        </div>
+
+                        <!-- Time Display -->
+                        <div class="time-info">
+                            <span id="current-time" class="current-time">0:00</span>
+                            <span id="total-time" class="total-time">0:00</span>
+                        </div>
+
+                        <!-- Player Controls -->
+                        <div class="player-controls">
+                            <button id="prev-btn" class="control-btn" title="Previous">
+                                <i class="fas fa-step-backward"></i>
+                            </button>
+                            <button id="play-pause-btn" class="control-btn play-btn" title="Play">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button id="next-btn" class="control-btn" title="Next">
+                                <i class="fas fa-step-forward"></i>
+                            </button>
+                        </div>
+
+                        <!-- Volume Control -->
+                        <div class="volume-control">
+                            <i class="fas fa-volume-down"></i>
+                            <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="70">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nearby Mosques Tab -->
+            <div id="mosques" class="tab-content" role="tabpanel" aria-labelledby="mosques-tab">
+                <div class="mosques-container">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-mosque mr-3 text-green-600"></i>Nearby Mosques
+                    </h2>
+                    
+                    <!-- Map Controls -->
+                    <div class="map-controls mb-6">
+                        <div class="flex items-center justify-between flex-wrap gap-4">
+                            <div class="map-info">
+                                <p class="text-gray-600 text-sm">
+                                    <i class="fas fa-map-marker-alt mr-2 text-green-600"></i>
+                                    Showing mosques within <span id="search-radius" class="font-semibold">2km</span> radius
+                                </p>
+                                <p class="text-gray-500 text-xs mt-1" id="mosques-count">Loading mosques...</p>
+                            </div>
+                            <div class="map-actions flex gap-2">
+                                <button class="map-btn" id="refresh-mosques" aria-label="Refresh mosque locations">
+                                    <i class="fas fa-sync-alt mr-2"></i>Refresh
+                                </button>
+                                <button class="map-btn" id="expand-search" aria-label="Expand search radius">
+                                    <i class="fas fa-search-plus mr-2"></i>Expand
+                                </button>
+                                <button class="map-btn primary" id="fullscreen-map" aria-label="View map in fullscreen">
+                                    <i class="fas fa-expand mr-2"></i>Fullscreen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Enhanced Map Container -->
+                    <div class="map-wrapper">
+                        <div id="mosques-map" class="mosque-map" role="application" aria-label="Interactive map showing nearby mosques">
+                            <div class="map-loading" id="map-loading">
+                                <div class="loading-spinner"></div>
+                                <p class="mt-3 text-gray-600">Loading map and nearby mosques...</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Map Stats Overlay -->
+                        <div class="map-stats" id="map-stats">
+                            <div class="stat-item">
+                                <span class="stat-value" id="total-mosques">0</span>
+                                <span class="stat-label">Mosques Found</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="closest-distance">-</span>
+                                <span class="stat-label">Closest</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="map-accuracy">High</span>
+                                <span class="stat-label">Accuracy</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mosques List -->
+                    <div class="mosques-list-container mt-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                <i class="fas fa-list mr-2 text-green-600"></i>Mosque Directory
+                            </h3>
+                            <div class="list-controls">
+                                <select id="sort-mosques" class="sort-select">
+                                    <option value="distance">Sort by Distance</option>
+                                    <option value="name">Sort by Name</option>
+                                    <option value="rating">Sort by Rating</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div id="mosques-list" class="mosques-grid">
+                            <!-- Mosques will be populated here by JavaScript -->
+                        </div>
+                        
+                        <!-- No Mosques Found Message -->
+                        <div id="no-mosques" class="no-mosques hidden">
+                            <div class="text-center py-12">
+                                <i class="fas fa-mosque text-gray-300 text-6xl mb-4"></i>
+                                <h3 class="text-xl font-semibold text-gray-600 mb-2">No Mosques Found</h3>
+                                <p class="text-gray-500 mb-4">No mosques found in your area. Try expanding the search radius.</p>
+                                <button class="map-btn primary" onclick="document.getElementById('expand-search').click()">
+                                    <i class="fas fa-search-plus mr-2"></i>Expand Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden" role="dialog" aria-labelledby="settings-title" aria-hidden="true">
+            <div class="bg-white rounded-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+                <div class="sticky top-0 bg-white p-6 border-b flex justify-between items-center rounded-t-2xl">
+                    <h2 id="settings-title" class="text-2xl font-bold text-gray-800">Settings</h2>
+                    <button id="close-settings" class="text-gray-500 hover:text-gray-700 text-xl" aria-label="Close settings">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="p-6">
+                    <!-- Location Settings -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-map-marker-alt text-blue-500 mr-3"></i>
+                            Location Settings
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div>
+                                    <span class="font-medium">Auto Location Detection</span>
+                                    <p class="text-sm text-gray-600">Use GPS to automatically detect your location</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="auto-location" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                            
+                            <div id="manual-location-section" class="hidden space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                                    <select class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option>United States</option>
+                                        <option>United Kingdom</option>
+                                        <option>Saudi Arabia</option>
+                                        <option>Egypt</option>
+                                        <option>Pakistan</option>
+                                        <option>Turkey</option>
+                                        <option>Malaysia</option>
+                                        <option>Indonesia</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
+                                    <input type="text" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter city name">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Calculation Method -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-calculator text-blue-500 mr-3"></i>
+                            Calculation Method
+                        </h3>
+                        <select id="calculation-method" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="0">Shia Ithna-Ansari</option>
+                            <option value="1">University of Islamic Sciences, Karachi</option>
+                            <option value="2">Islamic Society of North America</option>
+                            <option value="3">Muslim World League</option>
+                            <option value="4">Umm Al-Qura University, Makkah</option>
+                            <option value="5">Egyptian General Authority of Survey</option>
+                            <option value="7">Institute of Geophysics, University of Tehran</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Madhab Selection -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-scale-balanced text-blue-500 mr-3"></i>
+                            Madhab Selection
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="radio" name="madhab" value="shafi" class="form-radio text-blue-600" checked>
+                                <div class="ml-3">
+                                    <span class="font-medium">Shafi'i</span>
+                                    <p class="text-sm text-gray-600">Standard method</p>
+                                </div>
+                            </label>
+                            <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="radio" name="madhab" value="hanafi" class="form-radio text-blue-600">
+                                <div class="ml-3">
+                                    <span class="font-medium">Hanafi</span>
+                                    <p class="text-sm text-gray-600">Alternative method</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Save Button -->
+                    <button id="save-settings" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105">
+                        <i class="fas fa-save mr-2"></i>Save Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>

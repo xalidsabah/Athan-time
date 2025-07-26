@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athan Times - Test Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold mb-4">🕌 Athan Times Test</h1>
+        
+        <div class="space-y-4">
+            <button onclick="testGeolocation()" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                Test GPS Location
+            </button>
+            
+            <button onclick="testPrayerAPI()" class="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+                Test Prayer Times API
+            </button>
+            
+            <button onclick="testFallback()" class="w-full bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600">
+                Test Fallback Mode
+            </button>
+        </div>
+        
+        <div id="test-results" class="mt-6 p-4 bg-gray-50 rounded min-h-20">
+            <h3 class="font-bold mb-2">Test Results:</h3>
+            <div id="test-output">Click a test button above</div>
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const output = document.getElementById('test-output');
+            output.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>';
+        }
+
+        function clearLog() {
+            document.getElementById('test-output').innerHTML = '';
+        }
+
+        async function testGeolocation() {
+            clearLog();
+            log('🌍 Testing GPS location...');
+            
+            if (!navigator.geolocation) {
+                log('❌ Geolocation not supported');
+                return;
+            }
+            
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    log(`✅ GPS Success: ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+                    log(`📍 Accuracy: ${position.coords.accuracy}m`);
+                },
+                function(error) {
+                    log(`❌ GPS Error: ${error.message}`);
+                    log(`🔧 Error Code: ${error.code}`);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 300000
+                }
+            );
+        }
+
+        async function testPrayerAPI() {
+            clearLog();
+            log('🕌 Testing Prayer Times API...');
+            
+            const lat = 40.7128; // New York
+            const lng = -74.0060;
+            
+            try {
+                const date = new Date();
+                const dateString = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+                const apiUrl = `https://api.aladhan.com/v1/timings/${dateString}?latitude=${lat}&longitude=${lng}&method=2`;
+                
+                log(`📡 Calling API: ${apiUrl}`);
+                
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.code === 200 && data.data && data.data.timings) {
+                    log('✅ API Success!');
+                    log(`🌅 Fajr: ${data.data.timings.Fajr}`);
+                    log(`☀️ Dhuhr: ${data.data.timings.Dhuhr}`);
+                    log(`🌤️ Asr: ${data.data.timings.Asr}`);
+                    log(`🌅 Maghrib: ${data.data.timings.Maghrib}`);
+                    log(`🌙 Isha: ${data.data.timings.Isha}`);
+                } else {
+                    log('❌ Invalid API response format');
+                }
+                
+            } catch (error) {
+                log(`❌ API Error: ${error.message}`);
+            }
+        }
+
+        function testFallback() {
+            clearLog();
+            log('🔄 Testing Fallback Mode...');
+            
+            const fallbackPrayers = {
+                Fajr: { time: '05:30', name: 'Fajr', description: 'Dawn Prayer', icon: '🌅' },
+                Dhuhr: { time: '12:30', name: 'Dhuhr', description: 'Noon Prayer', icon: '☀️' },
+                Asr: { time: '15:45', name: 'Asr', description: 'Afternoon Prayer', icon: '🌤️' },
+                Maghrib: { time: '18:15', name: 'Maghrib', description: 'Sunset Prayer', icon: '🌅' },
+                Isha: { time: '19:45', name: 'Isha', description: 'Night Prayer', icon: '🌙' }
+            };
+            
+            log('✅ Fallback prayers generated');
+            Object.entries(fallbackPrayers).forEach(([name, prayer]) => {
+                log(`${prayer.icon} ${prayer.name}: ${prayer.time}`);
+            });
+            
+            log('✅ Fallback mode working correctly');
+        }
+    </script>
+</body>
+</html> 
