@@ -52,10 +52,18 @@ window.stopAudio = function() {
     }
     
     // Show notification
+<<<<<<< HEAD
             window.showSuccess('All audio stopped and cleared', {
             title: 'Audio Stopped 🔇',
             duration: 3000
         });
+=======
+    if (window.showNotification) {
+        window.showNotification('🔇 All audio stopped and cleared', 'info');
+    } else {
+        alert('🔇 All audio stopped');
+    }
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
     
     console.log('🛑 Audio stopping completed - all sources cleared');
 };
@@ -255,18 +263,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Enhanced location and prayer times with better error handling
     function getLocationAndPrayerTimes() {
         if (!navigator.geolocation) {
+<<<<<<< HEAD
             window.showError('Geolocation not supported by this browser', {
                 title: 'Browser Limitation ❌',
                 duration: 8000
             });
+=======
+            showNotification('❌ Geolocation not supported by this browser', 'error');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
             useFallbackLocation();
             return;
         }
 
+<<<<<<< HEAD
                     window.showLoading('Getting your location...', {
                 title: 'Location Service 📍',
                 id: 'location-loading'
             });
+=======
+        showNotification('📍 Getting your location...', 'info');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
         
         const geoOptions = {
             enableHighAccuracy: true,
@@ -308,11 +324,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 coordinatesElement.textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
             }
             
+<<<<<<< HEAD
                             window.notificationManager.hide('location-loading');
                 window.showSuccess(`Location found: ${locationName}`, {
                     title: 'Location Detected 📍',
                     sound: true
                 });
+=======
+            showNotification(`📍 Location found: ${locationName}`, 'success');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
             
             // Fetch prayer times
             await fetchEnhancedPrayerTimes(lat, lng);
@@ -350,11 +370,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
         }
         
+<<<<<<< HEAD
                     window.notificationManager.hide('location-loading');
             window.showError(errorMessage, {
                 title: 'Location Error ❌',
                 duration: 8000
             });
+=======
+        showNotification(errorMessage, 'error');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
         
         setTimeout(() => {
             useFallbackLocation();
@@ -396,19 +420,27 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.code === 200) {
                 displayPrayerTimes(data.data.timings);
                 updateNextPrayer(data.data.timings);
+<<<<<<< HEAD
                 window.showSuccess('Prayer times loaded successfully!', {
                 title: 'Al-Hamdulillah! 🕌',
                 sound: true
             });
+=======
+                showNotification('🕌 Prayer times loaded successfully!', 'success');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
             } else {
                 throw new Error('API response error');
             }
         } catch (error) {
             console.error('Error fetching prayer times:', error);
+<<<<<<< HEAD
             window.showWarning('Failed to fetch prayer times. Using fallback calculations.', {
                 title: 'API Unavailable ⚠️',
                 duration: 6000
             });
+=======
+            showNotification('⚠️ Failed to fetch prayer times. Using fallback.', 'warning');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
             useFallbackLocation();
         }
     }
@@ -544,10 +576,14 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('🧭 Initializing Enhanced Qibla Compass...');
         
         if (!window.currentLocation) {
+<<<<<<< HEAD
             window.showError('Location required for accurate Qibla direction', {
                 title: 'Permission Required 📍',
                 duration: 8000
             });
+=======
+            showNotification('📍 Location required for accurate Qibla direction', 'error');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
             displayBasicCompass();
             return;
         }
@@ -558,10 +594,14 @@ document.addEventListener('DOMContentLoaded', function() {
         calculatePreciseQiblaDirection(lat, lng);
         
         if (!window.DeviceOrientationEvent) {
+<<<<<<< HEAD
             window.showError('Device orientation not supported on this device', {
                 title: 'Device Limitation ❌',
                 duration: 8000
             });
+=======
+            showNotification('❌ Device orientation not supported', 'error');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
             displayBasicCompass();
             return;
         }
@@ -577,6 +617,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const permission = await DeviceOrientationEvent.requestPermission();
                 if (permission === 'granted') {
                     startEnhancedCompassListening();
+<<<<<<< HEAD
                     window.showSuccess('Compass access granted! Move device to calibrate.', {
                 title: 'Qibla Compass 🧭',
                 sound: true,
@@ -587,15 +628,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         title: 'Permission Required ❌',
                         duration: 8000
                     });
+=======
+                    showNotification('🧭 Compass access granted', 'success');
+                } else {
+                    showNotification('❌ Compass permission denied', 'error');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
                     displayBasicCompass();
                 }
             } else {
                 startEnhancedCompassListening();
+<<<<<<< HEAD
                 window.showSuccess('Compass initialized successfully! Move device in figure-8 to calibrate.', {
                 title: 'Qibla Compass Ready 🧭',
                 sound: true,
                 duration: 6000
             });
+=======
+                showNotification('🧭 Compass initialized', 'info');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
             }
         } catch (error) {
             console.error('Compass permission error:', error);
@@ -774,10 +824,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Enhanced mosque finder
     function initEnhancedMosqueFinder() {
         if (!window.currentLocation) {
+<<<<<<< HEAD
             window.showError('Location required for mosque finder', {
                 title: 'Permission Required 📍',
                 duration: 8000
             });
+=======
+            showNotification('📍 Location required for mosque finder', 'error');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
             displayBasicMosqueFinder();
             return;
         }
@@ -841,10 +895,14 @@ document.addEventListener('DOMContentLoaded', function() {
             
         } catch (error) {
             console.error('Error fetching mosques:', error);
+<<<<<<< HEAD
             window.showWarning('Could not load nearby mosques. Please try again later.', {
                 title: 'Network Issue ⚠️',
                 duration: 6000
             });
+=======
+            showNotification('⚠️ Could not load nearby mosques', 'warning');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
         }
     }
 
@@ -855,10 +913,14 @@ document.addEventListener('DOMContentLoaded', function() {
             marker.bindPopup(`<strong>🕌 ${name}</strong>`);
         });
         
+<<<<<<< HEAD
                     window.showSuccess(`Found ${currentMosques.length} nearby mosques`, {
                 title: 'Mosques Found 🕌',
                 sound: true
             });
+=======
+        showNotification(`🕌 Found ${currentMosques.length} nearby mosques`, 'success');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
     }
 
     function displayBasicMosqueFinder() {
@@ -1118,10 +1180,14 @@ document.addEventListener('DOMContentLoaded', function() {
         updateQuranDisplay();
         saveQuranPreferences();
         
+<<<<<<< HEAD
                     window.showInfo(`Selected: ${quranSurahs[selectedSurah - 1].name}`, {
                 title: 'Quran Selection 📖',
                 duration: 3000
             });
+=======
+        showNotification(`📖 Selected: ${quranSurahs[selectedSurah - 1].name}`, 'info');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
     };
 
     // Verse selection change handler
@@ -1144,10 +1210,14 @@ document.addEventListener('DOMContentLoaded', function() {
         saveQuranPreferences();
         
         const reciterName = reciterSelect.options[reciterSelect.selectedIndex].text;
+<<<<<<< HEAD
                     window.showInfo(`Reciter changed to: ${reciterName}`, {
                 title: 'Quran Reciter 🎙️',
                 duration: 3000
             });
+=======
+        showNotification(`🎙️ Reciter: ${reciterName}`, 'info');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
     };
 
     // Update Quran display with current selection
@@ -1220,10 +1290,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedVerse = currentQuranState.selectedVerse;
         const reciter = currentQuranState.selectedReciter;
         
+<<<<<<< HEAD
                     window.showInfo(`Playing ${quranSurahs[selectedSurah - 1].name}, Verse ${selectedVerse}`, {
                 title: 'Quran Player 🔊',
                 duration: 4000
             });
+=======
+        showNotification(`🔊 Playing ${quranSurahs[selectedSurah - 1].name}, Verse ${selectedVerse}`, 'info');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
         
         // Stop current audio if playing
         if (currentQuranState.currentAudio) {
@@ -1375,6 +1449,7 @@ document.addEventListener('DOMContentLoaded', function() {
             updateAudioStatus('Stopped', 'fas fa-stop text-gray-500');
             updatePlayButton();
             hideGlobalStopButton();
+<<<<<<< HEAD
             window.showInfo('Audio stopped successfully', {
                 title: 'Audio Control 🔇',
                 duration: 3000
@@ -1385,6 +1460,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: 'Audio Player ⚠️',
                 duration: 4000
             });
+=======
+            showNotification('🔇 Audio stopped', 'info');
+        } else {
+            console.log('⚠️ No audio to stop');
+            showNotification('⚠️ No audio is currently playing', 'warning');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
         }
     };
 
@@ -1446,10 +1527,14 @@ document.addEventListener('DOMContentLoaded', function() {
             
             audio.onerror = () => {
                 updateAudioStatus('No Audio Available', 'fas fa-times text-red-500');
+<<<<<<< HEAD
                 window.showError('No audio available for this selection', {
                 title: 'Audio Unavailable ❌',
                 duration: 6000
             });
+=======
+                showNotification('❌ No audio available for this selection', 'error');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
             };
             
         } catch (error) {
@@ -1490,10 +1575,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(() => btn.style.animation = '', 500);
             });
             
+<<<<<<< HEAD
             window.showWarning('Removed from saved verses', {
                 title: 'Bookmark Removed 💔',
                 duration: 4000
             });
+=======
+            showNotification('💔 Removed from saved verses', 'warning');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
         } else {
             // Add bookmark with celebration effect
             bookmarks.push(bookmarkData);
@@ -1510,10 +1599,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 createSparkleEffect(btn);
             });
             
+<<<<<<< HEAD
             window.showSuccess(`Saved: ${selectedSurah.name} ${window.currentQuranState.selectedSurah}:${window.currentQuranState.selectedVerse}`, {
                 title: 'Bookmark Added ⭐',
                 sound: true
             });
+=======
+            showNotification(`⭐ Saved: ${selectedSurah.name} ${window.currentQuranState.selectedSurah}:${window.currentQuranState.selectedVerse}`, 'success');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
         }
         
         updateBookmarkButton();
@@ -1561,6 +1654,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Fallback to clipboard
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(shareText);
+<<<<<<< HEAD
                 window.showSuccess('Verse reference copied to clipboard!', {
                 title: 'Copied! 📋',
                 sound: true,
@@ -1571,6 +1665,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     title: 'Feature Unavailable 📖',
                     duration: 4000
                 });
+=======
+                showNotification('📋 Verse reference copied to clipboard', 'success');
+            } else {
+                showNotification('📖 Share feature not available', 'info');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
             }
         }
     };
@@ -1612,6 +1711,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Audio functions
     window.playAdhan = function(prayerName) {
+<<<<<<< HEAD
         window.showInfo(`Playing ${prayerName} Adhan...`, {
             title: 'Call to Prayer 🔊',
             duration: 4000
@@ -1622,11 +1722,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: 'Prayer Call Complete ✅',
                 sound: true
             });
+=======
+        showNotification(`🔊 Playing ${prayerName} Adhan...`, 'info');
+        // Placeholder for Adhan audio
+        setTimeout(() => {
+            showNotification(`✅ ${prayerName} Adhan played`, 'success');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
         }, 2000);
     };
     
     // Calibration function
     window.calibrateCompass = function() {
+<<<<<<< HEAD
                     window.showInfo('Starting compass calibration. Move device in figure-8 pattern.', {
                 title: 'Calibrating Compass 🔄',
                 duration: 8000
@@ -1643,6 +1750,50 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // Functions globally available (showNotification is now handled by the modern NotificationManager)
+=======
+        showNotification('🔄 Starting compass calibration...', 'info');
+        showNotification('📱 Move device in figure-8 pattern', 'info');
+        
+        setTimeout(() => {
+            compassState.isCalibrated = true;
+            showNotification('✅ Compass calibrated successfully!', 'success');
+        }, 5000);
+    };
+    
+    // Enhanced notification system
+    function showNotification(message, type = 'info') {
+        console.log(`📢 ${type.toUpperCase()}: ${message}`);
+        
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white max-w-sm transition-all transform translate-x-full ${
+            type === 'success' ? 'bg-green-500' :
+            type === 'error' ? 'bg-red-500' :
+            type === 'warning' ? 'bg-yellow-500' :
+            'bg-blue-500'
+        }`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        // Slide in animation
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 100);
+        
+        // Remove after 4 seconds
+        setTimeout(() => {
+            notification.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 4000);
+    }
+    
+    // Make functions globally available
+    window.showNotification = showNotification;
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
     window.getLocationAndPrayerTimes = getLocationAndPrayerTimes;
     
     console.log('🕌 Enhanced Athan Times script loaded successfully');
@@ -1650,10 +1801,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Test function for stop button
     window.testStopButton = function() {
         console.log('🧪 Testing stop button...');
+<<<<<<< HEAD
         window.showInfo('Stop button test - Function is working!', {
             title: 'Test Successful 🧪',
             duration: 3000
         });
+=======
+        showNotification('🧪 Stop button test - Function is working!', 'info');
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
         return true;
     };
 
@@ -1747,6 +1902,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         showNotification(`⏩ Seeked to ${formatTime(newTime)}`, 'info');
     };
+<<<<<<< HEAD
 
     // ===================================
     // SETTINGS FUNCTIONALITY
@@ -2323,3 +2479,6 @@ document.addEventListener('notificationAction', (event) => {
             console.log('Unknown action:', actionId);
     }
 });
+=======
+}); 
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e

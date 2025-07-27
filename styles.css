@@ -4727,6 +4727,7 @@ button:disabled {
     0% { transform: scale(1); filter: brightness(1); }
     50% { transform: scale(1.15); filter: brightness(1.3); }
     100% { transform: scale(1); filter: brightness(1); }
+<<<<<<< HEAD
 }
 
 /* Settings button - ensure it's always clickable */
@@ -4997,4 +4998,6 @@ button:disabled {
     .notification-message {
         font-size: 13px;
     }
+=======
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
 }

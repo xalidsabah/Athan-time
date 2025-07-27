@@ -80,6 +80,7 @@
                     <div id="hijri-date" class="text-sm opacity-80 mt-1"></div>
                 </div>
                 <div class="flex items-center space-x-4">
+<<<<<<< HEAD
                     <button id="global-stop-btn" class="stop-btn-main p-3 rounded-full transition" onclick="stopAudio();" aria-label="Stop all audio">
                         <i class="fas fa-stop text-xl"></i>
                     </button>
@@ -92,6 +93,17 @@
                     <button id="settings-btn" class="p-3 rounded-full hover:bg-white hover:bg-opacity-20 transition relative z-50" onclick="openSettingsModal(); return false;" aria-label="Open settings">
                         <i class="fas fa-cog text-xl"></i>
                     </button>
+=======
+                    <button id="global-stop-btn" onclick="stopAllAudio()" class="p-3 rounded-full bg-red-600 hover:bg-red-700 transition" aria-label="Stop Audio" style="display: none;" title="Stop Audio">
+                        <i class="fas fa-stop text-xl"></i>
+                    </button>
+                    <button id="location-btn" class="p-3 rounded-full hover:bg-white hover:bg-opacity-20 transition" aria-label="Update location">
+                        <i class="fas fa-map-marker-alt text-xl"></i>
+                    </button>
+                    <button id="settings-btn" class="p-3 rounded-full hover:bg-white hover:bg-opacity-20 transition" aria-label="Open settings">
+                        <i class="fas fa-cog text-xl"></i>
+                </button>
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
                 </div>
             </div>
         </header>
@@ -526,7 +538,11 @@
             <div class="bg-white rounded-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
                 <div class="sticky top-0 bg-white p-6 border-b flex justify-between items-center rounded-t-2xl">
                     <h2 id="settings-title" class="text-2xl font-bold text-gray-800">Settings</h2>
+<<<<<<< HEAD
                     <button id="close-settings" class="text-gray-500 hover:text-gray-700 text-xl" onclick="closeSettingsModal(); return false;" aria-label="Close settings">
+=======
+                    <button id="close-settings" class="text-gray-500 hover:text-gray-700 text-xl" aria-label="Close settings">
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -613,6 +629,7 @@
                         </div>
                     </div>
                     
+<<<<<<< HEAD
                     <!-- Notification Test Section -->
                     <div class="mb-8">
                         <h3 class="text-xl font-semibold mb-4 flex items-center">
@@ -648,6 +665,10 @@
                     
                     <!-- Save Button -->
                     <button id="save-settings" onclick="saveSettings()" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105">
+=======
+                    <!-- Save Button -->
+                    <button id="save-settings" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105">
+>>>>>>> 4d7a6f40f666454c1d20f649b517d93a5d54566e
                         <i class="fas fa-save mr-2"></i>Save Settings
                     </button>
                 </div>
