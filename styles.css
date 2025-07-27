@@ -3851,3 +3851,1150 @@ button:disabled {
         gap: 8px;
     }
 }
+
+/* Unified Quran Player Styles */
+.quran-player-main {
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(75, 0, 130, 0.1) 100%);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 32px;
+    margin: 20px 0;
+    border: 2px solid rgba(139, 69, 19, 0.2);
+    box-shadow: 0 12px 40px rgba(139, 69, 19, 0.1);
+}
+
+.player-selection-section {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid rgba(139, 69, 19, 0.15);
+}
+
+.selection-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #8b4513;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.selection-controls {
+    display: grid;
+    grid-template-columns: 1fr 150px 1fr;
+    gap: 20px;
+    align-items: end;
+}
+
+.surah-selection,
+.verse-selection,
+.reciter-selection {
+    display: flex;
+    flex-direction: column;
+}
+
+.selection-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #8b4513;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.selection-dropdown {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid rgba(139, 69, 19, 0.3);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #8b4513;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.selection-dropdown:hover,
+.selection-dropdown:focus {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(139, 69, 19, 0.5);
+    box-shadow: 0 4px 16px rgba(139, 69, 19, 0.2);
+    outline: none;
+}
+
+/* Audio Player Section */
+.audio-player-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 24px;
+    margin: 24px 0;
+    border: 1px solid rgba(139, 69, 19, 0.15);
+}
+
+.player-info-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.currently-playing {
+    text-align: left;
+}
+
+.surah-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #8b4513;
+    margin: 0 0 4px 0;
+}
+
+.verse-number {
+    font-size: 16px;
+    color: rgba(139, 69, 19, 0.8);
+    margin: 0 0 4px 0;
+    font-weight: 600;
+}
+
+.reciter-name {
+    font-size: 14px;
+    color: rgba(139, 69, 19, 0.7);
+    margin: 0;
+    font-style: italic;
+}
+
+.audio-status {
+    background: rgba(139, 69, 19, 0.1);
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #8b4513;
+    border: 1px solid rgba(139, 69, 19, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.audio-progress-section {
+    margin: 20px 0;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 10px;
+    background: rgba(139, 69, 19, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #8b4513 0%, #daa520 100%);
+    border-radius: 5px;
+    transition: width 0.3s ease;
+    width: 0%;
+    box-shadow: 0 0 10px rgba(218, 165, 32, 0.5);
+}
+
+.time-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(139, 69, 19, 0.8);
+    font-weight: 600;
+}
+
+.player-controls-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.control-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid rgba(139, 69, 19, 0.3);
+    background: rgba(255, 255, 255, 0.9);
+    color: #8b4513;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-btn:hover {
+    background: rgba(139, 69, 19, 0.1);
+    border-color: rgba(139, 69, 19, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
+}
+
+.play-btn-main {
+    width: 65px;
+    height: 65px;
+    font-size: 24px;
+    background: linear-gradient(135deg, #228b22 0%, #32cd32 100%);
+    border-color: rgba(34, 139, 34, 0.3);
+    color: white;
+}
+
+.play-btn-main:hover {
+    background: linear-gradient(135deg, #1e7e1e 0%, #2eb82e 100%);
+    border-color: rgba(34, 139, 34, 0.5);
+}
+
+.stop-btn-main {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%) !important;
+    border: 3px solid rgba(220, 38, 38, 0.5) !important;
+    color: white !important;
+    width: 55px !important;
+    height: 55px !important;
+    font-size: 20px !important;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4) !important;
+}
+
+.stop-btn-main:hover {
+    background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%) !important;
+    border-color: rgba(220, 38, 38, 0.7) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.6) !important;
+    font-size: 22px !important;
+}
+
+.bookmark-btn-main {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%) !important;
+    border: 3px solid rgba(245, 158, 11, 0.5) !important;
+    color: white !important;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4) !important;
+}
+
+.bookmark-btn-main:hover {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%) !important;
+    border-color: rgba(245, 158, 11, 0.7) !important;
+    transform: translateY(-3px) scale(1.05) !important;
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.6) !important;
+}
+
+.bookmark-btn-main::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: rotate(45deg);
+    transition: all 0.5s ease;
+    opacity: 0;
+}
+
+.bookmark-btn-main:hover::before {
+    opacity: 1;
+    animation: shimmer 0.8s ease-in-out;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+/* Heart animation for circular bookmark button */
+.control-btn.bookmark-btn-main {
+    background: linear-gradient(135deg, #ec4899 0%, #f97316 100%) !important;
+    border: 3px solid rgba(236, 72, 153, 0.5) !important;
+    color: white !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.control-btn.bookmark-btn-main:hover {
+    background: linear-gradient(135deg, #db2777 0%, #ea580c 100%) !important;
+    border-color: rgba(236, 72, 153, 0.7) !important;
+    transform: translateY(-3px) scale(1.1) !important;
+    box-shadow: 0 8px 25px rgba(236, 72, 153, 0.6) !important;
+}
+
+.control-btn.bookmark-btn-main i {
+    animation: heartbeat 2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* When bookmarked - golden effect */
+.bookmark-btn-main.bookmarked {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%) !important;
+    border-color: rgba(255, 215, 0, 0.7) !important;
+    color: #1a1a1a !important;
+    animation: pulse-gold 2s infinite;
+}
+
+@keyframes pulse-gold {
+    0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+    70% { box-shadow: 0 0 0 20px rgba(255, 215, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+}
+
+/* Verse Display Section */
+.verse-display-section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 32px;
+    margin: 24px 0;
+    border: 2px solid rgba(139, 69, 19, 0.15);
+    text-align: center;
+}
+
+.verse-content-main {
+    margin-bottom: 32px;
+}
+
+.arabic-text-main {
+    font-family: 'Amiri', 'Arabic Typesetting', serif;
+    font-size: 36px;
+    line-height: 2;
+    color: #2c1810;
+    font-weight: 600;
+    margin-bottom: 24px;
+    padding: 24px;
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.05) 0%, rgba(218, 165, 32, 0.05) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(139, 69, 19, 0.1);
+    text-shadow: 0 1px 2px rgba(139, 69, 19, 0.1);
+}
+
+.translation-text-main {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #4a3728;
+    font-weight: 500;
+    font-style: italic;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: rgba(139, 69, 19, 0.03);
+    border-radius: 12px;
+    border-left: 4px solid #daa520;
+}
+
+.verse-reference-main {
+    margin: 24px 0;
+}
+
+.reference-badge-main {
+    background: linear-gradient(135deg, #8b4513 0%, #daa520 100%);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 4px 16px rgba(139, 69, 19, 0.3);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.verse-actions-main {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.action-btn-main {
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.2);
+    color: #8b4513;
+    padding: 14px 24px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    min-width: 120px;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(139, 69, 19, 0.1);
+}
+
+.action-btn-main:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(139, 69, 19, 0.2);
+}
+
+.listen-btn-main {
+    background: linear-gradient(135deg, #228b22 0%, #32cd32 100%);
+    border-color: rgba(34, 139, 34, 0.3);
+    color: white;
+}
+
+.listen-btn-main:hover {
+    background: linear-gradient(135deg, #1e7e1e 0%, #2eb82e 100%);
+    border-color: rgba(34, 139, 34, 0.5);
+}
+
+.share-btn-main {
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: white;
+}
+
+.share-btn-main:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    border-color: rgba(59, 130, 246, 0.5);
+}
+
+/* Responsive Design for Unified Player */
+@media (max-width: 768px) {
+    .quran-player-main {
+        padding: 20px;
+        margin: 16px 0;
+    }
+    
+    .selection-controls {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .player-info-display {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .audio-status {
+        align-self: stretch;
+        justify-content: center;
+    }
+    
+    .player-controls-main {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .control-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 16px;
+    }
+    
+    .play-btn-main {
+        width: 55px;
+        height: 55px;
+        font-size: 20px;
+    }
+    
+    .verse-display-section {
+        padding: 20px;
+    }
+    
+    .arabic-text-main {
+        font-size: 28px;
+        line-height: 1.8;
+        padding: 16px;
+    }
+    
+    .translation-text-main {
+        font-size: 16px;
+        padding: 16px;
+    }
+    
+    .verse-actions-main {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .action-btn-main {
+        width: 100%;
+        max-width: 250px;
+    }
+}
+
+/* PWA Install Button Styles */
+.install-btn {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    border: 2px solid rgba(16, 185, 129, 0.3);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
+    margin-left: 8px;
+}
+
+.install-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    border-color: rgba(16, 185, 129, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.install-btn i {
+    font-size: 12px;
+}
+
+/* iOS Chrome Helper Styles - REMOVED to prevent colorful windows */
+
+/* Enhanced notification styles for different browser messages */
+.notification.browser-specific {
+    border-left: 4px solid #ff9800;
+    background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+}
+
+.notification.browser-specific .notification-icon {
+    color: #ff9800;
+}
+
+/* PWA detection styles */
+.pwa-standalone {
+    display: none;
+}
+
+@media (display-mode: standalone) {
+    .pwa-standalone {
+        display: block;
+    }
+    
+    .pwa-browser-only {
+        display: none;
+    }
+    
+    .install-btn {
+        display: none !important;
+    }
+}
+
+/* Enhanced header actions for install button */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Safari-specific install hint */
+/* Safari install hint styles - REMOVED to prevent colorful windows */
+
+/* Location permission helper styles - REMOVED to prevent colorful windows */
+
+/* Responsive design for browser helpers */
+@media (max-width: 768px) {
+    .ios-chrome-helper,
+    .safari-install-hint,
+    .location-permission-helper {
+        margin: 12px 0;
+        padding: 16px;
+    }
+    
+    .ios-chrome-helper .helper-btn,
+    .location-permission-helper .permission-btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+    }
+    
+    .safari-install-hint .install-steps {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .safari-install-hint .step {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .install-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+        margin: 4px 0;
+    }
+}
+
+/* Enhanced Countdown Styling */
+.countdown-digit {
+    display: inline-block;
+    font-weight: 800;
+    font-size: inherit;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    animation: digitPulse 2s ease-in-out infinite;
+}
+
+.countdown-separator {
+    display: inline-block;
+    font-weight: 300;
+    opacity: 0.7;
+    animation: separatorBlink 1s ease-in-out infinite;
+}
+
+@keyframes digitPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes separatorBlink {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 0.3; }
+}
+
+/* Enhanced Prayer Card Animations */
+.prayer-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.prayer-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.prayer-card:hover::before {
+    left: 100%;
+}
+
+.prayer-card .group:hover {
+    transform: translateY(-2px);
+}
+
+/* Enhanced Glass Morphism Effects */
+.glass-effect {
+    position: relative;
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.glass-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+}
+
+/* Enhanced Button Styles */
+.enhanced-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.enhanced-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.enhanced-btn:hover::before {
+    left: 100%;
+}
+
+.enhanced-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.enhanced-btn:active {
+    transform: translateY(0);
+}
+
+/* Floating Animation for Icons */
+.floating-icon {
+    animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Gradient Text Animation */
+.gradient-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-size: 200% 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Enhanced Tab Navigation */
+.tab-btn {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.tab-btn:hover::after {
+    width: 100%;
+}
+
+.tab-btn.active::after {
+    width: 100%;
+}
+
+/* Enhanced Notification Styles */
+.notification-enhanced {
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Pulse Animation for Important Elements */
+.pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.6); }
+}
+
+/* Enhanced Background Animation */
+@keyframes backgroundShift {
+    0%, 100% { background-position: 0% 50%; }
+    25% { background-position: 100% 50%; }
+    50% { background-position: 100% 100%; }
+    75% { background-position: 0% 100%; }
+}
+
+/* Shimmer Effect for Loading States */
+.shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Enhanced Compass Styles */
+.compass-enhanced {
+    position: relative;
+    background: conic-gradient(from 0deg, #ffd700, #ff8c00, #ff6347, #ffd700);
+    box-shadow: 
+        0 0 50px rgba(255, 215, 0, 0.5),
+        inset 0 0 50px rgba(255, 255, 255, 0.2);
+    animation: compassRotate 20s linear infinite;
+}
+
+@keyframes compassRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Enhanced Map Styles */
+.map-enhanced {
+    background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+    box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
+    animation: mapPulse 4s ease-in-out infinite;
+}
+
+@keyframes mapPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+    .countdown-digit {
+        font-size: 0.9em;
+    }
+    
+    .glass-effect {
+        backdrop-filter: blur(15px);
+    }
+    
+    .prayer-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Pulse animation for stop button when active */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.stop-btn-main.active {
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.8) !important;
+}
+
+/* Cool animations for bookmark interactions */
+@keyframes sparkle-float {
+    0% { 
+        opacity: 1; 
+        transform: translateY(0) scale(0.5); 
+    }
+    50% { 
+        opacity: 1; 
+        transform: translateY(-30px) scale(1); 
+    }
+    100% { 
+        opacity: 0; 
+        transform: translateY(-60px) scale(0.5); 
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    25% { transform: translateY(-10px) scale(1.1); }
+    50% { transform: translateY(-5px) scale(1.05); }
+    75% { transform: translateY(-2px) scale(1.02); }
+}
+
+/* Enhanced bookmark button states */
+.bookmark-btn-main.saving {
+    animation: pulse-bright 0.8s ease-in-out;
+}
+
+@keyframes pulse-bright {
+    0% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.15); filter: brightness(1.3); }
+    100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Settings button - ensure it's always clickable */
+#settings-btn {
+    position: relative !important;
+    z-index: 100 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+#settings-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    transform: scale(1.05) !important;
+}
+
+#settings-btn i {
+    pointer-events: none !important; /* Icon shouldn't block clicks */
+}
+
+/* Header buttons container */
+.header .flex.gap-2 {
+    position: relative;
+    z-index: 50;
+}
+
+/* Make sure modal close button works */
+#close-settings {
+    z-index: 101 !important;
+    cursor: pointer !important;
+}
+
+/* ===================================
+   MODERN NOTIFICATION SYSTEM
+   =================================== */
+
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    max-width: 400px;
+    width: 100%;
+    pointer-events: none;
+}
+
+.notification {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    pointer-events: auto;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-family: 'Poppins', sans-serif;
+}
+
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification.hide {
+    transform: translateX(400px);
+    opacity: 0;
+}
+
+.notification::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    transition: all 0.3s ease;
+}
+
+.notification:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.notification-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.notification-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 14px;
+    color: white;
+    font-weight: 600;
+}
+
+.notification-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+    flex: 1;
+    line-height: 1.4;
+}
+
+.notification-close {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #718096;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 12px;
+}
+
+.notification-close:hover {
+    background: rgba(0, 0, 0, 0.2);
+    color: #2d3748;
+}
+
+.notification-content {
+    display: flex;
+    align-items: flex-start;
+}
+
+.notification-message {
+    font-size: 14px;
+    color: #4a5568;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.notification-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.6));
+    border-radius: 0 0 16px 16px;
+    transition: width linear;
+}
+
+/* Notification Types */
+.notification.success::before {
+    background: linear-gradient(45deg, #48bb78, #38a169);
+}
+
+.notification.success .notification-icon {
+    background: linear-gradient(45deg, #48bb78, #38a169);
+}
+
+.notification.error::before {
+    background: linear-gradient(45deg, #f56565, #e53e3e);
+}
+
+.notification.error .notification-icon {
+    background: linear-gradient(45deg, #f56565, #e53e3e);
+}
+
+.notification.warning::before {
+    background: linear-gradient(45deg, #ed8936, #dd6b20);
+}
+
+.notification.warning .notification-icon {
+    background: linear-gradient(45deg, #ed8936, #dd6b20);
+}
+
+.notification.info::before {
+    background: linear-gradient(45deg, #4299e1, #3182ce);
+}
+
+.notification.info .notification-icon {
+    background: linear-gradient(45deg, #4299e1, #3182ce);
+}
+
+.notification.loading::before {
+    background: linear-gradient(45deg, #805ad5, #6b46c1);
+}
+
+.notification.loading .notification-icon {
+    background: linear-gradient(45deg, #805ad5, #6b46c1);
+    animation: spin 1s linear infinite;
+}
+
+/* Notification Animations */
+@keyframes notification-slide-in {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes notification-slide-out {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes notification-bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-4px); }
+    60% { transform: translateY(-2px); }
+}
+
+.notification.bounce {
+    animation: notification-bounce 0.6s ease;
+}
+
+/* Sound notification */
+.notification.sound::after {
+    content: '🔊';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .notification-container {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    
+    .notification {
+        padding: 16px 20px;
+        margin-bottom: 8px;
+    }
+    
+    .notification-title {
+        font-size: 15px;
+    }
+    
+    .notification-message {
+        font-size: 13px;
+    }
+}

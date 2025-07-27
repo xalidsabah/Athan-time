@@ -1,336 +1,314 @@
-# 🕌 Athan Times - Premium Islamic Prayer Times App
+# 🕌 Athan Times - Complete Islamic Prayer App
 
-A modern, feature-rich Progressive Web Application (PWA) for accurate Islamic prayer times, Qibla direction, Quran recitation, and nearby mosque finder.
-
-![Athan Times](https://img.shields.io/badge/Version-2.0-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![PWA](https://img.shields.io/badge/PWA-Enabled-orange)
+A beautiful, comprehensive Progressive Web App (PWA) for Islamic prayer times, Qibla direction, and Quran recitation with modern design and full offline support.
 
 ## ✨ Features
 
-### 🕐 Prayer Times
-- **Real-time accurate prayer times** using Aladhan API
-- **Multiple calculation methods** (ISNA, MWL, Karachi, etc.)
-- **Live countdown** to next prayer with urgency indicators
-- **Custom notifications** and reminders
-- **Offline caching** for uninterrupted access
-- **Hijri date display** with Islamic events
+### 🕌 Prayer Times
+- **Real-time prayer times** for any location worldwide
+- **Automatic location detection** using GPS
+- **Beautiful countdown timer** to next prayer
+- **Visual prayer cards** with current status indicators
+- **Hijri date display** with Islamic calendar
+- **Audio Adhan** playback for each prayer
+- **Prayer notifications** with custom sounds
+- **Multiple calculation methods** for different regions
 
 ### 🧭 Qibla Compass
-- **Scientific accuracy** using spherical trigonometry
-- **Magnetic declination correction** via NOAA API
-- **Real device orientation** support (iOS 13+ compatible)
-- **Visual accuracy indicators** with calibration status
-- **Distance to Kaaba** calculation
-- **Interactive compass** with directional guidance
+- **Accurate Qibla direction** calculation to Mecca
+- **Real-time compass** using device orientation
+- **Magnetic declination correction** for precision
+- **Distance to Kaaba** display
+- **Compass calibration** functionality
+- **Visual indicators** with golden Qibla line
+- **Works on mobile and desktop**
 
-### 📖 Quran Audio Player
-- **High-quality recitations** from renowned reciters
-- **Verse-by-verse playback** with auto-progression
-- **Multiple reciters** (Mishary Alafasy, Al-Sudais, etc.)
-- **Bookmark system** and play history
-- **Variable playback speed** (0.5x to 1.5x)
-- **Search functionality** for Surahs
-- **Keyboard shortcuts** for better accessibility
+### 📖 Complete Quran Player
+- **All 114 Surahs** with complete verse navigation
+- **5 Famous Reciters** including Mishary Alafasy, Abdur-Rahman As-Sudais
+- **Verse-by-verse playback** with accurate audio mapping
+- **Audio progress tracking** with time display
+- **Bookmark system** for favorite verses
+- **Share verses** with copy/share functionality
+- **Export bookmarks** to text file
+- **Random and daily verses** with smart selection
 
 ### 🗺️ Nearby Mosques
-- **Interactive map** using Leaflet + OpenStreetMap
-- **Real-time mosque data** via Overpass API
-- **Distance calculation** and sorting options
-- **Custom markers** and search radius
+- **Interactive map** using OpenStreetMap and Leaflet
+- **Real mosque data** from Overpass API
+- **Distance calculation** and sorting
 - **Directions integration** with Google Maps
-- **No API key required** - completely free
+- **Fallback data** when API is unavailable
+- **Mobile-optimized** map controls
 
-### 📱 Progressive Web App
-- **Offline functionality** with service worker
-- **Installable** on mobile and desktop
-- **Push notifications** for prayer times
-- **Responsive design** for all screen sizes
-- **Fast loading** with optimized caching
+### 🎨 Modern Design
+- **Glass morphism** design with blur effects
+- **Islamic color palette** with gold and brown themes
+- **Responsive layout** for all screen sizes
+- **Smooth animations** and hover effects
+- **Dark/light mode** compatibility
+- **Arabic typography** support
+- **PWA features** with offline support
 
-## 🚀 Quick Start
+## 🏗️ Code Structure
 
-### Prerequisites
-- Modern web browser with JavaScript enabled
-- Internet connection for initial setup
-- Location permission for accurate prayer times
+### 📁 File Organization
 
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/athan-times.git
-   cd athan-times
-   ```
-
-2. **Serve the files**
-   ```bash
-   # Using Python
-   python -m http.server 8000
-   
-   # Using Node.js
-   npx serve .
-   
-   # Using PHP
-   php -S localhost:8000
-   ```
-
-3. **Open in browser**
-   ```
-   http://localhost:8000
-   ```
-
-### Alternative: Direct File Access
-You can also open `index.html` directly in your browser, though some features may be limited without a server.
-
-## 📖 Usage
-
-### First Launch
-1. **Allow location access** when prompted for accurate prayer times
-2. **Enable notifications** for prayer reminders
-3. **Wait for data loading** - prayer times and location will auto-detect
-
-### Navigation
-- **Prayer Times Tab**: View today's prayer schedule with live countdown
-- **Qibla Tab**: Find direction to Mecca with precision compass
-- **Quran Tab**: Listen to beautiful recitations with advanced controls
-- **Mosques Tab**: Discover nearby mosques on interactive map
-
-### Customization
-- **Settings**: Access via gear icon to customize prayer methods
-- **Notifications**: Set custom reminders for each prayer
-- **Display**: Choose between different themes and layouts
-
-## 🔧 Technical Details
-
-### Architecture
 ```
-athan-times/
-├── index.html          # Main application HTML
-├── styles.css          # Complete styling and animations
-├── script.js           # Core JavaScript functionality
-├── manifest.json       # PWA configuration
+Athan-Times/
+├── index.html          # Main HTML structure
+├── styles.css          # All CSS styling and animations
+├── script.js           # JavaScript functionality and logic
+├── manifest.json       # PWA manifest for app installation
 ├── sw.js              # Service worker for offline support
-├── test.html          # Testing utilities
-└── README.md          # This file
+├── favicon.svg        # App icon in SVG format
+├── .nojekyll          # GitHub Pages configuration
+└── README.md          # This documentation file
 ```
 
-### APIs Used
-- **[Aladhan API](https://aladhan.com/prayer-times-api)** - Prayer times calculation
-- **[OpenStreetMap Nominatim](https://nominatim.org/)** - Reverse geocoding
-- **[Overpass API](https://overpass-api.de/)** - Mosque location data
-- **[NOAA Magnetic Declination](https://www.ngdc.noaa.gov/)** - Compass accuracy
-- **[Al Quran Cloud CDN](https://alquran.cloud/cdn)** - Audio recitations
+### 🔧 Core Components
 
-### Browser Support
-- ✅ Chrome 80+
-- ✅ Firefox 75+
-- ✅ Safari 13+
-- ✅ Edge 80+
-- ⚠️ IE 11 (limited functionality)
+#### 1. **HTML Structure** (`index.html`)
+- **Semantic HTML5** with proper ARIA labels
+- **Tab-based navigation** for different features
+- **Responsive grid layouts** for prayer times
+- **Embedded audio controls** for Quran player
+- **Interactive map containers** for mosque finder
+- **Bookmark management** interface
 
-### Device Compatibility
-- 📱 **Mobile**: iOS 13+, Android 6+
-- 💻 **Desktop**: Windows, macOS, Linux
-- 🌐 **Web**: All modern browsers
-- 📲 **PWA**: Installable on all platforms
+#### 2. **CSS Styling** (`styles.css`)
+- **CSS Grid and Flexbox** for responsive layouts
+- **Custom CSS variables** for consistent theming
+- **Gradient backgrounds** and glass morphism effects
+- **Smooth transitions** and hover animations
+- **Media queries** for mobile responsiveness
+- **Arabic font support** for proper text rendering
 
-## ⚙️ Configuration
+#### 3. **JavaScript Logic** (`script.js`)
 
-### Prayer Calculation Methods
+##### 🌍 **Location & Prayer Times**
 ```javascript
-// Available in localStorage
-prayerMethod: '2'    // ISNA (default)
-madhab: '0'          // Shafi (default)
-midnightMode: '0'    // Standard
-latitudeRule: '1'    // Angle based
+// Main functions for prayer functionality
+getLocationAndPrayerTimes()    // GPS location and API calls
+fetchPrayerTimes(lat, lng)     // Aladhan API integration
+displayPrayerTimes(prayers)    // UI updates for prayer cards
+updateNextPrayer(prayers)      // Countdown and next prayer logic
+startCountdown()               // Real-time countdown timer
 ```
 
-### Supported Methods
-- **1**: University of Islamic Sciences, Karachi
-- **2**: Islamic Society of North America (ISNA)
-- **3**: Muslim World League (MWL)
-- **4**: Umm Al-Qura University, Makkah
-- **5**: Egyptian General Authority of Survey
-
-### Customization Options
+##### 🧭 **Qibla Compass**
 ```javascript
-// Notification preferences
-quranAutoRepeat: false
-quranPlaybackSpeed: 1.0
-quranBookmarks: []
-lastPrayerTimes: {...}
+// Compass functionality
+initQiblaCompass()             // Initialize compass system
+calculateQiblaDirection()      // Geometric calculation to Mecca
+handleDeviceOrientation()      // Device sensor integration
+fetchMagneticDeclination()     // NOAA API for accuracy
+updateCompassNeedle()          // Visual compass updates
 ```
 
-## 🧪 Testing
-
-### Automated Testing
-Run the included test page to verify functionality:
-```bash
-# Open test.html in browser
-open test.html
-```
-
-### Test Coverage
-- ✅ GPS location detection
-- ✅ Prayer times API integration
-- ✅ Fallback systems
-- ✅ Offline functionality
-- ✅ Notification system
-
-### Manual Testing
-1. **Location**: Test with/without GPS permission
-2. **API**: Test with/without internet connection
-3. **Responsive**: Test on different screen sizes
-4. **PWA**: Test installation and offline usage
-
-## 🛠️ Development
-
-### Local Development
-```bash
-# Install development server
-npm install -g live-server
-
-# Start development server
-live-server --port=8000
-
-# Auto-refresh on file changes
-```
-
-### Code Structure
+##### 📖 **Quran Player System**
 ```javascript
-// Main initialization
-document.addEventListener('DOMContentLoaded', initApp)
-
-// Core functions
-initApp()                    // App initialization
-getLocationAndPrayerTimes()  // Location & prayer times
-fetchPrayerTimes()           // API integration
-displayPrayerTimes()         // UI rendering
-initQiblaCompass()          // Compass functionality
-initQuranPlayer()           // Audio player
-initMosqueFinder()          // Map integration
+// Complete Quran management
+const quranSurahs = [...]      // All 114 Surahs data
+initQuranPlayer()              // Player initialization
+playCurrentVerse()             // Audio playback with Al-Quran API
+onSurahChange()                // Surah selection handling
+onVerseChange()                // Verse navigation
+updateDisplay()                // UI synchronization
 ```
 
-### Adding Features
-1. **New Prayer Method**: Update `fetchPrayerTimes()` function
-2. **New Reciter**: Add to `reciterData` object
-3. **New Language**: Update `calculateHijriDate()` for localization
-4. **New Theme**: Extend CSS variables and classes
-
-## 🔒 Privacy & Security
-
-### Data Collection
-- **Location**: Used only for prayer time calculation (not stored)
-- **Preferences**: Stored locally in browser
-- **No tracking**: No analytics or third-party trackers
-- **No accounts**: No user registration required
-
-### Permissions
-- **Location**: Required for accurate prayer times
-- **Notifications**: Optional for prayer reminders
-- **Device Orientation**: Optional for Qibla compass
-
-### Offline Data
-- Prayer times cached for up to 24 hours
-- Map tiles cached automatically
-- No personal data transmitted
-
-## 🤝 Contributing
-
-### How to Contribute
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
-### Development Guidelines
-- Follow existing code style and patterns
-- Add comments for complex functionality
-- Test on multiple browsers and devices
-- Update documentation for new features
-- Ensure offline functionality works
-
-### Bug Reports
-Please include:
-- Browser and version
-- Operating system
-- Steps to reproduce
-- Expected vs actual behavior
-- Console errors (if any)
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-```
-MIT License
-
-Copyright (c) 2024 Athan Times
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+##### 🏛️ **Mosque Finder**
+```javascript
+// Mosque location services
+initMosqueFinder(lat, lng)     // Leaflet map initialization
+fetchNearbyMosques()           // Overpass API queries
+processMosqueData()            // Data processing and sorting
+addMosqueMarker()              // Map marker management
+displayMosquesList()           // List view updates
 ```
 
-## 🙏 Acknowledgments
+##### 💾 **Data Management**
+```javascript
+// Local storage and bookmarks
+toggleBookmarks()              // Bookmark UI management
+bookmarkCurrentVerse()         // Save verse to localStorage
+exportBookmarks()              // File download functionality
+loadSavedSettings()            // App state persistence
+```
 
-### APIs & Services
-- **[Aladhan](https://aladhan.com/)** - Islamic prayer times and calendar
-- **[OpenStreetMap](https://www.openstreetmap.org/)** - Free map data
-- **[Al Quran Cloud](https://alquran.cloud/)** - Quran audio and text
-- **[Font Awesome](https://fontawesome.com/)** - Beautiful icons
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS
+### 🔌 API Integrations
 
-### Inspiration
-- Islamic community needs for accessible prayer tools
-- Modern web technology capabilities
-- Open source collaboration spirit
+#### 1. **Aladhan Prayer Times API**
+- **Endpoint:** `https://api.aladhan.com/v1/timings/{date}`
+- **Parameters:** Latitude, longitude, calculation method
+- **Response:** All 5 daily prayer times with timezone info
+- **Fallback:** Mathematical calculation when API fails
 
-### Special Thanks
-- All beta testers and early users
-- Islamic scholars for guidance on accuracy
-- Developer community for open source libraries
-- Users providing feedback and suggestions
+#### 2. **Al-Quran Cloud Audio API**
+- **Endpoint:** `https://cdn.islamic.network/quran/audio/128/{reciter}/{surah}{verse}.mp3`
+- **Reciters:** 5 famous Quranic reciters
+- **Fallback:** Full Surah audio when verse audio unavailable
+- **Alternative:** Web Audio API generated tones
 
-## 📞 Support
+#### 3. **OpenStreetMap & Overpass API**
+- **Map Tiles:** `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`
+- **Mosque Data:** Overpass API with amenity=place_of_worship filter
+- **Geocoding:** Nominatim API for location names
+- **Fallback:** Hardcoded mosque data for offline use
 
-### Getting Help
-- **Documentation**: Read this README thoroughly
-- **Issues**: [GitHub Issues](https://github.com/yourusername/athan-times/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/athan-times/discussions)
-- **Email**: support@athantimes.app
+#### 4. **NOAA Magnetic Declination**
+- **Endpoint:** `https://www.ngdc.noaa.gov/geomag-web/calculators/calculateDeclination`
+- **Purpose:** Compass accuracy correction
+- **Fallback:** Regional approximation based on coordinates
 
-### FAQ
+## 🚀 Installation & Usage
 
-**Q: Why is my location not detected?**
-A: Ensure you've allowed location permission and have GPS enabled. The app will fallback to New York coordinates if location fails.
+### 📱 **As a PWA (Recommended)**
+1. **Visit:** Your deployed app URL
+2. **Install:** Click "Add to Home Screen" prompt
+3. **Enjoy:** Full-screen app experience with offline support
 
-**Q: Prayer times seem incorrect?**
-A: Check your location accuracy and try different calculation methods in settings. Some regions may require specific methods.
+### 💻 **Local Development**
+1. **Clone/Download** the repository
+2. **Serve locally:** `python -m http.server 8000` or any local server
+3. **Open:** `http://localhost:8000` in your browser
+4. **Test:** All features work locally with internet connection
 
-**Q: Qibla direction is wrong?**
-A: Ensure device orientation permission is granted and calibrate your compass by moving the device in a figure-8 pattern.
+### 🌐 **GitHub Pages Deployment**
+1. **Push** all files to your GitHub repository
+2. **Enable** GitHub Pages in repository settings
+3. **Access:** Your app at `https://username.github.io/repository-name`
+4. **Note:** `.nojekyll` file ensures proper SVG favicon support
 
-**Q: Audio not playing?**
-A: Check your internet connection and browser's autoplay policy. Some browsers require user interaction before playing audio.
+## 🎯 Feature Usage Guide
 
-**Q: App not working offline?**
-A: Initial data loading requires internet connection. Once loaded, cached prayer times work offline for 24 hours.
+### 🕌 **Prayer Times Tab**
+- **Automatic:** App detects location and shows prayer times
+- **Manual:** Click refresh button to update location
+- **Audio:** Click prayer cards to play Adhan
+- **Countdown:** Real-time countdown to next prayer
+- **Sharing:** Click share button to share prayer times
+
+### 🧭 **Qibla Tab**
+- **Calibration:** Move device in figure-8 pattern for accuracy
+- **Direction:** Golden line points toward Mecca
+- **Distance:** Shows distance to Kaaba in kilometers
+- **Compass:** White needle shows device heading
+- **Accuracy:** Status indicator shows compass reliability
+
+### 📖 **Quran Tab**
+- **Selection:** Choose any Surah (1-114) and verse
+- **Reciter:** Select from 5 famous reciters
+- **Playback:** Play button starts verse audio
+- **Navigation:** Previous/Next buttons for easy browsing
+- **Bookmarks:** Save favorite verses for later
+- **Export:** Download all bookmarks as text file
+
+### 🗺️ **Mosques Tab**
+- **Automatic:** Shows nearby mosques on map
+- **Interactive:** Click markers for mosque details
+- **List View:** Scrollable list with distances
+- **Directions:** Click for Google Maps navigation
+- **Search:** Adjustable search radius
+
+## 🔧 Technical Implementation
+
+### 🎨 **Styling Approach**
+- **CSS Custom Properties** for consistent theming
+- **Flexbox & Grid** for responsive layouts
+- **Glass Morphism** with `backdrop-filter: blur()`
+- **Smooth Animations** with CSS transitions
+- **Mobile-First** responsive design
+
+### 📱 **PWA Features**
+- **Manifest:** App metadata and icons
+- **Service Worker:** Offline caching strategy
+- **Responsive:** Works on all device sizes
+- **Installable:** Add to home screen capability
+
+### 🔄 **Error Handling**
+- **Network Failures:** Graceful fallbacks to cached data
+- **Location Denied:** Manual location input option
+- **Audio Failures:** Alternative sources and generated tones
+- **API Limits:** Local calculations and cached responses
+
+### 💾 **Data Persistence**
+- **LocalStorage:** User preferences and bookmarks
+- **Cache API:** Offline prayer times and settings
+- **Session Storage:** Temporary app state
+
+## 🌟 Advanced Features
+
+### 🔊 **Audio System**
+- **Multiple Sources:** Primary and fallback audio URLs
+- **Progress Tracking:** Visual progress bars
+- **Volume Control:** System volume integration
+- **Format Support:** MP3 with Web Audio fallback
+
+### 📍 **Location Services**
+- **High Accuracy GPS:** For precise prayer times
+- **IP Geolocation:** Backup location method
+- **Manual Input:** Coordinate entry option
+- **Location Caching:** Reduced API calls
+
+### 🎨 **Theming System**
+- **Islamic Colors:** Gold (#FFD700), Brown (#8B4513), Blue (#3B82F6)
+- **Gradient Backgrounds:** Dynamic color transitions
+- **Glass Effects:** Modern blur and transparency
+- **Dark Mode Support:** Automatic system detection
+
+## 🐛 Troubleshooting
+
+### ❌ **Common Issues**
+
+#### **Prayer Times Not Loading**
+- Check internet connection
+- Allow location permissions
+- Try refresh button
+- Check browser console for errors
+
+#### **Audio Not Playing**
+- Ensure device volume is up
+- Try different reciter
+- Check internet connection for streaming
+- Some browsers require user interaction first
+
+#### **Compass Not Working**
+- Allow motion/orientation permissions
+- Calibrate by moving device in figure-8
+- Only works on mobile devices with sensors
+- Check device compass app functionality
+
+#### **Map Not Loading**
+- Check internet connection
+- Allow location permissions
+- Try refreshing the page
+- Fallback mosque data will display
+
+### 🔧 **Development Tips**
+- **HTTPS Required:** For GPS and device sensors
+- **Permissions:** Always request user permissions gracefully
+- **Fallbacks:** Implement for every external dependency
+- **Testing:** Test on actual mobile devices for sensors
+
+## 📄 **License & Credits**
+
+### 🙏 **APIs Used**
+- **Aladhan API** - Prayer times calculation
+- **Al-Quran Cloud** - Quranic audio recitations
+- **OpenStreetMap** - Map tiles and mosque data
+- **NOAA** - Magnetic declination data
+
+### 🎨 **Design Resources**
+- **Font Awesome** - Icons and symbols
+- **Google Fonts** - Typography (Amiri for Arabic)
+- **Unsplash** - Background inspiration
+
+### 📝 **License**
+This project is open source and available under the MIT License.
 
 ---
 
-**Made with ❤️ for the Muslim community**
+**Built with ❤️ for the Muslim community worldwide** 🌍
 
-*May Allah accept our prayers and guide us on the straight path. Ameen.*
-
-**🌙 Athan Times - Your Digital Prayer Companion** 
+For support, issues, or contributions, please visit the GitHub repository. 

@@ -80,12 +80,21 @@
                     <div id="hijri-date" class="text-sm opacity-80 mt-1"></div>
                 </div>
                 <div class="flex items-center space-x-4">
+                    <button id="global-stop-btn" class="stop-btn-main p-3 rounded-full transition" onclick="stopAudio();" aria-label="Stop all audio">
+                        <i class="fas fa-stop text-xl"></i>
+                    </button>
+                    <button id="test-notifications-btn" class="p-3 rounded-full hover:bg-white hover:bg-opacity-20 transition" onclick="testNotifications();" aria-label="Test notifications">
+                        <i class="fas fa-bell text-xl"></i>
+                    </button>
                     <button id="location-btn" class="p-3 rounded-full hover:bg-white hover:bg-opacity-20 transition" aria-label="Update location">
                         <i class="fas fa-map-marker-alt text-xl"></i>
                     </button>
-                    <button id="settings-btn" class="p-3 rounded-full hover:bg-white hover:bg-opacity-20 transition" aria-label="Open settings">
+                    <button onclick="window.refreshPrayerTimes()" class="p-3 rounded-full hover:bg-white hover:bg-opacity-20 transition" aria-label="Refresh Prayer Times">
+                        <i class="fas fa-sync-alt text-xl"></i>
+                    </button>
+                    <button id="settings-btn" class="p-3 rounded-full hover:bg-white hover:bg-opacity-20 transition relative z-50" onclick="openSettingsModal(); return false;" aria-label="Open settings">
                         <i class="fas fa-cog text-xl"></i>
-                </button>
+                    </button>
                 </div>
             </div>
         </header>
@@ -120,6 +129,8 @@
                     </button>
                 </div>
             </div>
+            
+            <!-- Helper boxes removed to prevent unwanted colorful windows -->
         </div>
 
         <!-- Navigation Tabs -->
@@ -149,14 +160,17 @@
                 <div class="tab-header">
                     <h2><i class="fas fa-mosque text-green-600"></i> Prayer Times</h2>
                     <div class="header-actions">
-                        <button id="stop-audio-btn" class="action-btn" onclick="stopAudio()" title="Stop Audio">
+                        <button onclick="refreshLocationWithBrowserCheck()" class="action-btn" title="Refresh Location">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </button>
+                        <button id="global-stop-btn" onclick="stopAllAudio()" class="action-btn stop-audio-btn" title="Stop Audio" style="display: none;">
                             <i class="fas fa-stop"></i>
                         </button>
-                        <button id="prayer-settings-btn" class="action-btn" onclick="showPrayerSettings()" title="Prayer Settings">
-                            <i class="fas fa-cog"></i>
+                        <button onclick="copyCurrentUrl()" class="action-btn" title="Share App">
+                            <i class="fas fa-share-alt"></i>
                         </button>
-                        <button id="location-refresh" class="action-btn" onclick="refreshLocation()" title="Refresh Location">
-                            <i class="fas fa-sync-alt"></i>
+                        <button onclick="showNotificationSettings()" class="action-btn" title="Settings">
+                            <i class="fas fa-cog"></i>
                         </button>
                     </div>
                 </div>
@@ -262,15 +276,125 @@
                         <button id="bookmarks-btn" onclick="toggleBookmarks()" class="action-btn" title="View Bookmarks">
                             <i class="fas fa-bookmark"></i>
                         </button>
-                        <button id="daily-verse-btn" onclick="showDailyVerse()" class="action-btn" title="Daily Verse">
-                            <i class="fas fa-calendar-day"></i>
-                        </button>
                         <button id="random-verse-btn" onclick="getRandomVerse()" class="action-btn" title="Random Verse">
                             <i class="fas fa-random"></i>
                         </button>
-                        <button id="search-toggle" class="action-btn" onclick="toggleQuranSearch()" title="Search">
-                            <i class="fas fa-search"></i>
+                        <button id="daily-verse-btn" onclick="showDailyVerse()" class="action-btn" title="Daily Verse">
+                            <i class="fas fa-calendar-day"></i>
                         </button>
+                    </div>
+                </div>
+                
+                <!-- Comprehensive Quran Player -->
+                <div class="quran-player-main">
+                    <div class="player-selection-section">
+                        <h3 class="selection-title">
+                            <i class="fas fa-list-alt text-purple-500 mr-2"></i>
+                            Select Surah & Verse
+                        </h3>
+                        
+                        <div class="selection-controls">
+                            <div class="surah-selection">
+                                <label for="surah-select" class="selection-label">Surah</label>
+                                <select id="surah-select" class="selection-dropdown" onchange="onSurahChange()">
+                                    <!-- Will be populated by JavaScript -->
+                                </select>
+                            </div>
+                            
+                            <div class="verse-selection">
+                                <label for="verse-select" class="selection-label">Verse</label>
+                                <select id="verse-select" class="selection-dropdown" onchange="onVerseChange()">
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+                            
+                            <div class="reciter-selection">
+                                <label for="main-reciter-select" class="selection-label">Reciter</label>
+                                <select id="main-reciter-select" class="selection-dropdown" onchange="onReciterChange()">
+                                    <option value="ar.alafasy">Mishary Alafasy</option>
+                                    <option value="ar.abdurrahmaansudais">Abdur-Rahman As-Sudais</option>
+                                    <option value="ar.maheralmeaqly">Maher Al Mueaqly</option>
+                                    <option value="ar.saadalghamdi">Saad Al Ghamdi</option>
+                                    <option value="ar.abdulbasitmurattal">Abdul Basit</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audio Player Section -->
+                    <div class="audio-player-section">
+                        <div class="player-info-display">
+                            <div class="currently-playing">
+                                <h4 id="current-surah-name" class="surah-name">Al-Fatihah</h4>
+                                <p id="current-verse-number" class="verse-number">Verse 1</p>
+                                <p id="current-reciter-name" class="reciter-name">Mishary Alafasy</p>
+                            </div>
+                            <div id="audio-status" class="audio-status">
+                                <i class="fas fa-pause text-gray-500"></i>
+                                <span>Ready to Play</span>
+                            </div>
+                        </div>
+                        
+                        <div class="audio-progress-section">
+                            <div class="progress-bar-container" onclick="seekAudio(event)" style="cursor: pointer;" title="Click to seek">
+                                <div id="main-progress-bar" class="progress-bar-fill"></div>
+                            </div>
+                            <div class="time-info">
+                                <span id="current-time-display">0:00</span>
+                                <span id="total-time-display">0:00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="player-controls-main">
+                            <button onclick="playPreviousVerse()" class="control-btn prev-btn" title="Previous Verse">
+                                <i class="fas fa-step-backward"></i>
+                            </button>
+                            <button onclick="playCurrentVerse()" class="control-btn play-btn-main" title="Play/Pause">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button onclick="stopAudio();" class="control-btn stop-btn-main" title="Stop">
+                                <i class="fas fa-stop"></i>
+                            </button>
+                            <button onclick="playNextVerse()" class="control-btn next-btn" title="Next Verse">
+                                <i class="fas fa-step-forward"></i>
+                            </button>
+                            <button onclick="bookmarkCurrentVerse()" class="control-btn bookmark-btn-main" title="Save Verse">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Verse Display Section -->
+                    <div class="verse-display-section">
+                        <div class="verse-content-main">
+                            <div class="arabic-text-main" id="main-arabic-text">
+                                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                            </div>
+                            <div class="translation-text-main" id="main-translation-text">
+                                "In the name of Allah, the Entirely Merciful, the Especially Merciful."
+                            </div>
+                            <div class="verse-reference-main" id="main-verse-reference">
+                                <span class="reference-badge-main">
+                                    <i class="fas fa-book-open mr-2"></i>
+                                    Al-Fatihah 1:1
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="verse-actions-main">
+                            <button onclick="shareCurrentVerse()" class="action-btn-main share-btn-main">
+                                <i class="fas fa-share-alt mr-2"></i>
+                                Share
+                            </button>
+                            <button onclick="playCurrentVerse()" class="action-btn-main listen-btn-main">
+                                <i class="fas fa-headphones mr-2"></i>
+                                Listen
+                            </button>
+                            <button onclick="bookmarkCurrentVerse()" class="action-btn-main bookmark-btn-main">
+                                <i class="fas fa-star mr-2"></i>
+                                Save Verse
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
@@ -302,230 +426,7 @@
                         <div class="no-bookmarks-content">
                             <i class="fas fa-bookmark-plus text-gray-400 mb-4" style="font-size: 48px;"></i>
                             <h4>No Saved Verses</h4>
-                            <p>Start bookmarking your favorite verses by clicking the bookmark button on any verse.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Beautiful Audio Player Section -->
-                <div class="quran-audio-player">
-                    <div class="player-header">
-                        <div class="player-info">
-                            <h4 class="player-title">
-                                <i class="fas fa-headphones text-purple-500 mr-2"></i>
-                                Audio Player
-                            </h4>
-                            <div class="player-details">
-                                <span id="current-verse-info" class="verse-info">Select a verse</span>
-                                <span class="separator">•</span>
-                                <span id="current-reciter" class="reciter-info">Mishary Alafasy</span>
-                            </div>
-                        </div>
-                        <div id="audio-player-status" class="player-status">
-                            <i class="fas fa-pause text-gray-500"></i> Ready
-                        </div>
-                    </div>
-                    
-                    <div class="audio-progress-container">
-                        <div class="audio-progress-track">
-                            <div id="audio-progress-bar" class="audio-progress-bar"></div>
-                        </div>
-                        <div class="audio-time-display">
-                            <span id="audio-current-time" class="time-current">0:00</span>
-                            <span id="audio-duration" class="time-duration">0:00</span>
-                        </div>
-                    </div>
-                    
-                    <div class="player-controls">
-                        <button onclick="playVerseAudio()" class="player-btn play-btn" title="Play Current Verse">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <button onclick="stopAudio()" class="player-btn stop-btn" title="Stop Audio">
-                            <i class="fas fa-stop"></i>
-                        </button>
-                        <div class="reciter-selector">
-                            <select id="reciter-select" onchange="changeReciter(this.value)" class="reciter-dropdown">
-                                <option value="ar.alafasy">Mishary Alafasy</option>
-                                <option value="ar.abdurrahmaansudais">Abdur-Rahman As-Sudais</option>
-                                <option value="ar.maheralmeaqly">Maher Al Mueaqly</option>
-                                <option value="ar.saadalghamdi">Saad Al Ghamdi</option>
-                                <option value="ar.abdulbasitmurattal">Abdul Basit</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Enhanced Daily Verse Section -->
-                <div class="daily-verse-section">
-                    <div class="verse-card-enhanced">
-                        <div class="verse-header">
-                            <div class="verse-title-section">
-                                <h3 class="verse-title">
-                                    <i class="fas fa-star-and-crescent text-purple-600 mr-2"></i>
-                                    <span>Verse of the Day</span>
-                                </h3>
-                                <div class="verse-navigation">
-                                    <button onclick="refreshVerse()" class="nav-btn prev-btn" title="Previous verse">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </button>
-                                    <button onclick="getRandomVerse()" class="nav-btn random-btn" title="Random verse">
-                                        <i class="fas fa-shuffle"></i>
-                                    </button>
-                                    <button onclick="refreshVerse()" class="nav-btn next-btn" title="Next verse">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="verse-content-enhanced">
-                            <div class="arabic-verse-container">
-                                <div class="arabic-verse-enhanced" id="arabic-verse">
-                                    وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ ۚ إِنَّ اللَّهَ بَالِغُ أَمْرِهِ ۚ قَدْ جَعَلَ اللَّهُ لِكُلِّ شَيْءٍ قَدْرًا
-                                </div>
-                                <div class="verse-ornament">
-                                    <div class="ornament-line"></div>
-                                    <div class="ornament-center">✦</div>
-                                    <div class="ornament-line"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="verse-translation-enhanced" id="verse-translation">
-                                "And whoever relies upon Allah - then He is sufficient for him. Indeed, Allah will accomplish His purpose. Allah has already set for everything a [decreed] extent."
-                            </div>
-                            
-                            <div class="verse-reference-enhanced" id="verse-reference">
-                                <div class="reference-badge">
-                                    <i class="fas fa-book-open mr-2"></i>
-                                    <span>Quran 65:3 - At-Talaq</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="verse-actions-enhanced">
-                            <button onclick="playVerseAudio()" class="verse-action-btn-enhanced listen-btn">
-                                <i class="fas fa-headphones mr-2"></i>
-                                <span>Listen</span>
-                            </button>
-                            <button onclick="shareVerse()" class="verse-action-btn-enhanced share-btn">
-                                <i class="fas fa-share-alt mr-2"></i>
-                                <span>Share</span>
-                            </button>
-                            <button onclick="bookmarkVerse()" class="verse-action-btn-enhanced bookmark-btn">
-                                <i class="fas fa-bookmark mr-2"></i>
-                                <span>Save</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Search Section -->
-                <div id="quran-search" class="search-section" style="display: none;">
-                    <div class="search-input-container">
-                        <input type="text" id="quran-search-input" placeholder="Search Surahs..." 
-                               oninput="searchQuran(this.value)">
-                        <i class="fas fa-search search-icon"></i>
-                    </div>
-                    <div id="search-results" class="search-results"></div>
-                </div>
-
-                <!-- Enhanced Audio Player -->
-                <div class="quran-player-container">
-                    <h3>Quran Audio Player</h3>
-                    
-                    <!-- Player Controls Row -->
-                    <div class="player-controls-row">
-                        <div class="player-selectors">
-                            <div class="selector-group">
-                                <label class="selector-label">Select Surah</label>
-                                <select id="surah-selector" class="custom-select">
-                                    <option value="1">Al-Fatiha (The Opening)</option>
-                                    <option value="2">Al-Baqarah (The Cow)</option>
-                                    <option value="3">Ali Imran (Family of Imran)</option>
-                                    <option value="18">Al-Kahf (The Cave)</option>
-                                    <option value="36">Ya-Sin</option>
-                                    <option value="55">Ar-Rahman (The Beneficent)</option>
-                                    <option value="67">Al-Mulk (The Sovereignty)</option>
-                                    <option value="112">Al-Ikhlas (The Sincerity)</option>
-                                    <option value="113">Al-Falaq (The Dawn)</option>
-                                    <option value="114">An-Nas (Mankind)</option>
-                                </select>
-                            </div>
-                            
-                            <div class="selector-group">
-                                <label class="selector-label">Select Reciter</label>
-                                <select id="reciter-selector" class="custom-select">
-                                    <option value="mishary">Mishary Rashid Alafasy</option>
-                                    <option value="sudais">Abdul Rahman Al-Sudais</option>
-                                    <option value="husary">Mahmoud Khalil Al-Husary</option>
-                                    <option value="minshawi">Mohamed Siddiq Al-Minshawi</option>
-                                    <option value="ajmi">Ahmad bin Ali Al-Ajmi</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <!-- Additional Controls -->
-                        <div class="player-extra-controls">
-                            <button id="bookmark-btn" onclick="toggleBookmark()" class="control-btn" title="Bookmark">
-                                <i class="far fa-bookmark"></i>
-                            </button>
-                            <button id="repeat-btn" onclick="toggleAutoRepeat()" class="control-btn" title="Auto Repeat">
-                                <i class="fas fa-repeat"></i>
-                            </button>
-                            <div class="speed-control">
-                                <select onchange="setPlaybackSpeed(this.value)" class="speed-select">
-                                    <option value="0.5">0.5x</option>
-                                    <option value="0.75">0.75x</option>
-                                    <option value="1.0" selected>1.0x</option>
-                                    <option value="1.25">1.25x</option>
-                                    <option value="1.5">1.5x</option>
-                                </select>
-                                <span id="speed-display" class="speed-label">1.0x</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Main Audio Player -->
-                    <div class="audio-player">
-                        <!-- Now Playing Info -->
-                        <div class="now-playing">
-                            <div class="surah-info">
-                                <div id="current-surah-name" class="surah-name">Al-Fatiha (The Opening)</div>
-                                <div id="current-reciter-name" class="reciter-name">Mishary Rashid Alafasy</div>
-                            </div>
-                        </div>
-
-                        <!-- Progress Bar -->
-                        <div class="progress-container">
-                            <div id="progress-bar" class="progress-bar">
-                                <div id="progress-fill" class="progress-fill"></div>
-                            </div>
-                        </div>
-
-                        <!-- Time Display -->
-                        <div class="time-info">
-                            <span id="current-time" class="current-time">0:00</span>
-                            <span id="total-time" class="total-time">0:00</span>
-                        </div>
-
-                        <!-- Player Controls -->
-                        <div class="player-controls">
-                            <button id="prev-btn" class="control-btn" title="Previous">
-                                <i class="fas fa-step-backward"></i>
-                            </button>
-                            <button id="play-pause-btn" class="control-btn play-btn" title="Play">
-                                <i class="fas fa-play"></i>
-                            </button>
-                            <button id="next-btn" class="control-btn" title="Next">
-                                <i class="fas fa-step-forward"></i>
-                            </button>
-                        </div>
-
-                        <!-- Volume Control -->
-                        <div class="volume-control">
-                            <i class="fas fa-volume-down"></i>
-                            <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="70">
-                            <i class="fas fa-volume-up"></i>
+                            <p>Start bookmarking your favorite verses by clicking the bookmark button.</p>
                         </div>
                     </div>
                 </div>
@@ -628,7 +529,7 @@
             <div class="bg-white rounded-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
                 <div class="sticky top-0 bg-white p-6 border-b flex justify-between items-center rounded-t-2xl">
                     <h2 id="settings-title" class="text-2xl font-bold text-gray-800">Settings</h2>
-                    <button id="close-settings" class="text-gray-500 hover:text-gray-700 text-xl" aria-label="Close settings">
+                    <button id="close-settings" class="text-gray-500 hover:text-gray-700 text-xl" onclick="closeSettingsModal(); return false;" aria-label="Close settings">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -680,15 +581,62 @@
                             <i class="fas fa-calculator text-blue-500 mr-3"></i>
                             Calculation Method
                         </h3>
-                        <select id="calculation-method" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="0">Shia Ithna-Ansari</option>
+                        <select name="calculation-method" id="calculation-method" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
                             <option value="1">University of Islamic Sciences, Karachi</option>
-                            <option value="2">Islamic Society of North America</option>
+                            <option value="2" selected>Islamic Society of North America (ISNA)</option>
                             <option value="3">Muslim World League</option>
                             <option value="4">Umm Al-Qura University, Makkah</option>
                             <option value="5">Egyptian General Authority of Survey</option>
                             <option value="7">Institute of Geophysics, University of Tehran</option>
+                            <option value="8">Gulf Region</option>
+                            <option value="9">Kuwait</option>
+                            <option value="10">Qatar</option>
+                            <option value="11">Singapore</option>
+                            <option value="12">France</option>
+                            <option value="13">Turkey</option>
+                            <option value="14">Russia</option>
                         </select>
+                        <p class="text-sm text-gray-600 mt-2">Different organizations use varying calculation methods for prayer times</p>
+                    </div>
+                    
+                    <!-- Timezone Selection -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-clock text-green-500 mr-3"></i>
+                            Timezone
+                        </h3>
+                        <select name="timezone" id="timezone" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
+                            <option value="auto" selected>Auto-detect from location</option>
+                            <option value="America/New_York">Eastern Time (US)</option>
+                            <option value="America/Chicago">Central Time (US)</option>
+                            <option value="America/Denver">Mountain Time (US)</option>
+                            <option value="America/Los_Angeles">Pacific Time (US)</option>
+                            <option value="Europe/London">London (GMT/BST)</option>
+                            <option value="Europe/Paris">Paris (CET/CEST)</option>
+                            <option value="Asia/Dubai">Dubai (GST)</option>
+                            <option value="Asia/Riyadh">Riyadh (AST)</option>
+                            <option value="Asia/Karachi">Karachi (PKT)</option>
+                            <option value="Asia/Dhaka">Dhaka (BST)</option>
+                            <option value="Asia/Jakarta">Jakarta (WIB)</option>
+                            <option value="Asia/Kuala_Lumpur">Kuala Lumpur (MYT)</option>
+                            <option value="Asia/Singapore">Singapore (SGT)</option>
+                            <option value="Australia/Sydney">Sydney (AEDT/AEST)</option>
+                        </select>
+                        <p class="text-sm text-gray-600 mt-2">Override automatic timezone detection if needed</p>
+                    </div>
+                    
+                    <!-- Theme Selection -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-palette text-purple-500 mr-3"></i>
+                            Theme
+                        </h3>
+                        <select name="theme" id="theme" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
+                            <option value="auto" selected>Auto (System preference)</option>
+                            <option value="light">Light Theme</option>
+                            <option value="dark">Dark Theme</option>
+                        </select>
+                        <p class="text-sm text-gray-600 mt-2">Choose your preferred app appearance</p>
                     </div>
                     
                     <!-- Madhab Selection -->
@@ -715,8 +663,41 @@
                         </div>
                     </div>
                     
+                    <!-- Notification Test Section -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-bell text-purple-500 mr-3"></i>
+                            Notification System
+                        </h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="window.testNotifications()" class="px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-sm rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all transform hover:scale-105 font-medium">
+                                <i class="fas fa-magic mr-2"></i>Test All Types
+                            </button>
+                            <button onclick="window.testAdvancedNotification()" class="px-4 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white text-sm rounded-lg hover:from-indigo-700 hover:to-blue-700 transition-all transform hover:scale-105 font-medium">
+                                <i class="fas fa-rocket mr-2"></i>Advanced Demo
+                            </button>
+                            <button onclick="window.showSuccess('This is a success notification!', {sound: true})" class="px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm rounded-lg hover:from-green-600 hover:to-emerald-600 transition-all transform hover:scale-105 font-medium">
+                                <i class="fas fa-check mr-2"></i>Success 🎉
+                            </button>
+                            <button onclick="window.showError('This is an error notification!', {sound: true})" class="px-4 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm rounded-lg hover:from-red-600 hover:to-pink-600 transition-all transform hover:scale-105 font-medium">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>Error ❌
+                            </button>
+                        </div>
+                        <div class="mt-3 grid grid-cols-2 gap-3">
+                            <button onclick="window.showWarning('This is a warning notification!', {sound: true})" class="px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-sm rounded-lg hover:from-yellow-600 hover:to-orange-600 transition-all transform hover:scale-105 font-medium">
+                                <i class="fas fa-exclamation mr-2"></i>Warning ⚠️
+                            </button>
+                            <button onclick="window.showInfo('This is an info notification!', {duration: 8000})" class="px-4 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-sm rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all transform hover:scale-105 font-medium">
+                                <i class="fas fa-info-circle mr-2"></i>Info 💡
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-3 text-center">
+                            <i class="fas fa-volume-up mr-1"></i>Sound notifications work best on mobile devices
+                        </p>
+                    </div>
+                    
                     <!-- Save Button -->
-                    <button id="save-settings" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105">
+                    <button id="save-settings" onclick="saveSettings()" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105">
                         <i class="fas fa-save mr-2"></i>Save Settings
                     </button>
                 </div>
@@ -739,6 +720,6 @@
         }
     </script>
 
-    <script src="script.js"></script>
+    <script src="script-enhanced.js"></script>
 </body>
 </html>

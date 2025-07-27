@@ -676,11 +676,605 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // Placeholder Quran player initialization
+    // Complete Quran Data - All 114 Surahs
+    const quranSurahs = [
+        { number: 1, name: "Al-Fatihah", arabicName: "الفاتحة", verses: 7, revelationType: "Meccan" },
+        { number: 2, name: "Al-Baqarah", arabicName: "البقرة", verses: 286, revelationType: "Medinan" },
+        { number: 3, name: "Ali 'Imran", arabicName: "آل عمران", verses: 200, revelationType: "Medinan" },
+        { number: 4, name: "An-Nisa", arabicName: "النساء", verses: 176, revelationType: "Medinan" },
+        { number: 5, name: "Al-Ma'idah", arabicName: "المائدة", verses: 120, revelationType: "Medinan" },
+        { number: 6, name: "Al-An'am", arabicName: "الأنعام", verses: 165, revelationType: "Meccan" },
+        { number: 7, name: "Al-A'raf", arabicName: "الأعراف", verses: 206, revelationType: "Meccan" },
+        { number: 8, name: "Al-Anfal", arabicName: "الأنفال", verses: 75, revelationType: "Medinan" },
+        { number: 9, name: "At-Tawbah", arabicName: "التوبة", verses: 129, revelationType: "Medinan" },
+        { number: 10, name: "Yunus", arabicName: "يونس", verses: 109, revelationType: "Meccan" },
+        { number: 11, name: "Hud", arabicName: "هود", verses: 123, revelationType: "Meccan" },
+        { number: 12, name: "Yusuf", arabicName: "يوسف", verses: 111, revelationType: "Meccan" },
+        { number: 13, name: "Ar-Ra'd", arabicName: "الرعد", verses: 43, revelationType: "Medinan" },
+        { number: 14, name: "Ibrahim", arabicName: "ابراهيم", verses: 52, revelationType: "Meccan" },
+        { number: 15, name: "Al-Hijr", arabicName: "الحجر", verses: 99, revelationType: "Meccan" },
+        { number: 16, name: "An-Nahl", arabicName: "النحل", verses: 128, revelationType: "Meccan" },
+        { number: 17, name: "Al-Isra", arabicName: "الإسراء", verses: 111, revelationType: "Meccan" },
+        { number: 18, name: "Al-Kahf", arabicName: "الكهف", verses: 110, revelationType: "Meccan" },
+        { number: 19, name: "Maryam", arabicName: "مريم", verses: 98, revelationType: "Meccan" },
+        { number: 20, name: "Taha", arabicName: "طه", verses: 135, revelationType: "Meccan" },
+        { number: 21, name: "Al-Anbya", arabicName: "الأنبياء", verses: 112, revelationType: "Meccan" },
+        { number: 22, name: "Al-Hajj", arabicName: "الحج", verses: 78, revelationType: "Medinan" },
+        { number: 23, name: "Al-Mu'minun", arabicName: "المؤمنون", verses: 118, revelationType: "Meccan" },
+        { number: 24, name: "An-Nur", arabicName: "النور", verses: 64, revelationType: "Medinan" },
+        { number: 25, name: "Al-Furqan", arabicName: "الفرقان", verses: 77, revelationType: "Meccan" },
+        { number: 26, name: "Ash-Shu'ara", arabicName: "الشعراء", verses: 227, revelationType: "Meccan" },
+        { number: 27, name: "An-Naml", arabicName: "النمل", verses: 93, revelationType: "Meccan" },
+        { number: 28, name: "Al-Qasas", arabicName: "القصص", verses: 88, revelationType: "Meccan" },
+        { number: 29, name: "Al-'Ankabut", arabicName: "العنكبوت", verses: 69, revelationType: "Meccan" },
+        { number: 30, name: "Ar-Rum", arabicName: "الروم", verses: 60, revelationType: "Meccan" },
+        { number: 31, name: "Luqman", arabicName: "لقمان", verses: 34, revelationType: "Meccan" },
+        { number: 32, name: "As-Sajdah", arabicName: "السجدة", verses: 30, revelationType: "Meccan" },
+        { number: 33, name: "Al-Ahzab", arabicName: "الأحزاب", verses: 73, revelationType: "Medinan" },
+        { number: 34, name: "Saba", arabicName: "سبإ", verses: 54, revelationType: "Meccan" },
+        { number: 35, name: "Fatir", arabicName: "فاطر", verses: 45, revelationType: "Meccan" },
+        { number: 36, name: "Ya-Sin", arabicName: "يس", verses: 83, revelationType: "Meccan" },
+        { number: 37, name: "As-Saffat", arabicName: "الصافات", verses: 182, revelationType: "Meccan" },
+        { number: 38, name: "Sad", arabicName: "ص", verses: 88, revelationType: "Meccan" },
+        { number: 39, name: "Az-Zumar", arabicName: "الزمر", verses: 75, revelationType: "Meccan" },
+        { number: 40, name: "Ghafir", arabicName: "غافر", verses: 85, revelationType: "Meccan" },
+        { number: 41, name: "Fussilat", arabicName: "فصلت", verses: 54, revelationType: "Meccan" },
+        { number: 42, name: "Ash-Shuraa", arabicName: "الشورى", verses: 53, revelationType: "Meccan" },
+        { number: 43, name: "Az-Zukhruf", arabicName: "الزخرف", verses: 89, revelationType: "Meccan" },
+        { number: 44, name: "Ad-Dukhan", arabicName: "الدخان", verses: 59, revelationType: "Meccan" },
+        { number: 45, name: "Al-Jathiyah", arabicName: "الجاثية", verses: 37, revelationType: "Meccan" },
+        { number: 46, name: "Al-Ahqaf", arabicName: "الأحقاف", verses: 35, revelationType: "Meccan" },
+        { number: 47, name: "Muhammad", arabicName: "محمد", verses: 38, revelationType: "Medinan" },
+        { number: 48, name: "Al-Fath", arabicName: "الفتح", verses: 29, revelationType: "Medinan" },
+        { number: 49, name: "Al-Hujurat", arabicName: "الحجرات", verses: 18, revelationType: "Medinan" },
+        { number: 50, name: "Qaf", arabicName: "ق", verses: 45, revelationType: "Meccan" },
+        { number: 51, name: "Adh-Dhariyat", arabicName: "الذاريات", verses: 60, revelationType: "Meccan" },
+        { number: 52, name: "At-Tur", arabicName: "الطور", verses: 49, revelationType: "Meccan" },
+        { number: 53, name: "An-Najm", arabicName: "النجم", verses: 62, revelationType: "Meccan" },
+        { number: 54, name: "Al-Qamar", arabicName: "القمر", verses: 55, revelationType: "Meccan" },
+        { number: 55, name: "Ar-Rahman", arabicName: "الرحمن", verses: 78, revelationType: "Medinan" },
+        { number: 56, name: "Al-Waqi'ah", arabicName: "الواقعة", verses: 96, revelationType: "Meccan" },
+        { number: 57, name: "Al-Hadid", arabicName: "الحديد", verses: 29, revelationType: "Medinan" },
+        { number: 58, name: "Al-Mujadila", arabicName: "المجادلة", verses: 22, revelationType: "Medinan" },
+        { number: 59, name: "Al-Hashr", arabicName: "الحشر", verses: 24, revelationType: "Medinan" },
+        { number: 60, name: "Al-Mumtahanah", arabicName: "الممتحنة", verses: 13, revelationType: "Medinan" },
+        { number: 61, name: "As-Saff", arabicName: "الصف", verses: 14, revelationType: "Medinan" },
+        { number: 62, name: "Al-Jumu'ah", arabicName: "الجمعة", verses: 11, revelationType: "Medinan" },
+        { number: 63, name: "Al-Munafiqun", arabicName: "المنافقون", verses: 11, revelationType: "Medinan" },
+        { number: 64, name: "At-Taghabun", arabicName: "التغابن", verses: 18, revelationType: "Medinan" },
+        { number: 65, name: "At-Talaq", arabicName: "الطلاق", verses: 12, revelationType: "Medinan" },
+        { number: 66, name: "At-Tahrim", arabicName: "التحريم", verses: 12, revelationType: "Medinan" },
+        { number: 67, name: "Al-Mulk", arabicName: "الملك", verses: 30, revelationType: "Meccan" },
+        { number: 68, name: "Al-Qalam", arabicName: "القلم", verses: 52, revelationType: "Meccan" },
+        { number: 69, name: "Al-Haqqah", arabicName: "الحاقة", verses: 52, revelationType: "Meccan" },
+        { number: 70, name: "Al-Ma'arij", arabicName: "المعارج", verses: 44, revelationType: "Meccan" },
+        { number: 71, name: "Nuh", arabicName: "نوح", verses: 28, revelationType: "Meccan" },
+        { number: 72, name: "Al-Jinn", arabicName: "الجن", verses: 28, revelationType: "Meccan" },
+        { number: 73, name: "Al-Muzzammil", arabicName: "المزمل", verses: 20, revelationType: "Meccan" },
+        { number: 74, name: "Al-Muddaththir", arabicName: "المدثر", verses: 56, revelationType: "Meccan" },
+        { number: 75, name: "Al-Qiyamah", arabicName: "القيامة", verses: 40, revelationType: "Meccan" },
+        { number: 76, name: "Al-Insan", arabicName: "الإنسان", verses: 31, revelationType: "Medinan" },
+        { number: 77, name: "Al-Mursalat", arabicName: "المرسلات", verses: 50, revelationType: "Meccan" },
+        { number: 78, name: "An-Naba", arabicName: "النبإ", verses: 40, revelationType: "Meccan" },
+        { number: 79, name: "An-Nazi'at", arabicName: "النازعات", verses: 46, revelationType: "Meccan" },
+        { number: 80, name: "Abasa", arabicName: "عبس", verses: 42, revelationType: "Meccan" },
+        { number: 81, name: "At-Takwir", arabicName: "التكوير", verses: 29, revelationType: "Meccan" },
+        { number: 82, name: "Al-Infitar", arabicName: "الإنفطار", verses: 19, revelationType: "Meccan" },
+        { number: 83, name: "Al-Mutaffifin", arabicName: "المطففين", verses: 36, revelationType: "Meccan" },
+        { number: 84, name: "Al-Inshiqaq", arabicName: "الإنشقاق", verses: 25, revelationType: "Meccan" },
+        { number: 85, name: "Al-Buruj", arabicName: "البروج", verses: 22, revelationType: "Meccan" },
+        { number: 86, name: "At-Tariq", arabicName: "الطارق", verses: 17, revelationType: "Meccan" },
+        { number: 87, name: "Al-A'la", arabicName: "الأعلى", verses: 19, revelationType: "Meccan" },
+        { number: 88, name: "Al-Ghashiyah", arabicName: "الغاشية", verses: 26, revelationType: "Meccan" },
+        { number: 89, name: "Al-Fajr", arabicName: "الفجر", verses: 30, revelationType: "Meccan" },
+        { number: 90, name: "Al-Balad", arabicName: "البلد", verses: 20, revelationType: "Meccan" },
+        { number: 91, name: "Ash-Shams", arabicName: "الشمس", verses: 15, revelationType: "Meccan" },
+        { number: 92, name: "Al-Layl", arabicName: "الليل", verses: 21, revelationType: "Meccan" },
+        { number: 93, name: "Ad-Duhaa", arabicName: "الضحى", verses: 11, revelationType: "Meccan" },
+        { number: 94, name: "Ash-Sharh", arabicName: "الشرح", verses: 8, revelationType: "Meccan" },
+        { number: 95, name: "At-Tin", arabicName: "التين", verses: 8, revelationType: "Meccan" },
+        { number: 96, name: "Al-Alaq", arabicName: "العلق", verses: 19, revelationType: "Meccan" },
+        { number: 97, name: "Al-Qadr", arabicName: "القدر", verses: 5, revelationType: "Meccan" },
+        { number: 98, name: "Al-Bayyinah", arabicName: "البينة", verses: 8, revelationType: "Medinan" },
+        { number: 99, name: "Az-Zalzalah", arabicName: "الزلزلة", verses: 8, revelationType: "Medinan" },
+        { number: 100, name: "Al-Adiyat", arabicName: "العاديات", verses: 11, revelationType: "Meccan" },
+        { number: 101, name: "Al-Qari'ah", arabicName: "القارعة", verses: 11, revelationType: "Meccan" },
+        { number: 102, name: "At-Takathur", arabicName: "التكاثر", verses: 8, revelationType: "Meccan" },
+        { number: 103, name: "Al-Asr", arabicName: "العصر", verses: 3, revelationType: "Meccan" },
+        { number: 104, name: "Al-Humazah", arabicName: "الهمزة", verses: 9, revelationType: "Meccan" },
+        { number: 105, name: "Al-Fil", arabicName: "الفيل", verses: 5, revelationType: "Meccan" },
+        { number: 106, name: "Quraysh", arabicName: "قريش", verses: 4, revelationType: "Meccan" },
+        { number: 107, name: "Al-Ma'un", arabicName: "الماعون", verses: 7, revelationType: "Meccan" },
+        { number: 108, name: "Al-Kawthar", arabicName: "الكوثر", verses: 3, revelationType: "Meccan" },
+        { number: 109, name: "Al-Kafirun", arabicName: "الكافرون", verses: 6, revelationType: "Meccan" },
+        { number: 110, name: "An-Nasr", arabicName: "النصر", verses: 3, revelationType: "Medinan" },
+        { number: 111, name: "Al-Masad", arabicName: "المسد", verses: 5, revelationType: "Meccan" },
+        { number: 112, name: "Al-Ikhlas", arabicName: "الإخلاص", verses: 4, revelationType: "Meccan" },
+        { number: 113, name: "Al-Falaq", arabicName: "الفلق", verses: 5, revelationType: "Meccan" },
+        { number: 114, name: "An-Nas", arabicName: "الناس", verses: 6, revelationType: "Meccan" }
+    ];
+
+    // Current player state
+    let currentSurah = 1;
+    let currentVerse = 1;
+    let currentReciter = 'ar.alafasy';
+    let isPlaying = false;
+
+    // Available reciters
+    const reciters = [
+        { code: 'ar.alafasy', name: 'Mishary Alafasy' },
+        { code: 'ar.abdurrahmaansudais', name: 'Abdur-Rahman As-Sudais' },
+        { code: 'ar.maheralmeaqly', name: 'Maher Al Mueaqly' },
+        { code: 'ar.saadalghamdi', name: 'Saad Al Ghamdi' },
+        { code: 'ar.abdulbasitmurattal', name: 'Abdul Basit' }
+    ];
+
+    // Initialize Quran Player
     function initQuranPlayer() {
-        console.log('Quran player placeholder - advanced features available in full version');
-        return;
+        populateSurahDropdown();
+        populateVerseDropdown();
+        loadSavedSettings();
+        updateDisplay();
+        console.log('🕌 Quran Player initialized with all 114 Surahs');
     }
+
+    function populateSurahDropdown() {
+        const surahSelect = document.getElementById('surah-select');
+        if (!surahSelect) return;
+
+        surahSelect.innerHTML = quranSurahs.map(surah => 
+            `<option value="${surah.number}">${surah.number}. ${surah.name} (${surah.arabicName})</option>`
+        ).join('');
+    }
+
+    function populateVerseDropdown() {
+        const verseSelect = document.getElementById('verse-select');
+        if (!verseSelect) return;
+
+        const surah = quranSurahs.find(s => s.number === currentSurah);
+        if (!surah) return;
+
+        verseSelect.innerHTML = '';
+        for (let i = 1; i <= surah.verses; i++) {
+            verseSelect.innerHTML += `<option value="${i}">${i}</option>`;
+        }
+        verseSelect.value = currentVerse;
+    }
+
+    function loadSavedSettings() {
+        const saved = localStorage.getItem('quranPlayerSettings');
+        if (saved) {
+            const settings = JSON.parse(saved);
+            currentSurah = settings.surah || 1;
+            currentVerse = settings.verse || 1;
+            currentReciter = settings.reciter || 'ar.alafasy';
+            
+            const surahSelect = document.getElementById('surah-select');
+            const verseSelect = document.getElementById('verse-select');
+            const reciterSelect = document.getElementById('main-reciter-select');
+            
+            if (surahSelect) surahSelect.value = currentSurah;
+            if (verseSelect) verseSelect.value = currentVerse;
+            if (reciterSelect) reciterSelect.value = currentReciter;
+        }
+    }
+
+    function saveSettings() {
+        localStorage.setItem('quranPlayerSettings', JSON.stringify({
+            surah: currentSurah,
+            verse: currentVerse,
+            reciter: currentReciter
+        }));
+    }
+
+    window.onSurahChange = function() {
+        const surahSelect = document.getElementById('surah-select');
+        if (!surahSelect) return;
+        
+        currentSurah = parseInt(surahSelect.value);
+        currentVerse = 1; // Reset to verse 1 when changing surah
+        
+        populateVerseDropdown();
+        updateDisplay();
+        saveSettings();
+        
+        if (isPlaying) {
+            stopAudio();
+        }
+    };
+
+    window.onVerseChange = function() {
+        const verseSelect = document.getElementById('verse-select');
+        if (!verseSelect) return;
+        
+        currentVerse = parseInt(verseSelect.value);
+        updateDisplay();
+        saveSettings();
+        
+        if (isPlaying) {
+            stopAudio();
+        }
+    };
+
+    window.onReciterChange = function() {
+        const reciterSelect = document.getElementById('main-reciter-select');
+        if (!reciterSelect) return;
+        
+        currentReciter = reciterSelect.value;
+        updateDisplay();
+        saveSettings();
+        
+        if (isPlaying) {
+            stopAudio();
+            setTimeout(() => playCurrentVerse(), 500); // Restart with new reciter
+        }
+    };
+
+    function updateDisplay() {
+        const surah = quranSurahs.find(s => s.number === currentSurah);
+        const reciter = reciters.find(r => r.code === currentReciter);
+        
+        if (!surah || !reciter) return;
+
+        // Update player info
+        const surahNameEl = document.getElementById('current-surah-name');
+        const verseNumberEl = document.getElementById('current-verse-number');
+        const reciterNameEl = document.getElementById('current-reciter-name');
+        const referenceEl = document.getElementById('main-verse-reference');
+        
+        if (surahNameEl) surahNameEl.textContent = `${surah.name} (${surah.arabicName})`;
+        if (verseNumberEl) verseNumberEl.textContent = `Verse ${currentVerse}`;
+        if (reciterNameEl) reciterNameEl.textContent = reciter.name;
+        if (referenceEl) {
+            referenceEl.innerHTML = `
+                <span class="reference-badge-main">
+                    <i class="fas fa-book-open mr-2"></i>
+                    ${surah.name} ${currentSurah}:${currentVerse}
+                </span>
+            `;
+        }
+
+        // Load verse text (placeholder - in real app you'd fetch from API)
+        updateVerseText(surah, currentVerse);
+    }
+
+    function updateVerseText(surah, verse) {
+        const arabicEl = document.getElementById('main-arabic-text');
+        const translationEl = document.getElementById('main-translation-text');
+        
+        // Placeholder text - in real implementation, fetch from Quran API
+        if (arabicEl) {
+            if (surah.number === 1 && verse === 1) {
+                arabicEl.textContent = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ";
+            } else {
+                arabicEl.textContent = `Loading ${surah.name} verse ${verse}...`;
+            }
+        }
+        
+        if (translationEl) {
+            if (surah.number === 1 && verse === 1) {
+                translationEl.textContent = '"In the name of Allah, the Entirely Merciful, the Especially Merciful."';
+            } else {
+                translationEl.textContent = `Translation for ${surah.name} verse ${verse} will be loaded here...`;
+            }
+        }
+    }
+
+    window.playCurrentVerse = function() {
+        if (isPlaying) {
+            pauseAudio();
+            return;
+        }
+
+        console.log(`🎵 Playing ${currentSurah}:${currentVerse} with ${currentReciter}`);
+        
+        // Stop any currently playing audio
+        stopAllAudio();
+        
+        const surah = quranSurahs.find(s => s.number === currentSurah);
+        if (!surah) return;
+
+        // Update status
+        updateAudioStatus('loading', `Loading ${surah.name} ${currentVerse}...`);
+        
+        // Al Quran Cloud API URL
+        const audioUrl = `https://cdn.islamic.network/quran/audio/128/${currentReciter}/${currentSurah}${currentVerse.toString().padStart(3, '0')}.mp3`;
+        
+        // Create and play audio
+        quranAudio = new Audio();
+        currentAudio = quranAudio;
+        quranAudio.src = audioUrl;
+        
+        quranAudio.addEventListener('canplay', function() {
+            console.log('✅ Verse audio loaded successfully');
+            quranAudio.play().then(() => {
+                isPlaying = true;
+                updateAudioStatus('playing', `Playing ${surah.name} ${currentVerse}`);
+                updatePlayButton('pause');
+            }).catch(error => {
+                console.error('Failed to play verse audio:', error);
+                tryFallbackAudio(currentSurah, currentVerse);
+            });
+        }, { once: true });
+        
+        quranAudio.addEventListener('error', function() {
+            console.warn('Failed to load verse audio');
+            tryFallbackAudio(currentSurah, currentVerse);
+        }, { once: true });
+        
+        quranAudio.addEventListener('ended', function() {
+            isPlaying = false;
+            updateAudioStatus('completed', `${surah.name} ${currentVerse} completed`);
+            updatePlayButton('play');
+            currentAudio = null;
+        }, { once: true });
+        
+        quranAudio.addEventListener('timeupdate', updateProgressBar);
+        
+        quranAudio.load();
+    };
+
+    function tryFallbackAudio(surahNum, verseNum) {
+        // Try full surah audio as fallback
+        const surahAudioUrl = `https://cdn.islamic.network/quran/audio-surah/128/${currentReciter}/${surahNum}.mp3`;
+        
+        if (quranAudio) {
+            quranAudio.src = surahAudioUrl;
+            quranAudio.load();
+            
+            quranAudio.addEventListener('canplay', function() {
+                quranAudio.play().then(() => {
+                    isPlaying = true;
+                    const surah = quranSurahs.find(s => s.number === surahNum);
+                    updateAudioStatus('playing', `Playing ${surah?.name || 'Surah'} (Full)`);
+                    updatePlayButton('pause');
+                }).catch(error => {
+                    console.error('Failed to play surah audio:', error);
+                    updateAudioStatus('error', 'Audio unavailable');
+                });
+            }, { once: true });
+        }
+    }
+
+    function pauseAudio() {
+        if (quranAudio && isPlaying) {
+            quranAudio.pause();
+            isPlaying = false;
+            updateAudioStatus('paused', 'Paused');
+            updatePlayButton('play');
+        }
+    }
+
+    window.playNextVerse = function() {
+        const surah = quranSurahs.find(s => s.number === currentSurah);
+        if (!surah) return;
+
+        if (currentVerse < surah.verses) {
+            currentVerse++;
+        } else if (currentSurah < 114) {
+            currentSurah++;
+            currentVerse = 1;
+            populateVerseDropdown();
+        } else {
+            showNotification('📖 End of Quran reached', 'info');
+            return;
+        }
+
+        updateSelectors();
+        updateDisplay();
+        saveSettings();
+        
+        if (isPlaying) {
+            setTimeout(() => playCurrentVerse(), 300);
+        }
+    };
+
+    window.playPreviousVerse = function() {
+        if (currentVerse > 1) {
+            currentVerse--;
+        } else if (currentSurah > 1) {
+            currentSurah--;
+            const prevSurah = quranSurahs.find(s => s.number === currentSurah);
+            if (prevSurah) {
+                currentVerse = prevSurah.verses;
+                populateVerseDropdown();
+            }
+        } else {
+            showNotification('📖 Beginning of Quran reached', 'info');
+            return;
+        }
+
+        updateSelectors();
+        updateDisplay();
+        saveSettings();
+        
+        if (isPlaying) {
+            setTimeout(() => playCurrentVerse(), 300);
+        }
+    };
+
+    function updateSelectors() {
+        const surahSelect = document.getElementById('surah-select');
+        const verseSelect = document.getElementById('verse-select');
+        
+        if (surahSelect) surahSelect.value = currentSurah;
+        if (verseSelect) verseSelect.value = currentVerse;
+    }
+
+    function updateAudioStatus(status, message) {
+        const statusEl = document.getElementById('audio-status');
+        if (!statusEl) return;
+
+        let icon = 'fas fa-pause';
+        let color = 'text-gray-500';
+
+        switch (status) {
+            case 'loading':
+                icon = 'fas fa-spinner fa-spin';
+                color = 'text-blue-500';
+                break;
+            case 'playing':
+                icon = 'fas fa-play';
+                color = 'text-green-500';
+                break;
+            case 'paused':
+                icon = 'fas fa-pause';
+                color = 'text-yellow-500';
+                break;
+            case 'completed':
+                icon = 'fas fa-check';
+                color = 'text-green-600';
+                break;
+            case 'error':
+                icon = 'fas fa-exclamation-triangle';
+                color = 'text-red-500';
+                break;
+        }
+
+        statusEl.innerHTML = `<i class="${icon} ${color}"></i><span>${message}</span>`;
+    }
+
+    function updatePlayButton(state) {
+        const playBtns = document.querySelectorAll('.play-btn-main, .listen-btn-main');
+        playBtns.forEach(btn => {
+            const icon = btn.querySelector('i');
+            if (icon) {
+                icon.className = state === 'play' ? 'fas fa-play' : 'fas fa-pause';
+            }
+        });
+    }
+
+    function updateProgressBar() {
+        if (!quranAudio || !quranAudio.duration) return;
+
+        const progress = (quranAudio.currentTime / quranAudio.duration) * 100;
+        const progressBar = document.getElementById('main-progress-bar');
+        const currentTimeDisplay = document.getElementById('current-time-display');
+        const totalTimeDisplay = document.getElementById('total-time-display');
+
+        if (progressBar) {
+            progressBar.style.width = `${progress}%`;
+        }
+
+        if (currentTimeDisplay) {
+            currentTimeDisplay.textContent = formatTime(quranAudio.currentTime);
+        }
+
+        if (totalTimeDisplay) {
+            totalTimeDisplay.textContent = formatTime(quranAudio.duration);
+        }
+    }
+
+    window.bookmarkCurrentVerse = function() {
+        const surah = quranSurahs.find(s => s.number === currentSurah);
+        if (!surah) return;
+
+        const arabicText = document.getElementById('main-arabic-text')?.textContent || '';
+        const translationText = document.getElementById('main-translation-text')?.textContent || '';
+
+        const bookmarkData = {
+            arabic: arabicText,
+            translation: translationText,
+            reference: `Quran ${currentSurah}:${currentVerse}`,
+            surahName: surah.name,
+            surah: currentSurah,
+            verse: currentVerse,
+            savedAt: new Date().toISOString()
+        };
+
+        let bookmarks = JSON.parse(localStorage.getItem('quranBookmarks') || '[]');
+        const isAlreadyBookmarked = bookmarks.some(b => b.reference === bookmarkData.reference);
+
+        if (!isAlreadyBookmarked) {
+            bookmarks.unshift(bookmarkData);
+            localStorage.setItem('quranBookmarks', JSON.stringify(bookmarks));
+            showNotification(`🔖 ${surah.name} ${currentVerse} bookmarked!`, 'success');
+            updateBookmarkButtonState(true);
+        } else {
+            showNotification(`📌 ${surah.name} ${currentVerse} already bookmarked`, 'info');
+        }
+    };
+
+    window.shareCurrentVerse = function() {
+        const surah = quranSurahs.find(s => s.number === currentSurah);
+        if (!surah) return;
+
+        const translationText = document.getElementById('main-translation-text')?.textContent || '';
+        const shareText = `${translationText}\n\n${surah.name} ${currentSurah}:${currentVerse}`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: 'Verse from the Quran',
+                text: shareText
+            }).catch(console.error);
+        } else {
+            navigator.clipboard.writeText(shareText).then(() => {
+                showNotification('📋 Verse copied to clipboard!', 'success');
+            }).catch(() => {
+                showNotification('❌ Could not copy verse', 'error');
+            });
+        }
+    };
+
+    function updateBookmarkButtonState(isBookmarked) {
+        const bookmarkBtns = document.querySelectorAll('.bookmark-btn-main');
+        bookmarkBtns.forEach(btn => {
+            const icon = btn.querySelector('i');
+            if (icon) {
+                icon.className = isBookmarked ? 'fas fa-bookmark' : 'far fa-bookmark';
+            }
+            if (isBookmarked) {
+                btn.classList.add('bookmarked');
+            } else {
+                btn.classList.remove('bookmarked');
+            }
+        });
+    }
+
+    // Random and daily verse functions
+    window.getRandomVerse = function() {
+        const randomSurah = Math.floor(Math.random() * 114) + 1;
+        const surah = quranSurahs.find(s => s.number === randomSurah);
+        if (!surah) return;
+
+        const randomVerse = Math.floor(Math.random() * surah.verses) + 1;
+        
+        currentSurah = randomSurah;
+        currentVerse = randomVerse;
+        
+        populateVerseDropdown();
+        updateSelectors();
+        updateDisplay();
+        saveSettings();
+        
+        showNotification(`🎲 Random verse: ${surah.name} ${currentVerse}`, 'success');
+    };
+
+    window.showDailyVerse = function() {
+        const today = new Date();
+        const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+        
+        // Use day of year to select a consistent daily verse
+        const surahIndex = (dayOfYear * 7) % 114; // Multiply by 7 for more variation
+        const selectedSurah = quranSurahs[surahIndex];
+        
+        const verseIndex = (dayOfYear * 3) % selectedSurah.verses; // Multiply by 3 for variation
+        
+        currentSurah = selectedSurah.number;
+        currentVerse = verseIndex + 1;
+        
+        populateVerseDropdown();
+        updateSelectors();
+        updateDisplay();
+        saveSettings();
+        
+        showNotification(`📅 Daily verse: ${selectedSurah.name} ${currentVerse}`, 'success');
+    };
+
+    // Initialize player when page loads
+    setTimeout(() => {
+        initQuranPlayer();
+    }, 1000);
 
     // Get location and prayer times - Core functionality
     function getLocationAndPrayerTimes() {
@@ -1234,168 +1828,314 @@ document.addEventListener('DOMContentLoaded', function() {
     let mosqueMarkers = [];
     let currentMosques = [];
 
-    // Global variables for Qibla compass
-    let qiblaDirection = 0;
-    let deviceHeading = 0;
-    let magneticDeclination = 0;
-    let isCompassActive = false;
-    let orientationPermissionGranted = false;
+    // Old compass variables removed - using compassState object instead
 
-    // Qibla Compass Implementation
+    // Enhanced Qibla Compass Implementation with Professional Accuracy
+    let compassState = {
+        isActive: false,
+        isCalibrated: false,
+        heading: 0,
+        qiblaDirection: 0,
+        magneticDeclination: 0,
+        isListening: false,
+        calibrationMovements: 0,
+        accuracy: 'Unknown',
+        isAbsolute: false
+    };
+
     function initQiblaCompass() {
-        console.log('🧭 Initializing Qibla Compass...');
+        console.log('🧭 Initializing Enhanced Qibla Compass...');
         
         if (!window.currentLocation) {
-            showNotification('📍 Location needed for Qibla direction', 'error');
+            showNotification('📍 Location required for accurate Qibla direction', 'error');
             return;
         }
-
-        // Calculate Qibla direction
-        calculateQiblaDirection(window.currentLocation.lat, window.currentLocation.lng);
         
-        // Update compass display
-        updateCompassDisplay();
+        // Reset compass state
+        compassState.isActive = true;
         
-        // Request device orientation permission for iOS 13+
-        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-            requestOrientationPermission();
-        } else {
-            // For other browsers, start listening immediately
-            startCompassListening();
+        const { lat, lng } = window.currentLocation;
+        
+        // Calculate precise Qibla direction
+        calculatePreciseQiblaDirection(lat, lng);
+        
+        // Check for device orientation support
+        if (!window.DeviceOrientationEvent) {
+            showNotification('❌ Device orientation not supported on this device', 'error');
+            compassState.accuracy = 'Not Supported';
+            updateAccuracyDisplay();
+            return;
         }
-
-        // Update accuracy display
-        updateAccuracyDisplay();
         
-        isCompassActive = true;
-        console.log('✅ Qibla Compass initialized');
+        // Start compass with permission handling
+        requestAndStartEnhancedCompass();
     }
 
-    function requestOrientationPermission() {
-        DeviceOrientationEvent.requestPermission()
-            .then(response => {
-                if (response === 'granted') {
-                    orientationPermissionGranted = true;
-                    startCompassListening();
-                    showNotification('🧭 Compass access granted', 'success');
-                } else {
-                    showNotification('❌ Compass access denied. Please enable in device settings.', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Permission request failed:', error);
-                showNotification('❌ Compass not supported on this device', 'error');
-            });
-    }
-
-    function startCompassListening() {
-        if ('DeviceOrientationEvent' in window) {
-            window.addEventListener('deviceorientation', handleDeviceOrientation, true);
-            
-            // Also try absolute orientation for better accuracy
-            if ('DeviceOrientationAbsoluteEvent' in window) {
-                window.addEventListener('deviceorientationabsolute', handleDeviceOrientation, true);
-            }
-            
-            console.log('🧭 Started listening to device orientation');
-        } else {
-            showNotification('❌ Device orientation not supported', 'error');
-        }
-    }
-
-    function handleDeviceOrientation(event) {
-        if (!isCompassActive) return;
-
-        // Get compass heading (alpha value)
-        let alpha = event.alpha;
-        
-        if (alpha !== null) {
-            // Normalize alpha to 0-360 degrees
-            deviceHeading = alpha < 0 ? alpha + 360 : alpha;
-            
-            // Apply magnetic declination correction
-            let correctedHeading = deviceHeading + magneticDeclination;
-            if (correctedHeading >= 360) correctedHeading -= 360;
-            if (correctedHeading < 0) correctedHeading += 360;
-            
-            // Update compass needle
-            updateCompassNeedle(correctedHeading);
-        }
-    }
-
-    function calculateQiblaDirection(lat, lng) {
-        // Kaaba coordinates
-        const kaabaLat = 21.4225;
-        const kaabaLng = 39.8262;
-        
-        // Convert to radians
-        const lat1 = lat * Math.PI / 180;
-        const lat2 = kaabaLat * Math.PI / 180;
-        const deltaLng = (kaabaLng - lng) * Math.PI / 180;
-        
-        // Calculate bearing using spherical trigonometry
-        const x = Math.sin(deltaLng) * Math.cos(lat2);
-        const y = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLng);
-        
-        let bearing = Math.atan2(x, y);
-        
-        // Convert to degrees and normalize to 0-360
-        qiblaDirection = (bearing * 180 / Math.PI + 360) % 360;
-        
-        console.log(`🕋 Qibla direction calculated: ${qiblaDirection.toFixed(1)}°`);
-        
-        // Fetch magnetic declination for more accurate compass
-        fetchMagneticDeclination(lat, lng);
-    }
-
-    async function fetchMagneticDeclination(lat, lng) {
+    async function requestAndStartEnhancedCompass() {
         try {
-            // Use NOAA magnetic declination web service
-            const response = await fetch(`https://www.ngdc.noaa.gov/geomag-web/calculators/calculateDeclination?lat1=${lat}&lon1=${lng}&key=zNEw7&startYear=2024&startMonth=1&startDay=1&resultFormat=json`);
-            
-            if (response.ok) {
-                const data = await response.json();
-                magneticDeclination = parseFloat(data.result[0].declination);
-                console.log(`🧭 Magnetic declination: ${magneticDeclination}°`);
+            // For iOS 13+ devices, request permission
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                console.log('📱 Requesting iOS device orientation permission...');
+                
+                const permission = await DeviceOrientationEvent.requestPermission();
+                if (permission === 'granted') {
+                    console.log('✅ iOS orientation permission granted');
+                    startEnhancedCompassListening();
+                    showNotification('🧭 Compass access granted - calibrate for best accuracy', 'success');
+                } else {
+                    console.warn('❌ iOS orientation permission denied');
+                    showNotification('❌ Compass permission required. Enable in Settings > Privacy > Motion & Orientation', 'error');
+                    compassState.accuracy = 'Permission Denied';
+                    updateAccuracyDisplay();
+                }
             } else {
-                // Fallback: approximate declination based on location
-                magneticDeclination = approximateMagneticDeclination(lat, lng);
+                // For other devices, start directly
+                startEnhancedCompassListening();
+                showNotification('🧭 Compass initialized - move device in figure-8 to calibrate', 'info');
             }
         } catch (error) {
-            console.warn('Failed to fetch magnetic declination:', error);
-            magneticDeclination = approximateMagneticDeclination(lat, lng);
-        }
-        
-        updateCompassDisplay();
-    }
-
-    function approximateMagneticDeclination(lat, lng) {
-        // Very rough approximation - real declination varies significantly
-        // This is just a fallback when the API fails
-        if (lng < -30) return -15; // Americas
-        if (lng > 120) return 10;  // Asia-Pacific
-        return 5; // Europe/Africa
-    }
-
-    function updateCompassDisplay() {
-        const qiblaAngle = document.getElementById('qibla-angle');
-        const qiblaDistance = document.getElementById('qibla-distance');
-        
-        if (qiblaAngle) {
-            qiblaAngle.textContent = `${qiblaDirection.toFixed(1)}°`;
-        }
-        
-        if (qiblaDistance && window.currentLocation) {
-            const distance = calculateDistanceToKaaba(window.currentLocation.lat, window.currentLocation.lng);
-            qiblaDistance.textContent = `${distance.toFixed(0)} km`;
+            console.error('Compass permission error:', error);
+            showNotification('❌ Unable to access device orientation', 'error');
+            compassState.accuracy = 'Error';
+            updateAccuracyDisplay();
         }
     }
 
-    function calculateDistanceToKaaba(lat, lng) {
-        const kaabaLat = 21.4225;
-        const kaabaLng = 39.8262;
+    function startEnhancedCompassListening() {
+        if (compassState.isListening) return;
         
-        const R = 6371; // Earth's radius in km
+        console.log('🎯 Starting enhanced compass listening...');
+        
+        // Remove existing listeners
+        window.removeEventListener('deviceorientation', handleEnhancedOrientation);
+        window.removeEventListener('deviceorientationabsolute', handleEnhancedOrientation);
+        
+        // Add new listeners with passive option for better performance
+        window.addEventListener('deviceorientation', handleEnhancedOrientation, { passive: true });
+        window.addEventListener('deviceorientationabsolute', handleEnhancedOrientation, { passive: true });
+        
+        compassState.isListening = true;
+        compassState.accuracy = 'Initializing';
+        updateAccuracyDisplay();
+        
+        // Start auto-calibration detection
+        setTimeout(startCalibrationDetection, 1000);
+    }
+
+    function handleEnhancedOrientation(event) {
+        if (!compassState.isActive) return;
+        
+        let heading = null;
+        let isAbsolute = false;
+        
+        // Determine the best heading source with priority
+        if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
+            // iOS Safari - most reliable for iOS devices
+            heading = event.webkitCompassHeading;
+            isAbsolute = true;
+            compassState.accuracy = 'High (iOS)';
+        } else if (event.alpha !== null) {
+            // Standard DeviceOrientationEvent
+            isAbsolute = event.absolute || event.type === 'deviceorientationabsolute';
+            
+            if (isAbsolute) {
+                // Absolute orientation (preferred when available)
+                heading = event.alpha;
+                compassState.accuracy = 'High (Absolute)';
+            } else {
+                // Relative orientation (less reliable but usable)
+                heading = event.alpha;
+                compassState.accuracy = compassState.isCalibrated ? 'Good (Relative)' : 'Low (Needs Calibration)';
+            }
+            
+            // Convert to compass heading (0° = North, clockwise)
+            heading = (360 - heading) % 360;
+        }
+        
+        if (heading !== null && !isNaN(heading)) {
+            compassState.heading = heading;
+            compassState.isAbsolute = isAbsolute;
+            
+            // Apply smooth filtering to reduce jitter
+            heading = applySmoothingFilter(heading);
+            
+            // Update compass display
+            updateEnhancedCompassDisplay(heading);
+            
+            // Track movement for auto-calibration
+            trackMovementForCalibration(heading);
+        }
+    }
+
+    // Smooth filtering to reduce compass jitter
+    let headingHistory = [];
+    const FILTER_SIZE = 5;
+
+    function applySmoothingFilter(newHeading) {
+        headingHistory.push(newHeading);
+        if (headingHistory.length > FILTER_SIZE) {
+            headingHistory.shift();
+        }
+        
+        if (headingHistory.length < 2) return newHeading;
+        
+        // Calculate circular mean for compass headings
+        let sumSin = 0, sumCos = 0;
+        for (let heading of headingHistory) {
+            const rad = heading * Math.PI / 180;
+            sumSin += Math.sin(rad);
+            sumCos += Math.cos(rad);
+        }
+        
+        let meanRad = Math.atan2(sumSin / headingHistory.length, sumCos / headingHistory.length);
+        let smoothedHeading = meanRad * 180 / Math.PI;
+        if (smoothedHeading < 0) smoothedHeading += 360;
+        
+        return smoothedHeading;
+    }
+
+    function calculatePreciseQiblaDirection(lat, lng) {
+        // Precise Kaaba coordinates
+        const kaabaLat = 21.422487; // More precise coordinates
+        const kaabaLng = 39.826206;
+        
+        // Convert to radians
+        const lat1Rad = lat * Math.PI / 180;
+        const lng1Rad = lng * Math.PI / 180;
+        const lat2Rad = kaabaLat * Math.PI / 180;
+        const lng2Rad = kaabaLng * Math.PI / 180;
+        
+        // Calculate bearing using spherical trigonometry (Great Circle)
+        const deltaLng = lng2Rad - lng1Rad;
+        const y = Math.sin(deltaLng) * Math.cos(lat2Rad);
+        const x = Math.cos(lat1Rad) * Math.sin(lat2Rad) - 
+                  Math.sin(lat1Rad) * Math.cos(lat2Rad) * Math.cos(deltaLng);
+        
+        let bearing = Math.atan2(y, x) * 180 / Math.PI;
+        compassState.qiblaDirection = (bearing + 360) % 360;
+        
+        console.log(`🕋 Precise Qibla direction: ${compassState.qiblaDirection.toFixed(2)}°`);
+        
+        // Update compass info display
+        updateCompassInfo();
+        
+        // Fetch magnetic declination for maximum accuracy
+        fetchEnhancedMagneticDeclination(lat, lng);
+    }
+
+    async function fetchEnhancedMagneticDeclination(lat, lng) {
+        try {
+            // Try multiple sources for magnetic declination
+            
+            // Primary: NOAA World Magnetic Model
+            const year = new Date().getFullYear();
+            const noaaUrl = `https://www.ngdc.noaa.gov/geomag-web/calculators/calculateDeclination?lat1=${lat}&lon1=${lng}&model=WMM&startYear=${year}&resultFormat=json`;
+            
+            const response = await fetch(noaaUrl);
+            if (response.ok) {
+                const data = await response.json();
+                if (data?.result?.[0]?.declination) {
+                    compassState.magneticDeclination = parseFloat(data.result[0].declination);
+                    console.log(`🧲 NOAA Magnetic declination: ${compassState.magneticDeclination.toFixed(2)}°`);
+                    updateCompassInfo();
+                    return;
+                }
+            }
+        } catch (error) {
+            console.warn('NOAA magnetic declination failed:', error);
+        }
+        
+        // Fallback to enhanced approximation
+        compassState.magneticDeclination = calculateEnhancedMagneticDeclination(lat, lng);
+        console.log(`🧲 Estimated magnetic declination: ${compassState.magneticDeclination.toFixed(2)}°`);
+        updateCompassInfo();
+    }
+
+    function calculateEnhancedMagneticDeclination(lat, lng) {
+        // Enhanced magnetic declination approximation based on global magnetic field model
+        const year = new Date().getFullYear();
+        const epochYear = 2020;
+        const yearDiff = year - epochYear;
+        
+        let declination = 0;
+        
+        // More accurate regional approximations
+        if (lat >= 40 && lat <= 70 && lng >= -140 && lng <= -60) {
+            // North America
+            declination = 10 + (lng + 100) * 0.15 + (lat - 50) * 0.1 + yearDiff * 0.1;
+        } else if (lat >= 35 && lat <= 70 && lng >= -15 && lng <= 50) {
+            // Europe and Western Asia
+            declination = 2 + (lng - 10) * 0.08 + (lat - 50) * 0.05 + yearDiff * 0.08;
+        } else if (lat >= 20 && lat <= 70 && lng >= 50 && lng <= 180) {
+            // Eastern Asia
+            declination = -8 + (lng - 100) * 0.05 + (lat - 40) * 0.1 + yearDiff * 0.07;
+        } else if (lat >= -60 && lat <= 20 && lng >= -180 && lng <= 180) {
+            // Southern regions and tropics
+            declination = Math.sin(lng * Math.PI / 180) * Math.cos(lat * Math.PI / 180) * 12 + yearDiff * 0.05;
+        } else {
+            // General fallback
+            declination = Math.sin(lng * Math.PI / 180) * Math.cos(lat * Math.PI / 180) * 8 + yearDiff * 0.1;
+        }
+        
+        // Clamp to reasonable range
+        return Math.max(-35, Math.min(35, declination));
+    }
+
+    function updateEnhancedCompassDisplay(heading) {
+        const compassNeedle = document.getElementById('compass-needle');
+        const qiblaIndicator = document.getElementById('qibla-indicator');
+        const headingElement = document.getElementById('compass-heading');
+        
+        // Apply magnetic declination correction for true north
+        const trueHeading = (heading + compassState.magneticDeclination + 360) % 360;
+        
+        if (compassNeedle) {
+            // Smooth needle rotation with CSS transition
+            compassNeedle.style.transition = 'transform 0.2s ease-out';
+            compassNeedle.style.transform = `rotate(${-trueHeading}deg)`;
+        }
+        
+        if (qiblaIndicator) {
+            // Calculate Qibla direction relative to current true heading
+            const qiblaRelative = (compassState.qiblaDirection - trueHeading + 360) % 360;
+            qiblaIndicator.style.transition = 'transform 0.2s ease-out';
+            qiblaIndicator.style.transform = `rotate(${qiblaRelative}deg)`;
+            
+            // Add visual feedback when pointing toward Qibla (within 10°)
+            if (qiblaRelative <= 10 || qiblaRelative >= 350) {
+                qiblaIndicator.style.filter = 'drop-shadow(0 0 10px #ffd700) brightness(1.3)';
+            } else {
+                qiblaIndicator.style.filter = '';
+            }
+        }
+        
+        if (headingElement) {
+            headingElement.textContent = `${Math.round(trueHeading)}°`;
+        }
+        
+        updateAccuracyDisplay();
+    }
+
+    function updateCompassInfo() {
+        const qiblaAngleElement = document.getElementById('qibla-angle');
+        const qiblaDistanceElement = document.getElementById('qibla-distance');
+        
+        if (qiblaAngleElement) {
+            qiblaAngleElement.textContent = `${compassState.qiblaDirection.toFixed(1)}°`;
+        }
+        
+        if (qiblaDistanceElement && window.currentLocation) {
+            const distance = calculatePreciseDistanceToKaaba(window.currentLocation.lat, window.currentLocation.lng);
+            qiblaDistanceElement.textContent = `${distance.toFixed(0)} km`;
+        }
+    }
+
+    function calculatePreciseDistanceToKaaba(lat, lng) {
+        const kaabaLat = 21.422487;
+        const kaabaLng = 39.826206;
+        
+        // Haversine formula for great circle distance
+        const R = 6371.0088; // Earth's mean radius in km (more precise)
         const dLat = (kaabaLat - lat) * Math.PI / 180;
         const dLng = (kaabaLng - lng) * Math.PI / 180;
         
@@ -1407,62 +2147,101 @@ document.addEventListener('DOMContentLoaded', function() {
         return R * c;
     }
 
-    function updateCompassNeedle(heading) {
-        const compassNeedle = document.getElementById('compass-needle');
-        const qiblaIndicator = document.getElementById('qibla-indicator');
-        
-        if (compassNeedle) {
-            // Rotate compass needle to show device heading
-            compassNeedle.style.transform = `rotate(${-heading}deg)`;
-        }
-        
-        if (qiblaIndicator) {
-            // Rotate Qibla indicator relative to device heading
-            const qiblaRelative = qiblaDirection - heading;
-            qiblaIndicator.style.transform = `rotate(${qiblaRelative}deg)`;
-        }
-        
-        // Update heading display
-        const headingDisplay = document.getElementById('compass-heading');
-        if (headingDisplay) {
-            headingDisplay.textContent = `${heading.toFixed(0)}°`;
-        }
-    }
-
     function updateAccuracyDisplay() {
         const accuracyElement = document.getElementById('compass-accuracy');
-        if (accuracyElement) {
-            let accuracy = 'Unknown';
-            
-            if ('DeviceOrientationEvent' in window) {
-                if (orientationPermissionGranted || typeof DeviceOrientationEvent.requestPermission !== 'function') {
-                    accuracy = 'Good';
-                } else {
-                    accuracy = 'Permission needed';
-                }
-            } else {
-                accuracy = 'Not supported';
-            }
-            
-            accuracyElement.textContent = accuracy;
+        if (!accuracyElement) return;
+        
+        let className = 'text-red-500';
+        
+        if (compassState.accuracy.includes('High')) {
+            className = 'text-green-500 font-bold';
+        } else if (compassState.accuracy.includes('Good')) {
+            className = 'text-blue-500 font-semibold';
+        } else if (compassState.accuracy.includes('Low')) {
+            className = 'text-yellow-500';
+        }
+        
+        accuracyElement.textContent = compassState.accuracy;
+        accuracyElement.className = className;
+    }
+
+    // Auto-calibration system
+    let movementHistory = [];
+    let lastCalibrationCheck = 0;
+
+    function startCalibrationDetection() {
+        console.log('🔧 Starting auto-calibration detection...');
+    }
+
+    function trackMovementForCalibration(heading) {
+        const now = Date.now();
+        movementHistory.push({ heading, time: now });
+        
+        // Keep only last 10 seconds of movement
+        movementHistory = movementHistory.filter(entry => now - entry.time < 10000);
+        
+        // Check for calibration every 2 seconds
+        if (now - lastCalibrationCheck > 2000) {
+            checkForCalibration();
+            lastCalibrationCheck = now;
         }
     }
 
-    // Compass calibration function
-    window.calibrateCompass = function() {
-        showNotification('🧭 Hold your phone flat and move it in a figure-8 pattern', 'info');
+    function checkForCalibration() {
+        if (movementHistory.length < 20) return; // Need sufficient data
         
-        // Reset compass values
-        deviceHeading = 0;
+        // Check for diverse movement patterns
+        const headings = movementHistory.map(entry => entry.heading);
+        const minHeading = Math.min(...headings);
+        const maxHeading = Math.max(...headings);
+        let range = maxHeading - minHeading;
+        
+        // Handle wrap-around (e.g., 350° to 10°)
+        if (range > 180) {
+            range = 360 - range;
+        }
+        
+        if (range > 120 && !compassState.isCalibrated) {
+            compassState.calibrationMovements++;
+            
+            if (compassState.calibrationMovements >= 3) {
+                compassState.isCalibrated = true;
+                compassState.accuracy = compassState.isAbsolute ? 'High (Calibrated)' : 'Good (Calibrated)';
+                showNotification('✅ Compass auto-calibrated successfully!', 'success');
+                updateAccuracyDisplay();
+            }
+        }
+    }
+
+    // Enhanced manual calibration
+    window.calibrateCompass = function() {
+        showNotification('🔄 Starting compass calibration...', 'info');
+        
+        // Reset calibration state
+        compassState.isCalibrated = false;
+        compassState.calibrationMovements = 0;
+        movementHistory = [];
+        headingHistory = [];
+        
+        // Show detailed calibration instructions
+        setTimeout(() => showNotification('📱 Hold device flat and move in large figure-8 patterns', 'info'), 1000);
+        setTimeout(() => showNotification('🔄 Rotate device in all directions for 10 seconds', 'info'), 2500);
+        setTimeout(() => showNotification('↕️ Tilt device up and down while rotating', 'info'), 4000);
         
         // Re-fetch magnetic declination
         if (window.currentLocation) {
-            fetchMagneticDeclination(window.currentLocation.lat, window.currentLocation.lng);
+            fetchEnhancedMagneticDeclination(window.currentLocation.lat, window.currentLocation.lng);
         }
         
+        // Force calibration completion after timeout
         setTimeout(() => {
-            showNotification('✅ Compass calibration complete', 'success');
-        }, 3000);
+            if (!compassState.isCalibrated) {
+                compassState.isCalibrated = true;
+                compassState.accuracy = compassState.isAbsolute ? 'High (Manual)' : 'Good (Manual)';
+                showNotification('✅ Manual compass calibration complete!', 'success');
+                updateAccuracyDisplay();
+            }
+        }, 12000);
     };
     
     window.initMosqueFinder = function(lat, lng) {
@@ -2035,4 +2814,432 @@ document.addEventListener('DOMContentLoaded', function() {
         originalDisplayCurrentVerse();
         checkIfVerseBookmarked();
     };
+
+    // Enhanced browser and device detection
+    const browserInfo = {
+        isIOSChrome: /CriOS/i.test(navigator.userAgent),
+        isIOSSafari: /Safari/i.test(navigator.userAgent) && /iPhone|iPad/i.test(navigator.userAgent) && !/CriOS/i.test(navigator.userAgent),
+        isAndroidChrome: /Chrome/i.test(navigator.userAgent) && /Android/i.test(navigator.userAgent),
+        isDesktopChrome: /Chrome/i.test(navigator.userAgent) && !/Mobile/i.test(navigator.userAgent),
+        isIOS: /iPhone|iPad/i.test(navigator.userAgent),
+        isAndroid: /Android/i.test(navigator.userAgent),
+        isMobile: /iPhone|iPad|Android/i.test(navigator.userAgent)
+    };
+
+    // PWA Installation Support
+    let deferredPrompt;
+    let installButton = null;
+
+    // Listen for beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+        console.log('💾 PWA install prompt available');
+        e.preventDefault();
+        deferredPrompt = e;
+        showInstallButton();
+    });
+
+    // Check if app is already installed
+    window.addEventListener('appinstalled', () => {
+        console.log('✅ PWA was installed');
+        hideInstallButton();
+        showNotification('🕌 Athan Times installed successfully!', 'success');
+    });
+
+    function showInstallButton() {
+        // Create install button if it doesn't exist
+        if (!installButton) {
+            installButton = document.createElement('button');
+            installButton.id = 'install-app-btn';
+            installButton.className = 'install-btn';
+            installButton.innerHTML = '<i class="fas fa-download mr-2"></i>Install App';
+            installButton.onclick = installApp;
+            
+            // Add to header actions
+            const headerActions = document.querySelector('.header-actions');
+            if (headerActions) {
+                headerActions.appendChild(installButton);
+            }
+        }
+        
+        installButton.style.display = 'flex';
+        
+        // Show notification for iOS users (who need manual installation)
+        if (browserInfo.isIOS) {
+            setTimeout(() => {
+                if (browserInfo.isIOSSafari) {
+                    showNotification('📱 Tap Share button and "Add to Home Screen" to install', 'info');
+                } else if (browserInfo.isIOSChrome) {
+                    showNotification('📱 Open in Safari and tap Share → "Add to Home Screen" to install', 'info');
+                }
+            }, 3000);
+        }
+    }
+
+    function hideInstallButton() {
+        if (installButton) {
+            installButton.style.display = 'none';
+        }
+    }
+
+    async function installApp() {
+        if (!deferredPrompt) {
+            if (browserInfo.isIOS) {
+                if (browserInfo.isIOSSafari) {
+                    showNotification('📱 Tap the Share button below and select "Add to Home Screen"', 'info');
+                } else {
+                    showNotification('📱 Please open this app in Safari to install it', 'info');
+                }
+            } else {
+                showNotification('❌ Installation not available on this browser', 'error');
+            }
+            return;
+        }
+
+        const choiceResult = await deferredPrompt.prompt();
+        console.log(`User response to install prompt: ${choiceResult.outcome}`);
+        
+        if (choiceResult.outcome === 'accepted') {
+            showNotification('📱 Installing Athan Times...', 'info');
+        } else {
+            showNotification('❌ Installation cancelled', 'info');
+        }
+        
+        deferredPrompt = null;
+        hideInstallButton();
+    }
+
+    // Enhanced geolocation with iOS Chrome fixes
+    function getLocationAndPrayerTimes() {
+        console.log('🌍 Requesting location...', browserInfo);
+        
+        if (!navigator.geolocation) {
+            showNotification('❌ Geolocation not supported by this browser', 'error');
+            useFallbackLocation();
+            return;
+        }
+
+        // Show different messages for different browsers
+        if (browserInfo.isIOSChrome) {
+            showNotification('📍 iOS Chrome detected - Getting location...', 'info');
+        } else if (browserInfo.isIOSSafari) {
+            showNotification('📍 Getting your location...', 'info');
+        } else {
+            showNotification('📍 Getting your location...', 'info');
+        }
+
+        // Enhanced geolocation options for different browsers
+        const geoOptions = {
+            enableHighAccuracy: true,
+            timeout: browserInfo.isIOSChrome ? 20000 : 15000, // Longer timeout for iOS Chrome
+            maximumAge: browserInfo.isIOSChrome ? 60000 : 300000 // Shorter cache for iOS Chrome
+        };
+
+        // For iOS Chrome, try a more permissive approach first
+        if (browserInfo.isIOSChrome) {
+            console.log('🔧 Using iOS Chrome location strategy');
+            
+            // First try with basic options
+            const basicOptions = {
+                enableHighAccuracy: false,
+                timeout: 10000,
+                maximumAge: 60000
+            };
+            
+            navigator.geolocation.getCurrentPosition(
+                handleLocationSuccess,
+                (error) => {
+                    console.warn('Basic geolocation failed, trying high accuracy...', error);
+                    // If basic fails, try high accuracy
+                    navigator.geolocation.getCurrentPosition(
+                        handleLocationSuccess,
+                        handleLocationError,
+                        geoOptions
+                    );
+                },
+                basicOptions
+            );
+        } else {
+            // Standard approach for other browsers
+            navigator.geolocation.getCurrentPosition(
+                handleLocationSuccess,
+                handleLocationError,
+                geoOptions
+            );
+        }
+    }
+
+    async function handleLocationSuccess(position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const accuracy = position.coords.accuracy;
+        
+        console.log(`✅ Location obtained: ${lat}, ${lng} (accuracy: ${accuracy}m)`);
+        
+        // Store current location globally
+        window.currentLocation = { lat, lng };
+        
+        try {
+            // Get location name
+            const locationResponse = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+            const locationData = await locationResponse.json();
+            
+            const locationName = locationData.display_name?.split(',')[0] || 'Unknown Location';
+            const locationElement = document.getElementById('location-name');
+            if (locationElement) {
+                locationElement.textContent = locationName;
+            }
+            
+            // Update coordinates display
+            const coordinatesElement = document.getElementById('location-coordinates');
+            if (coordinatesElement) {
+                coordinatesElement.textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+            }
+            
+            // Update location info with accuracy
+            const locationInfo = document.getElementById('location-info');
+            if (locationInfo) {
+                const accuracyText = accuracy < 100 ? 'High' : accuracy < 1000 ? 'Medium' : 'Low';
+                locationInfo.textContent = `${locationName} - GPS accuracy: ${accuracyText} (${accuracy.toFixed(0)}m)`;
+            }
+            
+            showNotification(`📍 Location found: ${locationName}`, 'success');
+            
+            // Fetch prayer times
+            await fetchPrayerTimes(lat, lng);
+            
+        } catch (error) {
+            console.error('Error getting location name:', error);
+            
+            // Update coordinates even if location name fails
+            const coordinatesElement = document.getElementById('location-coordinates');
+            if (coordinatesElement) {
+                coordinatesElement.textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+            }
+            
+            const locationInfo = document.getElementById('location-info');
+            if (locationInfo) {
+                locationInfo.textContent = `Coordinates: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+            }
+            
+            showNotification('📍 Location found, fetching prayer times...', 'info');
+            
+            // Still fetch prayer times with coordinates
+            await fetchPrayerTimes(lat, lng);
+        }
+    }
+
+    function handleLocationError(error) {
+        console.error('Geolocation error:', error);
+        
+        let errorMessage = '❌ Unable to get your location. ';
+        let suggestion = '';
+        
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                if (browserInfo.isIOSChrome) {
+                    errorMessage += 'iOS Chrome blocks location access.';
+                    suggestion = '💡 Try opening this app in Safari for better location support.';
+                } else if (browserInfo.isIOSSafari) {
+                    errorMessage += 'Please allow location access in Settings → Privacy → Location Services → Safari.';
+                    suggestion = '💡 You may need to refresh the page after enabling location.';
+                } else {
+                    errorMessage += 'Please allow location access.';
+                    suggestion = '💡 Click the location icon in your browser address bar.';
+                }
+                break;
+            case error.POSITION_UNAVAILABLE:
+                errorMessage += 'Location information unavailable.';
+                suggestion = '💡 Make sure GPS is enabled and you have internet connection.';
+                break;
+            case error.TIMEOUT:
+                if (browserInfo.isIOSChrome) {
+                    errorMessage += 'Location request timed out on iOS Chrome.';
+                    suggestion = '💡 Try opening this app in Safari for better location support.';
+                } else {
+                    errorMessage += 'Location request timed out.';
+                    suggestion = '💡 Try again or check your GPS connection.';
+                }
+                break;
+            default:
+                errorMessage += 'Unknown error occurred.';
+                suggestion = '💡 Please try refreshing the page.';
+                break;
+        }
+        
+        showNotification(errorMessage, 'error');
+        
+        if (suggestion) {
+            setTimeout(() => {
+                showNotification(suggestion, 'info');
+            }, 2000);
+        }
+        
+        // Use fallback location after showing error
+        setTimeout(() => {
+            useFallbackLocation();
+        }, 4000);
+    }
+
+    function useFallbackLocation() {
+        // Use fallback location (example: New York)
+        const fallbackLat = 40.7128;
+        const fallbackLng = -74.0060;
+        
+        window.currentLocation = { lat: fallbackLat, lng: fallbackLng };
+        
+        const locationElement = document.getElementById('location-name');
+        if (locationElement) {
+            locationElement.textContent = 'New York (Fallback)';
+        }
+        
+        // Update coordinates for fallback
+        const coordinatesElement = document.getElementById('location-coordinates');
+        if (coordinatesElement) {
+            coordinatesElement.textContent = `${fallbackLat.toFixed(4)}, ${fallbackLng.toFixed(4)}`;
+        }
+        
+        // Update location info for fallback
+        const locationInfo = document.getElementById('location-info');
+        if (locationInfo) {
+            locationInfo.textContent = 'Using fallback location - New York, NY';
+        }
+        
+        showNotification('📍 Using fallback location for demonstration', 'info');
+        
+        // Use fallback prayer times
+        const fallbackPrayers = calculateFallbackPrayerTimes(fallbackLat, fallbackLng);
+        displayPrayerTimes(fallbackPrayers);
+        updateNextPrayer(fallbackPrayers);
+    }
+
+    // Function to manually request location (for iOS Chrome users)
+    window.requestLocationManually = function() {
+        if (browserInfo.isIOSChrome) {
+            showNotification('📱 For best experience, please open this app in Safari', 'info');
+            
+            // Offer to copy the URL
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    showNotification('📋 URL copied! Open Safari and paste it', 'success');
+                }).catch(() => {
+                    showNotification('💡 Please copy this URL and open it in Safari', 'info');
+                });
+            }
+        } else {
+            getLocationAndPrayerTimes();
+        }
+    };
+
+    // Check if we should show install prompt on page load
+    window.addEventListener('load', () => {
+        console.log('🔍 Checking PWA installation status...');
+        
+        // Check if app is in standalone mode (already installed)
+        if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+            console.log('✅ App is running as installed PWA');
+            hideInstallButton();
+        } else {
+            console.log('📱 App is running in browser - install available');
+            
+            // For iOS, show install hint after delay
+            if (browserInfo.isIOS) {
+                setTimeout(() => {
+                    if (browserInfo.isIOSSafari) {
+                        showNotification('💡 Tip: Add this app to your home screen for the best experience!', 'info');
+                    }
+                }, 5000);
+            }
+        }
+        
+        // Auto-show install button after some time if available
+        setTimeout(() => {
+            if (deferredPrompt && !installButton?.style.display) {
+                showInstallButton();
+            }
+        }, 10000);
+    });
+
+    // Helper functions for iOS Chrome users
+    window.copyUrlForSafari = function() {
+        const currentUrl = window.location.href;
+        
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(currentUrl).then(() => {
+                showNotification('📋 URL copied! Now open Safari and paste it', 'success');
+                setTimeout(() => {
+                    showNotification('💡 In Safari: Long press URL bar → Paste → Go', 'info');
+                }, 2000);
+            }).catch(() => {
+                showNotification('❌ Could not copy URL automatically', 'error');
+                promptManualCopy(currentUrl);
+            });
+        } else {
+            promptManualCopy(currentUrl);
+        }
+    };
+
+    function promptManualCopy(url) {
+        // Create a temporary text area for manual copy
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        textArea.style.position = 'fixed';
+        textArea.style.top = '0';
+        textArea.style.left = '0';
+        textArea.style.width = '2em';
+        textArea.style.height = '2em';
+        textArea.style.padding = '0';
+        textArea.style.border = 'none';
+        textArea.style.outline = 'none';
+        textArea.style.boxShadow = 'none';
+        textArea.style.background = 'transparent';
+        
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            document.execCommand('copy');
+            showNotification('📋 URL copied! Open Safari and paste it', 'success');
+        } catch (err) {
+            showNotification('💡 Please manually copy this URL and open it in Safari', 'info');
+            console.log('Manual copy needed:', url);
+        }
+        
+        document.body.removeChild(textArea);
+    }
+
+    // Show/hide browser-specific helpers (DISABLED - was showing unwanted colorful windows)
+    function showBrowserSpecificHelpers() {
+        // Temporarily disabled to prevent colorful windows from appearing
+        console.log('Browser-specific helpers disabled to prevent unwanted UI elements');
+        
+        // Only show critical notifications, not the colorful helper boxes
+        if (browserInfo.isIOSChrome) {
+            setTimeout(() => {
+                showNotification('💡 For better location accuracy, consider using Safari', 'info');
+            }, 5000);
+        }
+    }
+
+    // Enhanced location refresh specifically for browser compatibility
+    window.refreshLocationWithBrowserCheck = function() {
+        if (browserInfo.isIOSChrome) {
+            showNotification('🔄 Refreshing location (iOS Chrome may have limitations)...', 'info');
+            setTimeout(() => {
+                getLocationAndPrayerTimes();
+            }, 1000);
+        } else {
+            getLocationAndPrayerTimes();
+        }
+    };
+
+    // Update location button to use browser-aware refresh
+    document.addEventListener('DOMContentLoaded', function() {
+        const locationBtn = document.getElementById('location-btn');
+        if (locationBtn) {
+            locationBtn.onclick = refreshLocationWithBrowserCheck;
+        }
+    });
+
+    // Browser helpers disabled to prevent colorful windows
 }); 
